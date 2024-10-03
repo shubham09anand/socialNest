@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-
+const cors = require('cors');
 const dotenv = require("dotenv");
 const bodyParser = require('body-parser');
 
@@ -13,23 +13,10 @@ dotenv.config();
 connectDB();
 
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
 const port = process.env.PORT || 8080;
 
-const corsMiddleware = (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With');
-    res.header('Access-Control-Allow-Methods', 'POST, OPTIONS, GET, PUT');
-
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(204);
-    }
-
-    next();
-};
-
-app.use(corsMiddleware);
 
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(express.json());
