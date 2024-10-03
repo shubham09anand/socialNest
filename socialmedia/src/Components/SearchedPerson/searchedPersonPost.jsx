@@ -69,14 +69,14 @@ const SearchedPersonPost = () => {
           let currentLikes = parseInt(likeSpan.innerHTML);
 
           if (status === "Post liked successfully") {
-               likeSpan.innerHTML = currentLikes + 1; // Increase like count
+               likeSpan.innerHTML = currentLikes + 1;
           } else if (status === "Like removed successfully") {
-               likeSpan.innerHTML = currentLikes - 1; // Decrease like count
+               likeSpan.innerHTML = currentLikes - 1;
           }
      }
 
      const settings = {
-          arrows: true,  // This should be true for arrows to show
+          arrows: true,
           dots: true,
           infinite: true,
           speed: 500,
