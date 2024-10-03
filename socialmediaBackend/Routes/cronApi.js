@@ -8,9 +8,9 @@ const scheduleCronJob = () => {
   cron.schedule('* * * * *', async () => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_CRONJOB_NETWORK}/auth/processScheduledMessage`);
-      console.log('Cron job executed successfully:', response.data); // Log the response data
+      console.log('Cron job executed successfully:', response.data);
     } catch (error) {
-      console.error('Error executing cron job:', error.message || error); // Log the error message
+      console.error('Error executing cron job:', error.message || error);
     }
   });
 };
