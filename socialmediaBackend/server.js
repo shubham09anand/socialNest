@@ -14,7 +14,7 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    origin: 'http://13.202.210.238:3000',
+    origin: ['http://socialnest.shubham09anand.in', 'http://13.202.210.238:3000'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     optionsSuccessStatus: 200
 }));
