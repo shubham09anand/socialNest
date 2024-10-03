@@ -52,7 +52,7 @@ const Header = ({ toggleDashboard, userPhoto }) => {
             {isHeaderLoading ? (
                 <HeaderAnimation />
             ) : (
-                <header className="fixed w-screen bottom-0 lg:top-0 lg:bottom-[100%] bg-white z-40">
+                <header className="pl-2 fixed w-screen bottom-0 lg:top-0 lg:bottom-[100%] bg-white z-40">
                     <div className="flex py-1 justify-between border-t-2 w-full pr-2 lg:px-6 lg:gap-5 space-x-2 place-content-center items-center bg-white">
                         <div className={` lg:hidden w-fit flex items-center gap-1 ${logedin_user_Id === null ? 'hidden' : 'block'}`}>
                             {!hamburgerDisplay && (

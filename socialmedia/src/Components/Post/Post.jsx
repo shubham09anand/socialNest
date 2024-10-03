@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 import LazyLoad from 'react-lazy-load';
-import { Carousel } from "@material-tailwind/react";
 import PostAniamtion from '../Animation/PostAniamtion';
 import MakeComment from './MakeComment';
 import ShowCommentsAndLike from './ShowCommentsAndLike';
@@ -11,6 +12,7 @@ import noProfilePicture from '../../Assets/NoProileImage.png';
 import API from '../../Services/API';
 import { useSelector } from 'react-redux';
 import Deveplores from "../Deveplores";
+import Slider from "react-slick";
 
 const Post = () => {
   
@@ -70,6 +72,15 @@ const Post = () => {
     setPage(pageNumber);
   };
 
+  const settings = {
+    arrows: true,  // This should be true for arrows to show
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+  
   return (
     <div className="w-full gap-y-5 max-h-[200vh] overflow-y-scroll example lg:w-4/5 md:border-r mb-20">
       <Story />
@@ -103,13 +114,13 @@ const Post = () => {
               {postDetails?.Post[index]?.postPhoto.length > 0 &&
                 <div className="relative w-full sm:px-4 p-1">
                   {postDetails?.Post[index]?.postPhoto.length > 1 ? (
-                    <Carousel>
+                    <Slider {...settings}>
                       {postDetails?.Post[index]?.postPhoto.map((pic, position) => (
                         <LazyLoad className='flex' key={position}>
                           <img src={pic || postImagErr} onError={(e) => e.target.src = postImagErr} alt="Post" className='sm:rounded-lg border-2 border-black w-full lg:h-96 h-full object-contain rounded-md' />
                         </LazyLoad>
                       ))}
-                    </Carousel>
+                    </Slider>
                   ) : (
                     <LazyLoad className='flex'>
                       <img src={postDetails?.Post[index]?.postPhoto[0] || postImagErr} onError={(e) => e.target.src = postImagErr} alt="Post" className='sm:rounded-lg border-2 border-black w-full lg:h-96 h-full object-contain rounded-md' />

@@ -7,9 +7,11 @@ import API from '../../Services/API';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { Carousel } from "@material-tailwind/react";
 import 'react-toastify/dist/ReactToastify.css';
 import AllStoryOfAUser from '../Setting/AccountHistory/All_Story_Of_A_User';
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 const SearchedPersonPost = () => {
 
@@ -73,6 +75,15 @@ const SearchedPersonPost = () => {
           }
      }
 
+     const settings = {
+          arrows: true,  // This should be true for arrows to show
+          dots: true,
+          infinite: true,
+          speed: 500,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        };
+
      return (
           <div className="w-full max-h-[200vh] overflow-y-scroll example lg:w-4/5 md:border-r">
                <ToastContainer />
@@ -117,14 +128,14 @@ const SearchedPersonPost = () => {
 
                               <div>
                                    {post?.postPhoto.length > 1 &&
-                                        <Carousel>
+                                        <Slider {...settings}>
                                              {post?.postPhoto?.map((src, index)=>(
 
                                              <div key={index} className="relative w-full lg:h-96 h-full sm:px-4">
                                                   <img src={src || postImagErr} onError={(e) => e.target.src = postImagErr} alt="" className="sm:rounded-lg border-2 border-black w-full h-full object-contain rounded-md" />
                                              </div>
                                              ))}
-                                        </Carousel>
+                                        </Slider>
                                    }
                                    {post?.postPhoto.length === 1 &&
                                         <>

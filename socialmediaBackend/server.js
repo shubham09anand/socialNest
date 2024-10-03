@@ -13,10 +13,15 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    optionsSuccessStatus: 200
+}));
+
+
 const server = http.createServer(app);
 const port = process.env.PORT || 8080;
-
 
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(express.json());
