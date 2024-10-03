@@ -1,8 +1,8 @@
 {
   "name": "socialmedia",
-  "proxy":"https://13.202.210.238:8080/auth",
   "version": "0.1.0",
   "private": true,
+  "proxy":"http://127.0.0.1:8080/auth",
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
     "@testing-library/jest-dom": "^5.17.0",
