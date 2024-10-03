@@ -1,7 +1,5 @@
 const UserLogin = require("../Models/UserSignupModel");
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
-dotenv.config();
 
 const loginController = async (req, res) => {
      try {
@@ -15,7 +13,7 @@ const loginController = async (req, res) => {
                });
           }
          else{
-          const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+          const token = jwt.sign({ userId: existingUser._id }, 'SecondTowerIsDown', { expiresIn: "1d" });
           const { password, updatedAt, __v, createdAt, ...userData } = existingUser.toObject();
           return res.status(200).send({
                success: true,

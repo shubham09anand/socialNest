@@ -14,9 +14,9 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    optionsSuccessStatus: 200
+    // origin: '*',
+    // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    // optionsSuccessStatus: 200
 }));
 
 
