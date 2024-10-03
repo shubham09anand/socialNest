@@ -14,14 +14,14 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    // origin: '*',
-    // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    // optionsSuccessStatus: 200
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    optionsSuccessStatus: 200
 }));
 
 
 const server = http.createServer(app);
-const port = process.env.PORT || 8080;
+const port = 8080;
 
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(express.json());
@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 const io = new Server(server, {
     maxHttpBufferSize: 12 * 1024 * 1024,
     cors: {
-        origin: process.env.REACT_APP_API_SOCKET_NETWORK,
+        origin: 'http://13.202.210.238:3000',
         methods: ['GET', 'POST'],
         credentials: true
     }

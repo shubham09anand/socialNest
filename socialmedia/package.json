@@ -1,5 +1,6 @@
 {
   "name": "socialmedia",
+  "proxy":"https://13.202.210.238:8080/auth",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

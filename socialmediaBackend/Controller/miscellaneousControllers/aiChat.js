@@ -2,7 +2,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
+const genAI = new GoogleGenerativeAI('AIzaSyDKClaXG72LTj6QMslblEhEZ9LkEtE86ts');
 
 const AIchat = async (req, res) => {
   try {
