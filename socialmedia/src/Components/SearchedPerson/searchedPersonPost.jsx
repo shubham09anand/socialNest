@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { Carousel } from "@material-tailwind/react";
 import 'react-toastify/dist/ReactToastify.css';
-import All_Story_Of_A_User from '../Setting/AccountHistory/All_Story_Of_A_User';
+import AllStoryOfAUser from '../Setting/AccountHistory/All_Story_Of_A_User';
 
 const SearchedPersonPost = () => {
 
@@ -76,7 +76,7 @@ const SearchedPersonPost = () => {
      return (
           <div className="w-full max-h-[200vh] overflow-y-scroll example lg:w-4/5 md:border-r">
                <ToastContainer />
-               {searchedUserId === likedBy && <All_Story_Of_A_User />}
+               {searchedUserId === likedBy && <AllStoryOfAUser />}
 
                {postDetails?.length === 0 ? (
                     <div className="text-center mt-4 text-gray-500">

@@ -113,10 +113,15 @@ const WebsiteLayout = () => {
 
   return (
     <>
+    {/* // eslint-disable-next-line */}
       {docTitle !== '404 - Page Not Found' && currentLocation !== '/' && currentLocation !== '/auth-failed' && currentLocation !== '/signup' && !currentLocation.startsWith('/searched-profile') && <Header userPhoto={userPhoto} dashboardDisplay={dashboardDisplay} toggleDashboard={() => setDashboardDisplay(prev => !prev)} />}
+      {/* // eslint-disable-next-line */}
       <div className='flex'>
+      {/* // eslint-disable-next-line */}
         {docTitle !== '404 - Page Not Found' && currentLocation !== '/auth-failed' && currentLocation !== '/' && currentLocation !== '/signup' && loggedUserId !== null && !currentLocation.startsWith("/searched-profile") && <Dashboard dashboardDisplay={dashboardDisplay} />}
+        {/* // eslint-disable-next-line */}
         <div className={`w-full ${!(currentLocation.startsWith("/message") && splitCuurPath.length === 3 || loggedUserId == null) ? 'lg:pt-4 lg:pb-5' : ''}`}>
+        {/* // eslint-disable-next-line */}
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

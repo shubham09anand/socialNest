@@ -33,7 +33,7 @@ const SearchedPerson = () => {
           console.error('Error fetching user profile');
         });
     }
-  }, [searchedUserId]);
+  }, [searchedUserId,navigator]);
 
   //getting user frined and post count
   useEffect(() => {
@@ -55,7 +55,7 @@ const SearchedPerson = () => {
     if (userToken && userId) {
       dispatch(setLoginData({ token: userToken, userId: userId }));
     }
-  },[userToken, userId])
+  },[userToken, userId,dispatch])
 
   return (
     <>

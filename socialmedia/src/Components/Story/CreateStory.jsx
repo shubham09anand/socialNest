@@ -109,7 +109,7 @@ const CreateStory = () => {
                                 {fileUploaded.length === 0 ? <><ion-icon name="Userimage" className="text-3xl text-teal-600 md hydrated" role="img" aria-label="userimage"></ion-icon><span className="text-black mt-2 text-center">Browse to Upload image </span></> : <span onClick={() => { handleRemoveImages() }} className="text-white mt-2 w-fit h-fit">Reupload</span>}
                             </label>
                             <div className='flex w-full overflow-x-scroll h-full example'>
-                                {fileUploaded.length > 0 ? fileUploaded.map((photos, index) => <img id="createStatusImage" key={index} src={photos || postImagErr} onError={(e) => e.target.src = postImagErr} alt="Uploaded Image" accept="image/png, image/jpeg" className="w-[200vw] mx-1 h-full object-cover" />) : null}
+                                {fileUploaded.length > 0 ? fileUploaded.map((photos, index) => <img id="createStatusImage" alt="imgErr" key={index} src={photos || postImagErr} onError={(e) => e.target.src = postImagErr} accept="image/png, image/jpeg" className="w-[200vw] mx-1 h-full object-cover" />) : null}
                             </div>
                         </div>
                     </div>

@@ -120,6 +120,7 @@ const ScheduledMessage = ({ toggleprofileDisplay }) => {
 
     useEffect(() => {
         getScheduledMessage();
+        // eslint-disable-next-line
     }, [source_id]);
 
     return (

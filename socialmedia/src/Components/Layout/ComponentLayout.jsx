@@ -3,7 +3,7 @@ import UserProfileLayout from '../Profile/UserProfileLayout'
 
 const ComponentLayout = () => {
   return (
-    <div className='w-full mt-20'>
+    <div className='w-full mt-20 pt-20'>
       <UserProfileLayout/>
     </div>
   )

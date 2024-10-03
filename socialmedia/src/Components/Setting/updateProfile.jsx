@@ -160,7 +160,7 @@ const UpdateProfile = () => {
                     )
                   )
                 }
-                <input onChange={(e) => { const file = e.target.files[0]; setNewProfilePhoto(e.target.files[0]) }} accept="image/*" type="file" id="file" className="hidden" />
+                <input onChange={(e) => {setNewProfilePhoto(e.target.files[0]) }} accept="image/*" type="file" id="file" className="hidden" />
                 <div className="font-extrabold mx-auto w-fit">profile</div>
               </label>
 

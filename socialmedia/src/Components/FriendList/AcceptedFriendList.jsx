@@ -45,7 +45,9 @@ const AcceptedFriendList = () => {
      };
 
      useEffect(() => {
+          // eslint-disable-next-line
           getFriendList();
+          // eslint-disable-next-line
      }, [userId]);
 
      return (

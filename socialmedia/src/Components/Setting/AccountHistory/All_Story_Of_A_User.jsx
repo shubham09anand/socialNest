@@ -29,6 +29,7 @@ const All_Story_Of_A_User = () => {
 
     useEffect(() => {
         getAllStoryOfSpecificUser();
+        // eslint-disable-next-line
     }, [index]);
 
     const handleNextStory = () => {
