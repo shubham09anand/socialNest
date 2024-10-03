@@ -14,7 +14,7 @@ connectDB();
 
 const app = express();
 const server = http.createServer(app);
-const port = process.env.PORT || 8080;
+const port = 8080;
 
 const corsMiddleware = (req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -39,7 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 const io = new Server(server, {
     maxHttpBufferSize: 12 * 1024 * 1024, // Maximum data size for WebSocket requests
     cors: {
-        origin: process.env.REACT_APP_API_SOCKET_NETWORK,
+        origin: "http://13.202.210.238:3000",
         methods: ['GET', 'POST'],
         credentials: true
     }

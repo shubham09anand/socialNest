@@ -4,9 +4,7 @@ const axios = require('axios');
 const scheduleCronJob = () => {
   cron.schedule('* * * * *', async () => {
     try {
-      const apiUrl = process.env.REACT_APP_API_CRONJOB_NETWORK;
-      const response = await axios.post(`${apiUrl}/auth/processScheduledMessage`);
-      console.log(`${apiUrl}/auth/processScheduledMessage`)
+      const response = await axios.post('http://13.202.210.238:8080/auth/processScheduledMessage');
     } catch (error) {
       console.error('Error executing cron job:', error);
     }

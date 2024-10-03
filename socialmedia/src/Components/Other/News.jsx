@@ -12,7 +12,7 @@ const News = () => {
 
      useEffect(() => {
           const fetchData = async () => {
-               const apiKey = process.env.REACT_APP_NYT_API;
+               const apiKey = 'xNomhkVetThz3DOz48oQXTspUZi6gxG9';
                const apiUrl = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${apiKey}`;
                try {
                     const response = await axios.get(apiUrl);
