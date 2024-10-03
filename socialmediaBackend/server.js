@@ -18,7 +18,7 @@ connectDB();
 
 const app = express();
 const server = http.createServer(app);
-const port = process.env.PORT || 8080; // Default to port 8080 if not defined
+const port = 8080; // Default to port 8080 if not defined
 
 // Middleware
 app.use(cors());
@@ -81,7 +81,7 @@ app.use("/auth", require('./Routes/articleRoutes'));
 app.use("/auth", require('./Routes/messageRoutes'));
 app.use("/auth", require('./Routes/settingRoutes'));
 app.use("/auth", require('./Routes/searchedRoutes'));
-app.use("/auth", require('./Routes/scheduledRoutes'));
+// app.use("/auth", require('./Routes/scheduledRoutes'));
 app.use("/auth", require('./Routes/userInfo'));
 
 // Schedule cron jobs
