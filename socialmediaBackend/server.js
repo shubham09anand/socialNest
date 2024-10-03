@@ -3,68 +3,64 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const bodyParser = require('body-parser');
 
-// Load environment variables from .env file
-dotenv.config();
-
-// Database connection
+// Import your database connection and route handlers
 const connectDB = require("./DatabseConnection/connection.js");
-
-// Import routes
-const { scheduleCronJob } = require('./Routes/cronApi.js');
+// const { scheduleCronJob } = require('./Routes/cronApi.js');
 const { sendMessage } = require("./Controller/Messages/sendMessage.js");
 
-const app = express();
-const port = 8080;
-
-// Middleware
-app.use(cors());
-app.use(express.json({ limit: '100mb' })); // For parsing application/json
-app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
-
-// Socket.IO setup
-const server = http.createServer(app);
-const io = new Server(server, {
-    maxHttpBufferSize: 12 * 1024 * 1024, // Maximum data size for WebSocket requests
-    cors: {
-        origin: "http://13.202.210.238:3000", // Replace with your frontend URL
-        methods: ['GET', 'POST'],
-        credentials: true
-    }
-});
+// Load environment variables
+dotenv.config();
 
 // Connect to the database
 connectDB();
 
-// Handle Socket.IO connections
+const app = express();
+const server = http.createServer(app);
+const port = process.env.PORT || 8080; // Default to port 8080 if not defined
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json({ limit: '100mb' })); // Increased limit for JSON payloads
+app.use(express.json({ limit: '100mb' })); // Increased limit for JSON payloads
+app.use(express.urlencoded({ extended: true }));
+
+// Set up Socket.IO
+const io = new Server(server, {
+    maxHttpBufferSize: 12 * 1024 * 1024, // Max data size for WebSocket requests
+    cors: {
+        origin: '*', // Use wildcard for all origins if not set
+        methods: ['GET', 'POST'],
+    }
+});
+
+// Socket.IO events
 io.on('connection', (socket) => {
-    console.log('New client connected:', socket.id);
+    console.log('A user connected:', socket.id);
 
     // Handle joining a room
     socket.on('join_room', (room) => {
         if (room) {
             socket.join(room);
-            io.to(room).emit('user_joined', socket.id);
+            io.to(room).emit('user_joined', socket.id); // Notify others in the room
         } else {
             console.log(`Invalid room: ${room}`);
         }
     });
 
-    // Handle message sending
+    // Handle sending messages
     socket.on('send_message', async (data) => {
         const { convoId, sourceId, reciverId, message, messagePhoto } = data;
 
-        // Validate the data
+        // Validate incoming data
         if (!convoId || !sourceId || !reciverId || !(message || messagePhoto)) {
             console.error("Missing required data:", data);
             return;
         }
 
         try {
-            // Join the conversation room
             socket.join(convoId);
-
-            // Save and forward the message
             const result = await sendMessage(data);
             io.to(convoId).emit('forward_message', { content: data, result: result });
         } catch (error) {
@@ -72,9 +68,8 @@ io.on('connection', (socket) => {
         }
     });
 
-    // Handle disconnection
     socket.on('disconnect', () => {
-        console.log(`Client disconnected: ${socket.id}`);
+        console.log('User disconnected:', socket.id);
     });
 });
 
@@ -90,7 +85,7 @@ app.use("/auth", require('./Routes/scheduledRoutes'));
 app.use("/auth", require('./Routes/userInfo'));
 
 // Schedule cron jobs
-scheduleCronJob();
+// scheduleCronJob();
 
 // Start the server
 server.listen(port, () => {
