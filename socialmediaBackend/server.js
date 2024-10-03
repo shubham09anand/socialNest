@@ -1,51 +1,44 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-
+const cors = require("cors");
 const dotenv = require("dotenv");
-const bodyParser = require('body-parser');
 
+// Load environment variables from .env file
+dotenv.config();
+
+// Database connection
 const connectDB = require("./DatabseConnection/connection.js");
+
+// Import routes
 const { scheduleCronJob } = require('./Routes/cronApi.js');
 const { sendMessage } = require("./Controller/Messages/sendMessage.js");
 
-dotenv.config();
-connectDB();
-
 const app = express();
-const server = http.createServer(app);
 const port = 8080;
 
-const corsMiddleware = (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With');
-    res.header('Access-Control-Allow-Methods', 'POST, OPTIONS, GET, PUT');
+// Middleware
+app.use(cors());
+app.use(express.json({ limit: '100mb' })); // For parsing application/json
+app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(204);
-    }
-
-    next();
-};
-
-app.use(corsMiddleware);
-
-app.use(bodyParser.json({ limit: '100mb' }));
-app.use(express.json());
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
-
+// Socket.IO setup
+const server = http.createServer(app);
 const io = new Server(server, {
     maxHttpBufferSize: 12 * 1024 * 1024, // Maximum data size for WebSocket requests
     cors: {
-        origin: "http://13.202.210.238:3000",
+        origin: "http://13.202.210.238:3000", // Replace with your frontend URL
         methods: ['GET', 'POST'],
         credentials: true
     }
 });
 
+// Connect to the database
+connectDB();
+
+// Handle Socket.IO connections
 io.on('connection', (socket) => {
+    console.log('New client connected:', socket.id);
 
     // Handle joining a room
     socket.on('join_room', (room) => {
@@ -79,8 +72,9 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Handle disconnection
     socket.on('disconnect', () => {
-        return false;
+        console.log(`Client disconnected: ${socket.id}`);
     });
 });
 
@@ -98,7 +92,7 @@ app.use("/auth", require('./Routes/userInfo'));
 // Schedule cron jobs
 scheduleCronJob();
 
-// Start the server on the defined port
+// Start the server
 server.listen(port, () => {
     console.log(`Server and Socket.IO are running on port ${port}`);
 });
