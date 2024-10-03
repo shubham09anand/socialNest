@@ -13,32 +13,30 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    optionsSuccessStatus: 200
-}));
 
+// CORS configuration
+const corsOptions = {
+    origin: 'http://13.202.210.238:3000', // Replace with your client app URL
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    optionsSuccessStatus: 200,
+    credentials: true // Allow credentials (cookies, authorization headers, etc.)
+};
+
+app.use(cors(corsOptions));
 
 const server = http.createServer(app);
 const port = 8080;
 
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(express.json());
-app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 const io = new Server(server, {
     maxHttpBufferSize: 12 * 1024 * 1024,
-    cors: {
-        origin: 'http://13.202.210.238:3000',
-        methods: ['GET', 'POST'],
-        credentials: true
-    }
+    cors: corsOptions // Use the same CORS options for Socket.IO
 });
 
 io.on('connection', (socket) => {
-
     // Handle joining a room
     socket.on('join_room', (room) => {
         if (room) {
@@ -72,7 +70,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        return false;
+        console.log(`Socket ${socket.id} disconnected`);
     });
 });
 
@@ -93,4 +91,4 @@ scheduleCronJob();
 // Start the server on the defined port
 server.listen(port, () => {
     console.log(`Server and Socket.IO are running on port ${port}`);
-});
+});  
