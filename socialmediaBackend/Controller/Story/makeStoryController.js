@@ -23,6 +23,7 @@ const createuserStory = async (req, res) => {
 
       res.status(200).json({
         message: "Story added successfully",
+        status:1
       });
 
     } else {
