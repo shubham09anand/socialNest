@@ -13,17 +13,12 @@ dotenv.config();
 connectDB();
 
 const app = express();
-
 app.use(cors({
-    origin: [
-        process.env.REACT_APP_API_SOCKET_LOCAL, 
-        process.env.REACT_APP_API_SOCKET_NETWORK, 
-        process.env.REACT_APP_API_SOCKET_AWS_IP,
-        process.env.REACT_APP_API_SOCKET_AWS_DOMAIN,
-    ],
+    origin: ['http://socialnest.shubham09anand.in', 'http://13.202.210.238:3000'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     optionsSuccessStatus: 200
 }));
+
 
 const server = http.createServer(app);
 const port = process.env.PORT || 8080;
@@ -36,13 +31,8 @@ app.use(express.urlencoded({ extended: true }));
 const io = new Server(server, {
     maxHttpBufferSize: 12 * 1024 * 1024,
     cors: {
-        origin: [
-            process.env.REACT_APP_API_SOCKET_LOCAL, 
-            process.env.REACT_APP_API_SOCKET_NETWORK, 
-            process.env.REACT_APP_API_SOCKET_AWS_IP,
-            process.env.REACT_APP_API_SOCKET_AWS_DOMAIN,
-        ],
-        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        origin: 'http://13.202.210.238:3000',
+        methods: ['GET', 'POST'],
         credentials: true
     }
 });

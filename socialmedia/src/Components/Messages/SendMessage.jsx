@@ -21,7 +21,7 @@ const SendMessage = ({ newConsversation }) => {
 
   // Initialize socket connection
   useEffect(() => {
-    const s = io(process.env.REACT_APP_BASE_SOCKET_LOCAL);
+    const s = io('http://127.0.0.1:8080');
     setSocket(s);
 
     // Join the room when the component mounts
