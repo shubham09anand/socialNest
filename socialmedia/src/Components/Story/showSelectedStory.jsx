@@ -6,7 +6,7 @@ import noProfilePicture from '../../Assets/NoProileImage.png';
 import Deveplores from "../Deveplores";
 
 const ShowSelectedStory = () => {
-    
+
     const postImagErr = 'https://icons.veryicon.com/png/o/education-technology/alibaba-cloud-iot-business-department/image-load-failed.png';
     const [error, setError] = useState(null);
     const [selectedStory, setSelectedStory] = useState([]);
@@ -114,7 +114,7 @@ const ShowSelectedStory = () => {
             {!isLoading && !error && selectedStory.length > 0 && (
                 <>
                     {selectedStory[0]?.storyPhoto.length > 0 && (
-                        <div className="lg:w-[30%] flex-col place-content-center items-center h-full mx-auto relative">
+                        <div onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} className="lg:w-[30%] flex-col place-content-center items-center h-full mx-auto relative">
                             {instructionDisplay && selectedStory[0]?.storyPhoto.length > 1 &&
                                 (
                                     <div className="mx-auto w-fit">
@@ -148,13 +148,16 @@ const ShowSelectedStory = () => {
                             )}
 
                             <div className="w-full relative">
-                                <div className="w-full h-full" onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-                                    <img className="w-full h-full object-contain" src={selectedStory[0]?.storyPhoto[index] || postImagErr} onError={(e) => e.target.src = postImagErr} alt="" />
+                                <div className="w-full h-full">
+                                    {selectedStory[0]?.storyPhoto[index] && (
+                                        <img className="w-full h-full object-contain" src={selectedStory[0]?.storyPhoto[index] || postImagErr} onError={(e) => e.target.src = postImagErr} alt="imgErr" />
+                                    )}
                                 </div>
                             </div>
 
+
                             {isLongTouch && (
-                                <div className="p-2 pr-2 h-fit overflow-y-scroll absolute bottom-32 text-gray-100 w-full example">
+                                <div className={`p-2 pr-2 overflow-y-scrollw-full example ${selectedStory[0]?.storyPhoto[index] ? 'absolute bottom-32 text-xl h-fit text-gray-100  ':'text-3xl text-center bg-slate-100 h-96 flex place-content-center items-center '}`}>
                                     {selectedStory[0]?.storyMessage[index]}
                                 </div>
                             )}

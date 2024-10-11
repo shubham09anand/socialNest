@@ -7,7 +7,7 @@ const scheduleCronJob = () => {
   // Schedule a job to run every minute (adjust as needed)
   cron.schedule('* * * * *', async () => {
     try {
-      const response = await axios.post(`http://13.202.210.238:8080/auth/processScheduledMessage`);
+      const response = await axios.post(`http://127.0.0.1:8080/auth/processScheduledMessage`);
       console.log('Cron job executed successfully:', response.data);
     } catch (error) {
       console.error('Error executing cron job:', error.message || error);

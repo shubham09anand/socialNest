@@ -14,7 +14,7 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    origin: ['http://socialnest.shubham09anand.in', 'http://13.202.210.238:3000'],
+    origin: ['http://socialnest.shubham09anand.in', 'http://127.0.0.1:3000'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     optionsSuccessStatus: 200
 }));
@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 const io = new Server(server, {
     maxHttpBufferSize: 12 * 1024 * 1024,
     cors: {
-        origin: 'http://13.202.210.238:3000',
+        origin: 'http://127.0.0.1:3000',
         methods: ['GET', 'POST'],
         credentials: true
     }

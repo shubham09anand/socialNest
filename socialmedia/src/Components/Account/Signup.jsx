@@ -73,34 +73,34 @@ const Signup = () => {
      };
 
      return (
-          <div className="h-screen">
+          <div className="h-screen bg-[#f1f5f9]">
                <ToastContainer style={{ fontSize: "12px" }} />
-               <div className="bg-gray-10 pt-20 lg:pt-0 flex-row lg:flex justify-center items-center h-screen w-full md:px-20 lg:px-20 xl:px-60 md:space-x-10">
+               <div className="pt-20 lg:pt-0 flex-row lg:flex justify-center items-center h-screen w-full md:px-20 lg:px-20 xl:px-60 md:space-x-10">
                     <Intro height={500} />
                     <img src={socialNest} alt="socialNest" className="w-20 h-20 mx-auto mb-2 lg:hidden" />
-                    <div className="p-5 w-full sm:w-3/4 lg:w-full h-fit shadow-2xl">
+                    <div className="bg-white p-5 w-full sm:w-3/4 lg:w-full h-fit shadow-2xl">
                          <h1 className="text-2xl font-semibold mb-2">Signup</h1>
                          <form onSubmit={handleSubmit} className="w-full mx-auto h-full place-content-center items-center flex-col">
                               <div className="sm:flex sm:flex-col justify-between">
                                    <div className="mb-2 w-full">
                                         <label htmlFor="firstName" className="block text-gray-600">First Name</label>
-                                        <input required placeholder="First Name" type="text" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                                        <input required placeholder="First Name" type="text" className="w-full border-2 border-[#4f74d4] focus:border-[#032478] rounded-md py-2 px-3 focus:outline-none" autoComplete="off" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                                    </div>
                                    <div className="mb-2 w-full">
                                         <label htmlFor="lastName" className="block text-gray-600">Last Name</label>
-                                        <input required placeholder="Last Name" type="text" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                                        <input required placeholder="Last Name" type="text" className="w-full border-2 border-[#4f74d4] focus:border-[#032478] rounded-md py-2 px-3 focus:outline-none" autoComplete="off" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                                    </div>
                               </div>
                               <div className="mb-2">
                                    <label htmlFor="userName" className="block text-gray-600">Username</label>
-                                   <input required placeholder="Enter a username" type="text" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" value={userName} onChange={(e) => setuserName(e.target.value)} />
+                                   <input required placeholder="Enter a username" type="text" className="w-full border-2 border-[#4f74d4] focus:border-[#032478] rounded-md py-2 px-3 focus:outline-none" autoComplete="off" value={userName} onChange={(e) => setuserName(e.target.value)} />
                                    {warnDisplay && (<div className="text-red-600 text-[12px] italic">Username is restricted, please choose another one.</div>)}
                               </div>
                               <div className="mb-2">
                                    <label htmlFor="password" className="block text-gray-600">Password</label>
-                                   <input required placeholder="Enter a password" type="password" id="password" className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500" autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                   <input required placeholder="Enter a password" type="password" id="password" className="w-full border-2 border-[#4f74d4] focus:border-[#032478] rounded-md py-2 px-3 focus:outline-none" autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} />
                               </div>
-                              <button type="submit" disabled={button} className={`mt-2 bg-[#7090e3] hover:bg-[#2f5ed5] text-white font-semibold rounded-sm py-2 px-4 w-full ${button ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
+                              <button type="submit" disabled={button} className={`mt-2 bg-[#7090e3] text-white font-semibold rounded-sm py-2 px-4 w-full ${button ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
                                    {button ? 'Signing Up...' : 'Sign Up'}
                               </button>
                          </form>

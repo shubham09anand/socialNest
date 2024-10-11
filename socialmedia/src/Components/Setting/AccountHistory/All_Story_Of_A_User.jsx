@@ -110,9 +110,11 @@ const All_Story_Of_A_User = () => {
                                                 </svg>
                                             </div>
                                         )}
-                                        <img src={storyDetails[0]?.stories[0]?.storyPhoto[0] || postImagErr} onError={(e) => e.target.src = postImagErr} alt='imgErr' className="mb-2 object-contain w-full h-[50vh]" />
+                                        {storyDetails[0]?.stories[0]?.storyPhoto[0] && (
+                                            <img src={storyDetails[0]?.stories[0]?.storyPhoto[0] || postImagErr} onError={(e) => e.target.src = postImagErr} alt='imgErr' className="mb-2 object-contain w-full h-[50vh]" />
+                                        )}
                                     </div>
-                                    <div className="max-h-20 mx-auto h-fit w-fit duration-[2s] ml-28 overflow-y-scroll text-gray-100 example">
+                                    <div className={`mx-auto h-fit w-fit duration-[2s] ml-28 overflow-y-scroll text-gray-100 example ${storyDetails[0]?.stories[0]?.storyPhoto[0] ? 'max-h-20 px-10 text-center' : 'text-2xl px-28 text-center'}`}>
                                         {storyDetails[0]?.stories[0]?.storyMessage}
                                     </div>
                                 </div>

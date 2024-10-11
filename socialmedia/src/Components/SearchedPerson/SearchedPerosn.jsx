@@ -61,7 +61,7 @@ const SearchedPerson = () => {
     <>
       <div className={`${loggedUser === null ? 'pb-20 h-screen w-full' : 'pb-20 lg:absolute right-0  w-full lg:w-[80%] lg:p-5'}`}>
         <div className="w-full bg-white lg:rounded-b-2xl lg:-mt-10">
-          <div className="relative overflow-hidden w-full lg:h-72 h-48">
+          <div className="relative overflow-hidden w-full lg:h-72 h-36 md:h-48">
             {UserData?.userProfile2?.backGroundPhoto || UserData?.userProfile2?.backGroundPhoto === "" ?
               <img src={UserData?.userProfile2?.backGroundPhoto} alt="backgroundPicture" className="h-full w-full object-fill" />
               :
