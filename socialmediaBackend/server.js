@@ -14,11 +14,15 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    origin: ['http://socialnest.shubham09anand.in', 'http://127.0.0.1:3000'],
+    origin: [
+        process.env.REACT_APP_API_SOCKET_LOCAL, 
+        process.env.REACT_APP_API_SOCKET_NETWORK, 
+        process.env.REACT_APP_API_SOCKET_AWS_IP,
+        process.env.REACT_APP_API_SOCKET_AWS_DOMAIN,
+    ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     optionsSuccessStatus: 200
 }));
-
 
 const server = http.createServer(app);
 const port = process.env.PORT || 8080;
@@ -31,8 +35,13 @@ app.use(express.urlencoded({ extended: true }));
 const io = new Server(server, {
     maxHttpBufferSize: 12 * 1024 * 1024,
     cors: {
-        origin: 'http://127.0.0.1:3000',
-        methods: ['GET', 'POST'],
+        origin: [
+            process.env.REACT_APP_API_SOCKET_LOCAL, 
+            process.env.REACT_APP_API_SOCKET_NETWORK, 
+            process.env.REACT_APP_API_SOCKET_AWS_IP,
+            process.env.REACT_APP_API_SOCKET_AWS_DOMAIN,
+        ],
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         credentials: true
     }
 });
