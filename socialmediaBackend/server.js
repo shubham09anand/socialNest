@@ -13,6 +13,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
 app.use(cors({
     origin: [
         process.env.REACT_APP_API_SOCKET_LOCAL, 
