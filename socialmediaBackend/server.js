@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 const io = new Server(server, {
     maxHttpBufferSize: 12 * 1024 * 1024,
     cors: {
-        origin: 'http://13.202.210.238:3000',
+        origin: ['http://13.202.210.238:3000','http://socialnest.shubham09anand.in:3000','http://socialnest.shubham09anand.in'],
         methods: ['GET', 'POST'],
         credentials: true
     }
