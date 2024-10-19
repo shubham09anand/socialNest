@@ -3,6 +3,7 @@ const userSignup = require("../../Models/UserSignupModel");
 const filterUser = async (req, res) => {
   try {
     const userInput = req.body.userInput;
+    console.log(userInput)
 
     const getSignupData = await userSignup.aggregate([
       {

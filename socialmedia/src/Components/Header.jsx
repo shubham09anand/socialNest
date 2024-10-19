@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import noProfilePicture from '../Assets/NoProileImage.png';
@@ -20,16 +20,43 @@ const Header = ({ toggleDashboard, userPhoto }) => {
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [hamburgerDisplay, setHamburgerDisplay] = useState(false)
 
-    useEffect(() => {
-        if (userInput !== "") {
-            API.post("/filterUser", { userInput }).then((res) => {
+    const debounceTimeoutRef = useRef(null);
+
+    const debounce = (func, delay) => {
+        return (...args) => {
+            if (debounceTimeoutRef.current) {
+                clearTimeout(debounceTimeoutRef.current);
+            }
+            debounceTimeoutRef.current = setTimeout(() => {
+                func(...args);
+            }, delay);
+        };
+    };
+
+    const fetchFilteredUsers = useCallback((userInput) => {
+        API.post("/filterUser", { userInput })
+            .then((res) => {
                 setUsers(res.data);
             })
-                .catch((error) => {
-                    console.log("Error:", error);
-                });
+            .catch((error) => {
+                console.log("Error fetching users:", error);
+            });
+    }, []);
+
+    const debouncedFetchFilteredUsers = useCallback(debounce(fetchFilteredUsers, 500), [fetchFilteredUsers]);
+
+    useEffect(() => {
+        if (userInput !== "") {
+            debouncedFetchFilteredUsers(userInput);
+        } else {
+            setUsers({ filterData: [] });
         }
-    }, [userInput]);
+        return () => {
+            if (debounceTimeoutRef.current) {
+                clearTimeout(debounceTimeoutRef.current);
+            }
+        };
+    }, [userInput, debouncedFetchFilteredUsers]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -72,7 +99,7 @@ const Header = ({ toggleDashboard, userPhoto }) => {
                         </div>
 
                         <div className={`${logedin_user_Id === null ? 'pl-4 sm:pl-3 lg:-translate-x-8 w-full' : 'hidden lg:block'}`}>
-                            <div className="flex place-content-center items-center justify-between w-full -translate-x-5">
+                            <div className={`flex place-content-center items-center justify-between -translate-x-5 ${logedin_user_Id === null ? "w-screen" : "w-full"}`}>
                                 <div className="flex space-x-2 place-content-center items-center">
                                     <img src={socialNest} draggable={false} className="h-10 w-10 select-none" alt="Social Nest Logo" />
                                     <div className={`${logedin_user_Id === null ? '' : 'select-none text-base font-extrabold hidden lg:block'}`}>Social<span className="text-[#6e8de0]">Nest</span></div>
