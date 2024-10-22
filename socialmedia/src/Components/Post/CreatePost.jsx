@@ -154,7 +154,7 @@ const CreatePost = () => {
                     </div>
 
                     <div className="flex justify-between items-center">
-                        <button disabled={button} onClick={handlePost} type="button" className={`button mx-auto bg-[#6f8ee1] hover:bg-[#6186ec] text-white px-8 rounded-md text-xl py-1 ${button ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>{button ? 'Create Post' : 'Creating'}</button>
+                        <button disabled={button} onClick={handlePost} type="button" className={`button mx-auto bg-[#3954aa] hover:bg-[#072daa] text-white px-8 rounded-md text-xl py-1 ${button ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>{button ? 'Creating...' : 'Create'}</button>
                     </div>
                 </div>
             </div>

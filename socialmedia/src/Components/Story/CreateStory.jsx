@@ -114,7 +114,7 @@ const CreateStory = () => {
                         </div>
                     </div>
                     <div className="flex justify-between items-center">
-                        <button disabled={button} onClick={() => { handleStory() }} type="button" className={`button mx-auto w-fit bg-[#5771b5] text-white px-8 rounded-md text-xl py-1 ${button ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>{button ? 'Add Story' : 'Posting'}</button>
+                        <button disabled={button} onClick={() => { handleStory() }} type="button" className={`button mx-auto w-fit bg-[#324fad] hover:bg-[#012085] text-white px-8 rounded-md text-xl py-1 ${button ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>{button ? 'Adding...' : 'Add Story'}</button>
                     </div>
                 </div>
             </div>

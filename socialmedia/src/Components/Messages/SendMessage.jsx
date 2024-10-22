@@ -21,8 +21,8 @@ const SendMessage = ({ newConsversation }) => {
 
   // Initialize socket connection
   useEffect(() => {
-    const s = io('https://apisocialnest.shubham09anand.in');
-    // const s = io(process.env.REACT_APP_BASE_SOCKET_NETWORK,);
+    // const s = io('https://apisocialnest.shubham09anand.in');
+    const s = io(process.env.REACT_APP_BASE_SOCKET_NETWORK,);
     setSocket(s);
 
     // Join the room when the component mounts
