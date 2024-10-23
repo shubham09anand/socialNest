@@ -7,8 +7,8 @@ const SettingsOptions = () => {
      const userId =  useSelector((state) => (state.LoginSlice.loggedUserId));
      
      return (
-          <aside id="logo-sidebar" className="w-full lg:w-[80%] lg:p-2 lg:absolute right-0 pt-[35px] lg:pt-[30px]" aria-label="Sidebar">
-               <div className="h-full px-3 py-4 overflow-y-auto">
+          <aside id="logo-sidebar" className="w-full lg:w-[80%] lg:p-2 lg:absolute right-0 pt-[20px] lg:pt-[30px]" aria-label="Sidebar">
+               <div className="h-full px-3 lg:py-4 overflow-y-auto">
                     <ul className="font-medium">
                          <div className='text-3xl font-bold mb-2'>Setting</div>
                          <Link to={`/searched-person/${userId}`} style={{ textDecoration: "none" }} className='border-b flex items-center cursor-pointer hover:bg-slate-100 active:opacity-50 group py-2'>

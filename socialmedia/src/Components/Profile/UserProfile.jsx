@@ -12,7 +12,7 @@ const UserProfile = ({ userProfile, userName, joinedOn }) => {
      const logedInPersonId = useSelector((state) => state.LoginSlice.loggedUserId);
 
      return (
-          <div className="w-full md:w-72 lg:w-96 lg:border-b m-1 space-y-10 bg-white">
+          <div className="w-full md:w-72 lg:w-96 shadow-[1px_1px_1px_1px_gray] lg:shadow-none m-1 space-y-10 bg-white">
                <div className="box py-2 px-3">
                     <div className="flex items-ce justify-between text-black ">
                          <h3 className="font-semibold text-3xl mb-4"> Intro </h3>
@@ -40,9 +40,14 @@ const UserProfile = ({ userProfile, userName, joinedOn }) => {
                          )}
 
                          {userProfile === null ?
-                              <div className="cursor-pointer w-full text-center h-fit px-4 py-2 bg-blue-600 text-white font-semibold active:opacity-75 rounded-md mx-auto">
-                                   <Link style={{ textDecoration: "none", color: "white" }} to="/update-profile">Complete Your Profile</Link>
-                              </div>
+                              <>
+                                   {logedInPersonId === searchedUserId && (
+
+                                        <div className="cursor-pointer w-full text-center h-fit px-4 py-2 bg-blue-600 text-white font-semibold active:opacity-75 rounded-md mx-auto">
+                                             <Link style={{ textDecoration: "none", color: "white" }} to="/update-profile">Complete Your Profile</Link>
+                                        </div>
+                                   )}
+                              </>
                               :
                               <>
                                    {userProfile &&

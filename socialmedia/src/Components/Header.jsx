@@ -79,7 +79,7 @@ const Header = ({ toggleDashboard, userPhoto }) => {
             {isHeaderLoading ? (
                 <HeaderAnimation />
             ) : (
-                <header className="fixed w-screen bottom-0 lg:top-0 lg:bottom-[100%] bg-white z-40">
+                <header className="lg:px-2 fixed w-screen bottom-0 lg:top-0 lg:bottom-[100%] bg-white z-40">
                     <div className="flex py-1 justify-between border-t-2 w-full pr-2 lg:px-6 lg:gap-5 space-x-2 place-content-center items-center bg-white">
                         <div className={` lg:hidden w-fit flex items-center gap-1 ${logedin_user_Id === null ? 'hidden' : 'block'}`}>
                             {!hamburgerDisplay && (
@@ -201,7 +201,7 @@ const Header = ({ toggleDashboard, userPhoto }) => {
                         <nav className={`w-full h-full text-sm font-medium text-black bg-white`}>
                             {userInput !== "" && users.filterData && users.filterData.length > 0 ? (
                                 users.filterData.filter(user => user?._id !== logedin_user_Id).map((user) => (
-                                    <Link style={{ textDecoration: "none" }} to={`/searched-person/${user?._id}`} key={user?._id} className="mt-2 cursor-pointer hover:bg-white relative py-1.5 border-b flex items-center gap-4">
+                                    <Link onClick={handleLowerSearch} style={{ textDecoration: "none" }} to={`/searched-person/${user?._id}`} key={user?._id} className="mt-2 cursor-pointer hover:bg-white relative py-1.5 border-b flex items-center gap-4">
                                         {user?.searchedPersonProfile[0]?.profilePhoto ? (
                                             <img src={user?.searchedPersonProfile[0]?.profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} className="w-9 h-9 rounded-full object-contain border-[#5670b2]" alt={`Avatar of ${user?.firstName} ${user?.lastName}`} style={{ border: "2px solid #6f8fe2" }} />
                                         ) :

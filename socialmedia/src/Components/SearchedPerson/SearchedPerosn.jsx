@@ -33,7 +33,7 @@ const SearchedPerson = () => {
           console.error('Error fetching user profile');
         });
     }
-  }, [searchedUserId,navigator]);
+  }, [searchedUserId, navigator]);
 
   //getting user frined and post count
   useEffect(() => {
@@ -55,12 +55,12 @@ const SearchedPerson = () => {
     if (userToken && userId) {
       dispatch(setLoginData({ token: userToken, userId: userId }));
     }
-  },[userToken, userId,dispatch])
+  }, [userToken, userId, dispatch])
 
   return (
     <>
-      <div className={`${loggedUser === null ? 'pb-20 w-full mx-auto shadow-2xl h-fit' : 'pb-20 lg:absolute right-0 w-full lg:w-[80%] lg:p-5 mt-3'}`}>
-        <div className={`w-full bg-white lg:rounded-b-2xl ${loggedUser === null ? "lg:mt-14" : 'lg:-mt-10' }`}>
+      <div className={`${loggedUser === null ? 'pb-20 w-full lg:w-3/4 mx-auto shadow-2xl h-fit' : 'pb-20 lg:absolute right-0 w-full lg:w-[80%] lg:p-5'}`}>
+        <div className={`w-full bg-white lg:rounded-b-2xl ${loggedUser === null ? "lg:mt-14" : 'lg:-mt-10'}`}>
           <div className="relative overflow-hidden w-full lg:h-72 h-36 md:h-48">
             {UserData?.userProfile2?.backGroundPhoto || UserData?.userProfile2?.backGroundPhoto === "" ?
               <img src={UserData?.userProfile2?.backGroundPhoto} alt="backgroundPicture" className="h-full w-full object-fill" />
@@ -72,7 +72,7 @@ const SearchedPerson = () => {
             <div className="flex flex-col justify-center md:items-center lg:-mt-32 sm:-mt-16 -mt-20">
               <div className="relative z-10">
                 <div className="mx-auto relative overflow-hidden rounded-full mt-3 h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 md:border-[6px] border-gray-900 shrink-0 shadow">
-                  {UserData?.userProfile2 ? <img src={UserData?.userProfile2?.profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="imgErr" className="h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 object-cover inset-0 rounded-full " style={{border : '2px solid black'}} /> : <img src={noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="imgErr" className="h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 object-cover inset-0 rounded-full" style={{border : '2px solid black'}}/>}
+                  {UserData?.userProfile2 ? <img src={UserData?.userProfile2?.profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="imgErr" className="h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 object-cover inset-0 rounded-full " style={{ border: '2px solid black' }} /> : <img src={noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="imgErr" className="h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 object-cover inset-0 rounded-full" style={{ border: '2px solid black' }} />}
                 </div>
               </div>
             </div>
@@ -143,7 +143,9 @@ const SearchedPerson = () => {
               } else if (ListDisplay === 1) {
                 return null;
               } else if (ListDisplay === 2) {
-                return <div className='md:hidden'><UserProfile userProfile={UserData?.userProfile2} /></div>;
+                return <div className='md:hidden'>
+                  <UserProfile userProfile={UserData?.userProfile2} userName={UserData?.userProfile1?.userName} joinedOn={UserData?.userProfile1?.createdAt} />
+                </div>;
               }
             })()}
           </div>
