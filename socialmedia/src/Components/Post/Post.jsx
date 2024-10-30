@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import LazyLoad from 'react-lazy-load';
 import PostAniamtion from '../Animation/PostAniamtion';
@@ -15,7 +15,7 @@ import Deveplores from "../Deveplores";
 import Slider from "react-slick";
 
 const Post = () => {
-  
+
   const postImagErr = 'https://icons.veryicon.com/png/o/education-technology/alibaba-cloud-iot-business-department/image-load-failed.png';
   const likedBy = useSelector((state) => (state.LoginSlice.loggedUserId));
   const [isLoading, setIsLoading] = useState(true);
@@ -80,7 +80,7 @@ const Post = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  
+
   return (
     <div className="w-full gap-y-5 max-h-[200vh] overflow-y-scroll example lg:w-4/5 md:border-r mb-20">
       <Story />
@@ -129,10 +129,21 @@ const Post = () => {
                 </div>
               }
               {post.message &&
-                <div className={'overflow-scroll example my-2 rounded-xl max-h-20 overflow-y-scroll ' + (postDetails?.Post[index]?.postPhoto.length !== 0 ? 'text-sm sm:text-base' : 'text-2xl sm:text-3xl font-extrabold')}>
+                <div
+                  className={
+                    'overflow-scroll example my-2 rounded-xl max-h-40 overflow-y-scroll ' +
+                    (postDetails?.Post[index]?.postPhoto.length !== 0
+                      ? 'text-sm sm:text-base'
+                      : post.message.length < 50
+                        ? 'text-2xl sm:text-2xl font-extrabold'
+                        : post.message.length < 150
+                          ? 'text-xl sm:text-xl font-bold'
+                          : 'text-lg sm:text-lg')
+                  }>
                   {post.message}
                 </div>
               }
+
               <div className='flex justify-between place-content-center items-center'>
                 <div className="text-xs pt-1 text-gray-800">
                   {moment(post.createdAt).format('D MMMM YYYY')}, {moment(post.createdAt).format('h:mm A')}

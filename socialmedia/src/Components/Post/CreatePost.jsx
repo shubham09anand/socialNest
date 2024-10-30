@@ -98,7 +98,7 @@ const CreatePost = () => {
                 <div className='text-2xl lg:mt-10 tracking-wide font-semibold text-center'>Add Post</div>
                 <div className="space-y-5">
                     <div>
-                        <input value={PostMessage} onChange={(e) => setPostMessage(e.target.value)} placeholder='Post Message...' type="text" className="w-full mt-3 bg-gray-100 outline-none rounded-md py-1 pl-2 text-gray-500" />
+                        <textarea value={PostMessage} onChange={(e) => setPostMessage(e.target.value)} placeholder='Post Message...' type="text" className="resize-none w-full h-[32px] focus:h-24 transition-all duration-500  mt-3 bg-gray-50 focus:bg-slate-100 focus:border focus:border-gray-300 outline-none rounded-md py-1 pl-2 text-gray-500" />
                     </div>
                     <div style={{ backgroundImage: `url(${addPattern})` }} className='shadow-xl border rounded-md'>
                         <div className="w-full h-72 relative border1 rounded-lg overflow-hidden bg-repeat">
