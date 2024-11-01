@@ -27,13 +27,18 @@ Setup Instructions
 Prerequisites
 Install Docker: Ensure Docker is installed on your system. You can download it from Docker’s official website.
 
-Install Docker Compose: Docker Compose is typically bundled with Docker Desktop. Confirm it’s installed by running ```bash
+Install Docker Compose: Docker Compose is typically bundled with Docker Desktop. 
+
+Confirm it’s installed by running ```
 docker-compose --version ``` in your terminal.
 
-Instructions
-Create a docker-compose.yml File: In your project directory, create a file named docker-compose.yml and add the following configuration:
+## Instructions
 
-```bash
+<br>Create a docker-compose.yml File: <br>
+
+In your project directory, create a file named docker-compose.yml and add the following configuration:
+
+```
 version: '3.8'
 
 services:
@@ -77,17 +82,18 @@ volumes:
 
 Run Docker Compose: Open a terminal in the directory containing your docker-compose.yml file and run:
 
-```bash
+```
 docker-compose up -d 
 ```
 
 The -d flag runs the services in detached mode, so they continue running in the background.
+
 Docker Compose will download the images, create containers, and start the application.
 Access the Application:
 
-- Frontend: Visit ``` bash http://localhost:3000 ``` in your browser.
+- Frontend: Visit ```http://localhost:3000 ``` in your browser.
 
-- Backend: Access ``` bash http://localhost:8080 ``` to interact with the backend.
+- Backend: Access ```http://localhost:8080 ``` to interact with the backend.
 
-- MongoDB: MongoDB will be running locally on ```bash port 27017.```
+- MongoDB: MongoDB will be running locally on ```port 27017.```
 
