@@ -15,7 +15,7 @@ A brief description of what this project does.
 - [Instagram](https://www.instagram.com/shubham09anand/?igsh=YTJvZDZlZmNwYWY1)
 - [Docker](https://hub.docker.com/u/shubham09anand)
 
-## 🔗 Links  <img src="https://socialnest.shubham09anand.in/static/media/socialNest.284b6b7c03b19ec4d054.png" style="height: 30px; width: 30px;" />
+## 🔗 Links  <img src="https://socialnest.shubham09anand.in/static/media/socialNest.284b6b7c03b19ec4d054.png" style="height: 30px; width: 30px; margin-top: 10px; margin-left: 5px;" />
 
  <b> Social Nest <b> (https://socialnest.shubham09anand.in)
 
