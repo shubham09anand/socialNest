@@ -10,14 +10,14 @@ A brief description of what this project does.
 
 ## Authors
 
-- [Shubham Anand](https://shubham09anand.in) - Portfolio
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://shubham09anand.in/)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)]([https://www.linkedin.com/](https://www.linkedin.com/in/subham09anand/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app))
 - [Instagram](https://www.instagram.com/shubham09anand/?igsh=YTJvZDZlZmNwYWY1)
 - [Docker](https://hub.docker.com/u/shubham09anand)
-- [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)]([https://www.linkedin.com/](https://www.linkedin.com/in/subham09anand/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app))
 
-
-
-## 🔗 Links
+https://socialnest.shubham09anand.in/static/media/socialNest.284b6b7c03b19ec4d054.png
+## 🔗 Links 
+<img src="https://socialnest.shubham09anand.in/static/media/socialNest.284b6b7c03b19ec4d054.png" style="height: 30px; width: 30px;" />
 [![Social Nest]](https:/socialnest.shubham09anand.in/)
 
 ## Deployment
