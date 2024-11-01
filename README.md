@@ -89,5 +89,5 @@ Access the Application:
 
 - Backend: Access ``` bash http://localhost:8080 ``` to interact with the backend.
 
-- MongoDB: MongoDB will be running locally on ``` bash port 27017.```
+- MongoDB: MongoDB will be running locally on ```bash port 27017.```
 
