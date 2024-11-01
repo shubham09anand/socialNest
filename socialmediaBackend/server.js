@@ -15,9 +15,9 @@ connectDB();
 const app = express();
 app.use(cors({
     // origin: [process.env.REACT_APP_API_SOCKET_NETWORK, process.env.REACT_APP_BASE_SOCKET_NETWORK, 'http://socialnest.shubham09anand.in', 'http://13.202.210.238:3000', 'https://socialnest.shubham09anand.in'],
-    origin: [process.env.REACT_APP_API_SOCKET_NETWORK, process.env.REACT_APP_BASE_SOCKET_NETWORK],
+    origin: ["http://localhost:3000", "http://127.0.0.1:3000", process.env.REACT_APP_API_SOCKET_NETWORK, process.env.REACT_APP_BASE_SOCKET_NETWORK],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    optionsSuccessStatus: 200  
+    optionsSuccessStatus: 200
 }));
 
 
@@ -33,7 +33,7 @@ const io = new Server(server, {
     maxHttpBufferSize: 12 * 1024 * 1024,
     cors: {
         // origin: [process.env.REACT_APP_API_SOCKET_NETWORK, process.env.REACT_APP_BASE_SOCKET_NETWORK, 'http://13.202.210.238:3000', 'http://socialnest.shubham09anand.in:3000', 'https://socialnest.shubham09anand.in'],
-        origin: [process.env.REACT_APP_API_SOCKET_NETWORK, process.env.REACT_APP_BASE_SOCKET_NETWORK],
+        origin: ["http://localhost:3000", "http://127.0.0.1:3000", process.env.REACT_APP_API_SOCKET_NETWORK, process.env.REACT_APP_BASE_SOCKET_NETWORK],
         methods: ['GET', 'POST'],
         credentials: true
     }

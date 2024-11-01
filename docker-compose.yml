@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  social_nest_backend:
+    build: ./socialmediaBackend
+    container_name: social_nest_backend_container
+    ports:
+      - '8080:8080'
+    networks:
+      - socialnestnetwork
+    depends_on:
+      - mongo
+
+  social_nest_frontend:
+    build: ./socialmediaFrontend
+    container_name: social_nest_frontend_container
+    ports:
+      - '3000:3000'
+    networks:
+      - socialnestnetwork
+    depends_on:
+      - social_nest_backend
+
+  mongo:
+    image: mongo:7.0
+    container_name: mongo_container   # make sure that u have the same name in ur database connection
+    ports:
+      - '27017:27017'
+    networks:
+      - socialnestnetwork
+
+networks:
+  socialnestnetwork:
+    driver: bridge
