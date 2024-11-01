@@ -4,6 +4,7 @@ services:
   social_nest_backend:
     build: ./socialmediaBackend
     container_name: social_nest_backend_container
+    image: shubham09anand/social_nest_backend:latest 
     ports:
       - '8080:8080'
     networks:
@@ -14,6 +15,7 @@ services:
   social_nest_frontend:
     build: ./socialmediaFrontend
     container_name: social_nest_frontend_container
+    image: shubham09anand/social_nest_frontend:latest 
     ports:
       - '3000:3000'
     networks:
@@ -23,7 +25,7 @@ services:
 
   mongo:
     image: mongo:7.0
-    container_name: mongo_container   # make sure that u have the same name in ur database connection
+    container_name: mongo_container   
     ports:
       - '27017:27017'
     networks:
