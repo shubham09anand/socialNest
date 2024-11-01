@@ -8,6 +8,14 @@ A brief description of what this project does.
 
 
 
+## Authors
+
+- [Shubham Anand](https://shubham09anand.in) - Portfolio
+- [Instagram](https://www.instagram.com/shubham09anand/?igsh=YTJvZDZlZmNwYWY1)
+- [Docker](https://hub.docker.com/u/shubham09anand)
+
+
+
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://katherineoelsner.com/)
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/)
@@ -80,7 +88,9 @@ The -d flag runs the services in detached mode, so they continue running in the 
 Docker Compose will download the images, create containers, and start the application.
 Access the Application:
 
-Frontend: Visit http://localhost:3000 in your browser.
-Backend: Access http://localhost:8080 to interact with the backend.
-MongoDB: MongoDB will be running locally on port 27017.
+- Frontend: Visit ``` bash http://localhost:3000 ``` in your browser.
+
+- Backend: Access ``` bash http://localhost:8080 ``` to interact with the backend.
+
+- MongoDB: MongoDB will be running locally on ``` bash port 27017.```
 
