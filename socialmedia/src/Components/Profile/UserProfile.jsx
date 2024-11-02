@@ -109,7 +109,7 @@ const UserProfile = ({ userProfile, userName, joinedOn }) => {
                                         </li>
                                    )}
 
-                                   {userName === "@shubham" && (
+                                   {userName === "@shubham" || userName === "shubham09anand" && (
                                         <div>
                                              <div className="font-semibold text-black text-lg mb-2">Other Social Platforms</div>
                                              <div className="flex space-x-5">
