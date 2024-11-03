@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   social_nest_backend:
     build: ./socialmediaBackend
-    container_name: social_nest_backend_container
-    image: shubham09anand/social_nest_backend:latest 
+    image: shubham09anand/social_nest_backend:latest
+    container_name: social_nest_backend
     ports:
       - '8080:8080'
     networks:
@@ -13,9 +11,9 @@ services:
       - mongo
 
   social_nest_frontend:
-    build: ./socialmediaFrontend
-    container_name: social_nest_frontend_container
-    image: shubham09anand/social_nest_frontend:latest 
+    build: ./socialmedia
+    image: shubham09anand/social_nest_frontend:latest
+    container_name: social_nest_frontend
     ports:
       - '3000:3000'
     networks:
@@ -25,12 +23,17 @@ services:
 
   mongo:
     image: mongo:7.0
-    container_name: mongo_container   
+    container_name: mongo_container
     ports:
       - '27017:27017'
     networks:
       - socialnestnetwork
+    volumes:
+      - F:/Docker data:/data/db
 
 networks:
   socialnestnetwork:
     driver: bridge
+
+volumes:
+  mongo_data:
