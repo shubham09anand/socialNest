@@ -71,19 +71,16 @@ const MessgaeSection = ({ userPhoto }) => {
         const res = await API.post("/deleteMessage", { messageID });
         try {
             if (res.status === 200 && res.data.deleteCount === 1) {
-                setTimeout(() => {
+               
                     setDelteMessage(null);
                     setMessages(Messages.filter((_, i) => i !== index));
-                },4000);
             } else if (res.status === 200 && res.data.deleteCount === 0) {
                 toast.error("Something went wrong")
             }
         } catch (error) {
             toast.error("Something went wrong")
         }finally{
-            setTimeout(() => {
                 setDeleteStatus(false);
-            }, 4000);
         }
     };
 
@@ -121,7 +118,7 @@ const MessgaeSection = ({ userPhoto }) => {
                                         )}
                                         {delteMessage === index && (
                                             <div onClick={()=> handleDelteMessage(msg?._id,index)} className='w-full flex flex-row-reverse'>
-                                                <div className={`flex text-center bg-gray-200 cursor-pointer select-none border-[0.1px] border-gray-900 text-gray-800 px-2 py-1 rounded-lg`}>{deleteStatus ? 'Deleting' : 'Delete'} { index}</div>
+                                                <div className={`flex text-center bg-gray-200 cursor-pointer select-none border-[0.1px] border-gray-900 text-gray-800 px-2 py-1 rounded-lg`}>{deleteStatus ? 'Deleting' : 'Delete'}</div>
                                             </div>
                                         )}
                                         {msg.message && (
