@@ -17,6 +17,8 @@ const MessgaeSection = ({ userPhoto }) => {
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [consversation, setConsversation] = useState();
+    const [delteMessage, setDelteMessage] = useState(null);
+    const [deleteStatus, setDeleteStatus] = useState(false);
     const navigate = useNavigate();
 
     // function to get message at front end
@@ -31,15 +33,15 @@ const MessgaeSection = ({ userPhoto }) => {
         try {
             const res = await API.post("/getMessage", { sender_id, reciver_id });
             if (res.status === 200) {
-                    setMessages(res.data.conversationHistory);
-                    setIsLoading(false);
+                setMessages(res.data.conversationHistory);
+                setIsLoading(false);
             } else {
                 setError(true);
-                    setIsLoading(false);
+                setIsLoading(false);
             }
         } catch (error) {
             setError(true);
-                setIsLoading(false);
+            setIsLoading(false);
         }
     };
 
@@ -64,6 +66,27 @@ const MessgaeSection = ({ userPhoto }) => {
         }
     }, [consversation]);
 
+    const handleDelteMessage = async (messageID, index) => {
+        setDeleteStatus(true);
+        const res = await API.post("/deleteMessage", { messageID });
+        try {
+            if (res.status === 200 && res.data.deleteCount === 1) {
+                setTimeout(() => {
+                    setDelteMessage(null);
+                    setMessages(Messages.filter((_, i) => i !== index));
+                },4000);
+            } else if (res.status === 200 && res.data.deleteCount === 0) {
+                toast.error("Something went wrong")
+            }
+        } catch (error) {
+            toast.error("Something went wrong")
+        }finally{
+            setTimeout(() => {
+                setDeleteStatus(false);
+            }, 4000);
+        }
+    };
+
     return (
         <div className="lg:w-[80%] right-0 absolute mt-[10px] pb-36 lg:pb-36 lg:mt-10 pt-14 space-y-5 example w-full overflow-hidden">
             {isLoading && (<div className='text-3xl text-gray-500 font-thin pt-40 text-center'>Loading Older Chats</div>)}
@@ -76,7 +99,7 @@ const MessgaeSection = ({ userPhoto }) => {
                         <div className="text-center text-gray-500 mt-4">No Conversation Exists</div>
                     ) : (
                         <>
-                            {Messages.map((msg, index) => (
+                            {Messages?.map((msg, index) => (
                                 <div id={index} key={index} className={`flex gap-3 ${msg.sourceId === sender_id ? 'flex-row-reverse items-end' : ''}`}>
                                     <img src={(msg.sourceId === sender_id ? userPhoto?.user?.profilePhoto : reciver_photo) || noProfilePicture}
                                         onError={(e) => e.target.src = noProfilePicture}
@@ -87,19 +110,30 @@ const MessgaeSection = ({ userPhoto }) => {
                                         {msg.messagePhoto.length > 0 && (
                                             <div className='flex-col relative items-start w-fit h-full mx-auto space-y-3'>
                                                 {msg.messagePhoto.map((_, index) => (
-                                                    <figure key={index} className="relative overflow-hidden max-w-lg border rounded-xl border-gray-200">
+                                                    <div key={index} className="relative overflow-hidden max-w-lg border rounded-xl border-gray-200">
                                                         <svg onClick={() => handleDownloadImage(msg.messagePhoto[index]?.base64, msg.messagePhoto[index]?.name)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="size-6 absolute rounded-md opacity-90 right-4 top-2 bg-[#6e8ee1] p-1 cursor-pointer">
                                                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                                                         </svg>
-                                                        <img className="h-auto w-80 sm:max-w-96 max-h-40 object-cover" src={msg.messagePhoto[index]?.base64 || postImagErr} onError={(e) => e.target.src = postImagErr} alt={`imgErr-${index}`}/>
-                                                    </figure>
+                                                        <img className="h-auto w-80 sm:max-w-96 max-h-40 object-cover" src={msg.messagePhoto[index]?.base64 || postImagErr} onError={(e) => e.target.src = postImagErr} alt={`imgErr-${index}`} />
+                                                    </div>
                                                 ))}
                                             </div>
                                         )}
-
+                                        {delteMessage === index && (
+                                            <div onClick={()=> handleDelteMessage(msg?._id,index)} className='w-full flex flex-row-reverse'>
+                                                <div className={`flex text-center bg-gray-200 cursor-pointer select-none border-[0.1px] border-gray-900 text-gray-800 px-2 py-1 rounded-lg`}>{deleteStatus ? 'Deleting' : 'Delete'} { index}</div>
+                                            </div>
+                                        )}
                                         {msg.message && (
-                                            <div className={`relative px-4 py-2 rounded-[20px] max-w-2xl ${msg.sourceId === sender_id ? 'bg-[#708fe3] text-white shadow-[1px_2px_1px_gray]' : 'bg-gray-200'}`}>
-                                                <div className='font-sans'>{msg.message}</div>
+                                            <div className={`relative px-4 py-2 rounded-[15px] max-w-2xl ${msg.sourceId === sender_id ? 'bg-[#708fe3] text-white shadow-[1px_2px_1px_gray]' : 'bg-gray-200'}`}>
+                                                <div className='font-sans pr-3'>{msg.message}</div>
+                                                {msg.sourceId === sender_id && (
+                                                    <>
+                                                        <svg onClick={() => delteMessage === null ? setDelteMessage(index) : delteMessage === index ? setDelteMessage(null) : setDelteMessage(index)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-5 w-5 absolute right-2 top-2 cursor-pointer active:opacity-50">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"/>
+                                                        </svg>
+                                                    </>
+                                                )}
                                             </div>
                                         )}
 

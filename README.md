@@ -91,9 +91,6 @@ The -d flag runs the services in detached mode, so they continue running in the 
 Docker Compose will download the images, create containers, and start the application.
 Access the Application:
 
-- Frontend: Visit ```http://localhost:3000 ``` in your browser.
+- Frontend: Visit ```http://127.0.0.1:3000 ``` in your browser.
 
-- Backend: Access ```http://localhost:8080 ``` to interact with the backend.
-
-- MongoDB: MongoDB will be running locally on ```port 27017.```
-
+- Backend: Access ```http://127.0.0.1:8080 ``` to interact with the backend.
