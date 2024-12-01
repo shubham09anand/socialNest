@@ -7,14 +7,19 @@ const groupMessage = new mongoose.Schema(
                ref: 'Group',
                required: [true, 'Group id is missing'],
           },
+
+          senderId:{
+               type: String,
+               required: [true, 'Sender id missing'],
+          },
           
-          groupId:{
-               type: mongoose.Schema.Types.ObjectId,
-               ref: 'Group',
+          message:{
+               type: String,
                required: [true, 'Group Message is missing'],
           },
           
-     }
+     },
+     { timestamps: true }
 )
 
 module.exports = mongoose.model("groupMessage", groupMessage , "GroupMessageCollection");
