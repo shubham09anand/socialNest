@@ -10,6 +10,13 @@ import API from "../../Services/API";
 
 const Login = () => {
 
+     const dispatch = useDispatch();
+     const navigate = useNavigate();
+     const [userName, setUserName] = useState('');
+     const [userPassword, setUserPassword] = useState('');
+     const [userLoginDetails, setUserLoginDetails] = useState(null);
+     const [button, setButton] = useState(false);
+
      window.onload = function () {
           if (localStorage.getItem('userToken')) {
                localStorage.removeItem('userToken');
@@ -19,14 +26,9 @@ const Login = () => {
           }
      };
 
-     const dispatch = useDispatch();
-     const navigate = useNavigate();
-     const [userName, setUserName] = useState('');
-     const [userPassword, setUserPassword] = useState('');
-     const [userLoginDetails, setUserLoginDetails] = useState(null);
-
      // login function
      const handleLogin = async (e) => {
+          setButton(true);
           e.preventDefault();
           try {
                const response = await API.post("/login", { userName, password: userPassword });
@@ -36,6 +38,8 @@ const Login = () => {
                }
           } catch (error) {
                toast.warning("Something Went Wrong");
+          } finally{
+               setButton(false)
           }
      };
 
@@ -83,8 +87,8 @@ const Login = () => {
                                                             <input className="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 rounded shadow appearance-none outline-none border-[#5070c9] border-2 focus:border-[#132d74]" id="password" type="password" name="password" placeholder="******************" value={userPassword} onChange={(e) => setUserPassword(e.target.value)} required />
                                                        </div>
                                                   </div>
-                                                  <div className="mb-6 text-center bg-[#4f74d4] hover:bg-[#2f5ed5] rounded-md">
-                                                       <button className="w-full px-4 py-2 font-bold text-white rounded-full" type="">
+                                                  <div className="mb-6 text-center bg-[#4f74d4] hover:bg-[#2f5ed5] rounded-full">
+                                                       <button className={`w-full px-4 py-2 font-bold text-white rounded-full ${button ? 'opacity-50 cursor-wait' : 'cursor-pointer'}`} type="">
                                                             Login Account
                                                        </button>
                                                   </div>
