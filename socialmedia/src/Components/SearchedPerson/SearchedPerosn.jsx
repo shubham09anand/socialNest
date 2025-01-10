@@ -28,7 +28,7 @@ const SearchedPerson = () => {
       API.post("/getUserProfile", { userId: searchedUserId }).then((res) => {
         setUserData(res.data);
       })
-        .catch((error) => {
+        .catch(() => {
           navigator('*')
           console.error('Error fetching user profile');
         });

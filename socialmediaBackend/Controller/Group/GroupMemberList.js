@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const GroupMemberList = async (req, res) => {
      try {
+          
           const { groupId } = req.body;
 
           const groupMembers = await GroupSchema.aggregate([
@@ -69,22 +70,14 @@ const GroupMemberList = async (req, res) => {
                // Remove sensitive or unnecessary fields
                {
                     $project: {
-                         "members.password": 0,
-                         "members.createdAt": 0,
-                         "members.updatedAt": 0,
-                         "members.__v": 0,
-                         "members.profileDetails.dateOfBirth": 0,
-                         "members.profileDetails.phoneNumber": 0,
-                         "members.profileDetails.city": 0,
-                         "members.profileDetails.state": 0,
-                         "members.profileDetails.country": 0,
-                         "members.profileDetails.description": 0,
-                         "members.profileDetails.studiedAt": 0,
-                         "members.profileDetails.youAre": 0,
-                         "members.profileDetails.createdAt": 0,
-                         "members.profileDetails.updatedAt": 0,
-                         "members.profileDetails.__v": 0,
-                         "__v": 0,
+                         "members._id": 1,
+                         "members.firstName": 1,
+                         "members.lastName": 1,
+                         "members.userName": 1,
+                         "members.profileDetails.profilePhoto": 1,
+                         "members.profileDetails.userId": 1,
+                         "members.profileDetails._id": 1,
+
                     },
                },
           ]);
@@ -92,7 +85,7 @@ const GroupMemberList = async (req, res) => {
           if (groupMembers.length > 0) {
                return res.status(200).json({
                     success: true,
-                    data: groupMembers[0], // Return the first (and only) matched group with populated members
+                    data: groupMembers[0],
                     message: "Members Fetched Successfully",
                });
           } else {
@@ -102,7 +95,6 @@ const GroupMemberList = async (req, res) => {
                });
           }
      } catch (error) {
-          console.error(error);
           res.status(500).json({
                success: false,
                message: "Server Error",

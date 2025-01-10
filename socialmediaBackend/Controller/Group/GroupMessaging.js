@@ -7,8 +7,6 @@ const GroupMessage = async (req, res) => {
 
           const newGroupMessage = await GroupMessageSchema.create(data);
 
-          console.log(newGroupMessage)
-
           if (newGroupMessage) {
                res.status(200).json({
                     success: true,

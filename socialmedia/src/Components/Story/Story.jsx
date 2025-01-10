@@ -15,7 +15,7 @@ const Story = () => {
                 setStoryDetails(res.data.storyDetails);
                 setIsLoading(false);
             })
-            .catch((error) => {
+            .catch(() => {
                 setIsLoading(false);
             });
     };

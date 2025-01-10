@@ -1,10 +1,15 @@
 const GroupSchema = require("../../Models/GroupSchema");
 
-const createMessageGroup = async (req, res) => {
+const CreateGroup = async (req, res) => {
      try {
           const gropuData = req.body;
 
-          await GroupSchema.create(gropuData);
+          const newGroup = await GroupSchema.create(gropuData);
+
+          if (newGroup) {
+               newGroup.members.push(req.body.ownerID);
+               await newGroup.save(); 
+          }
 
           res.status(200).json({
                message: 'Group Created Succesfully',
@@ -20,4 +25,4 @@ const createMessageGroup = async (req, res) => {
      }
 };
 
-module.exports = { createMessageGroup };
+module.exports = { CreateGroup };

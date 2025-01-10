@@ -43,6 +43,7 @@ const Header = ({ toggleDashboard, userPhoto }) => {
             });
     }, []);
 
+    // eslint-disable-next-line
     const debouncedFetchFilteredUsers = useCallback(debounce(fetchFilteredUsers, 500), [fetchFilteredUsers]);
 
     useEffect(() => {

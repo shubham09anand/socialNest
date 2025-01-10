@@ -12,8 +12,8 @@ const UserProfile = ({ userProfile, userName, joinedOn }) => {
      const logedInPersonId = useSelector((state) => state.LoginSlice.loggedUserId);
 
      return (
-          <div className="w-full md:w-72 lg:w-96 shadow-[1px_1px_1px_1px_gray] lg:shadow-none m-1 space-y-10 bg-white">
-               <div className="box py-2 px-3">
+          <div className="w-full md:w-72 lg:w-96 lg:shadow-none m-1 space-y-10 bg-white">
+               <div className="box py-2">
                     <div className="flex items-ce justify-between text-black ">
                          <h3 className="font-semibold text-3xl mb-4"> Intro </h3>
                     </div>
@@ -108,7 +108,7 @@ const UserProfile = ({ userProfile, userName, joinedOn }) => {
                                              </div>
                                         </li>
                                    )}
-
+                                   {/* eslint-disable-next-line */}
                                    {userName === "@shubham" || userName === "shubham09anand" && (
                                         <div>
                                              <div className="font-semibold text-black text-lg mb-2">Other Social Platforms</div>

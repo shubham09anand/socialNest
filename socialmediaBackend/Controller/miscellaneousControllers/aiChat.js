@@ -2,16 +2,16 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const genAI = new GoogleGenerativeAI('AIzaSyDKClaXG72LTj6QMslblEhEZ9LkEtE86ts');
+const genAI = new GoogleGenerativeAI('AIzaSyDPGAB0Gd5EsQAkOaAezycQ-lz3du9wJKQ');
 
 const AIchat = async (req, res) => {
   try {
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const value = (req.query.userInput)
 
     const result = await model.generateContent(value);
-    const response = await result.response;
+    const response = result.response;
 
     const text = response.text();
 
@@ -22,7 +22,7 @@ const AIchat = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error Creating Post:', error);
+    console.error('Error Creating Post:');
     res.status(500).json({
       message: 'Internal Server Error',
       error: error.message,

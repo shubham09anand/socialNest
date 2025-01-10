@@ -30,7 +30,7 @@ const SearchedPersonPost = () => {
                          setPostDetails(res.data.Post || []);
                     })
                     .catch(() => {
-                        toast.error("Someting Went Wrong");
+                         toast.error("Someting Went Wrong");
                     });
           }
      }, [searchedUserId]);

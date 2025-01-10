@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { div, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import feed from '../Assets/images/icons/home.png';
 import message from '../Assets/images/icons/message.png';

@@ -45,19 +45,13 @@ const ContactList = ({ toggleDisplay }) => {
      return (
           <div className='select-none w-screen pr-2 border-r example relative pb-20 lg:pb-5  lg:mt-3 lg:pt-[20px]'>
                <div className="h-screen overflow-y-scroll example relative mt-26">
-                    <div className="px-1 w-full flex place-content-center justify-between">
-                         <div onClick={() => setDisplay(false)} className={`flex cursor-pointer w-full pr-3 pb-2 space-x-2a ${!display ? 'border-b-[2px] border-white' : ''}`}>
-                              {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" className="size-6 mt-2">
-                                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-                              </svg> */}
-                              <div className="text-3xl font-bold text-black text-left">Chats</div>
+                    <div className="px-1 w-full flex place-content-center justify-between mb-2">
+                         <div onClick={() => setDisplay(false)} className={`flex cursor-pointer w-full pr-3 pb-.5 space-x-2 ${!display ? 'opacity-100' : 'opacity-50'}`}>
+                              <div className="text-2xl font-semibold text-black text-left mt-1">Chats</div>
                          </div>
-                         {/* <div onClick={() => setDisplay(true)} className={`flex cursor-pointer place-content-end w-full pl-3 pb-2 space-x-2a ${display ? 'border-b-[2px] border-black' : ''}`}>
-                              <div className="text-3xl font-bold text-black text-left">Gropu</div>
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" className="size-6 mt-2.5">
-                                   <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                              </svg>
-                         </div> */}
+                         <div onClick={() => setDisplay(true)} className={`hidden flex cursor-pointer place-content-end w-full pl-3 pb-.5 space-x-2 ${display ? 'opacity-100' : 'opacity-50'}`}>
+                              <div className="text-2xl font-semibold text-black text-left mt-1">Gropu</div>
+                         </div>
                     </div>
                     <div className='flex overflow-hidden '>
                          <div className={`w-full flex-shrink-0 duration-500 ${display ? '-translate-x-full' : '-translate-x-0'}`}>
@@ -71,11 +65,11 @@ const ContactList = ({ toggleDisplay }) => {
                                              ))}
                                         </>
                                    ) : (
-                                        <div className="space-y-2 overflow-y-auto w-full">
+                                        <div className="overflow-y-auto w-full divide-y divide-gray-400/20">
                                              {chatList.chatList?.filter(person => person._id !== loggedUser).map((person, index) => (
                                                   <Link to={getChatLink(loggedUser, person._id)} style={{ textDecoration: 'none' }} key={index} onClick={() => handleItemClick(loggedUser, person._id, person.secondPerson[0]?.profilePhoto)} className="cursor-pointer relative flex items-center gap-4 p-2 duration-200 active:opacity-60">
                                                        <div className="relative w-14 h-14 shrink-0">
-                                                            <img src={person.secondPerson[0]?.profilePhoto || noProfilePicture} onError={(e) => { e.target.src = noProfilePicture }} alt="imgErr" className="border-black object-contain w-full h-full rounded-full" style={{ border: "2px solid black" }} />
+                                                            <img src={person.secondPerson[0]?.profilePhoto || noProfilePicture} onError={(e) => { e.target.src = noProfilePicture }} alt="imgErr" className="object-contain w-full h-full rounded-full" style={{ border: "1px solid gray" }} />
                                                        </div>
                                                        <div className="flex-1 min-w-0">
                                                             <div className="flex items-center gap-2 mb-1.5">
@@ -85,15 +79,15 @@ const ContactList = ({ toggleDisplay }) => {
                                                        </div>
                                                   </Link>
                                              ))}
-                                             <div className='text-xs text-center text-gray-500 font-thin'>List Ends Here</div>
+                                             <div className='text-xs text-center text-gray-500 font-thin pt-3'>List Ends Here</div>
                                         </div>
                                    )
                               }
                          </div>
 
-                         {/* <div className={`w-full flex-shrink-0 duration-500 ${display ? '-translate-x-full' : '-translate-x-0'}`}>
-                              <GroupList />
-                         </div> */}
+                         <div className={`w-full flex-shrink-0 duration-500 ${display ? '-translate-x-full' : '-translate-x-0'}`}>
+                              <GroupList display={display} />
+                         </div>
                     </div>
                </div>
 

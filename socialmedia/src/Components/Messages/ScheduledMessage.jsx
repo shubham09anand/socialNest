@@ -89,14 +89,14 @@ const ScheduledMessage = ({ toggleprofileDisplay }) => {
     }
 
     // Delete message
-    const deleteScheduledMessage = (id) => {    
+    const deleteScheduledMessage = (id) => {
         if (!id) {
             toast.info("Message ID is required");
             return;
         }
-    
+
         setCancelButton(true);
-    
+
         API.post("/deleteScheduledMessage", { messageId: id })
             .then((req, _) => {
                 if (req.data.status === 1) {
@@ -116,7 +116,6 @@ const ScheduledMessage = ({ toggleprofileDisplay }) => {
                 setCancelButton(false);
             });
     };
-     
 
     useEffect(() => {
         getScheduledMessage();
@@ -124,13 +123,13 @@ const ScheduledMessage = ({ toggleprofileDisplay }) => {
     }, [source_id]);
 
     return (
-        <div className='overflow-y-scroll border-t-4 border-black h-[300%] sm:w-1/2 lg:w-2/4 xl:w-[27%] mt-[60px] border-l bg-white fixed z-[770] right-0 top-0 px-4'>
+        <div className={`overflow-y-scroll border-y-0 h-[calc(100%-110px)] sm:h-[calc(100%-160px)] md:h-[calc(100%-160px)] pb-10 shadow-inner border-black border-l bg-white fixed z-10 sm:z-0 right-0 top-16 lg:top-[110px] transition-all duration-500 ${toggleprofileDisplay ? 'px-4 w-full sm:w-1/2 lg:w-2/4 xl:w-[27%]' : 'w-0'}`}>
             <ToastContainer />
 
             <div className='overflow-y-scroll h-[200%]'>
                 <div className='z-50 flex w-full justify-between place-content-center items-center h-fit'>
                     <h2 className="text-2xl w-fit mx-auto pb-2 sm:leading-snug tracking-wide font-bold pt-3">Schedule Message</h2>
-                    <svg onClick={() => toggleprofileDisplay(0)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="5" stroke="white" className="fixed right-5 translate-y-1 w-6 h-6 bg-[#6f88c9] rounded-full p-1 active:opacity-80">
+                    <svg onClick={() => toggleprofileDisplay(0)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="5" stroke="white" className="fixed right-5 w-6 h-6 bg-[#6f88c9] rounded-full p-1 active:opacity-80">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                     </svg>
                 </div>

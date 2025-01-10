@@ -1,18 +1,16 @@
-const GroupSchema = require('../../Models/GroupSchema');
+const groupSchema = require("../../Models/GroupSchema");
 
-const RemoveMemberByAdmin = async (req, res) => {
+const RemoveAdmin = async (req, res) => {
 
      try {
           const { groupId, userId } = req.body;
-
-          const currentGroup = await GroupSchema.findOne({ _id: groupId, members: { $in: [userId] } });
+          
+          const currentGroup = await groupSchema.findOne({ _id: groupId });
 
           if (currentGroup) {
 
-               const updatedMember = currentGroup.members.filter((items) => items.toString() !== userId);
                const updatedAdmin = currentGroup.groupAdmins.filter((items) => items.toString() !== userId);
 
-               currentGroup.members = updatedMember;
                currentGroup.groupAdmins = updatedAdmin;
 
                const update = await currentGroup.save();
@@ -20,27 +18,29 @@ const RemoveMemberByAdmin = async (req, res) => {
                if (update) {
                     res.status(200).json({
                          success: true,
-                         message: 'Member Removed Success'
+                         message: 'Admin Removed'
                     })
                } else {
                     res.status(400).json({
                          success: false,
-                         message: 'Member Removed Failed'
+                         message: 'Process Failed'
                     })
                }
 
           } else {
                res.status(400).json({
                     success: false,
-                    message: 'Group not found or user is not a member'
+                    message: 'No Group Found'
                })
           }
+
      } catch (error) {
           res.status(500).json({
                success: false,
                message: 'Server Error'
           })
      }
+
 }
 
-module.exports = { RemoveMemberByAdmin }
+module.exports = { RemoveAdmin }

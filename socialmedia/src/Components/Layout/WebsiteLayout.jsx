@@ -25,7 +25,9 @@ import UpdatePassword from '../Setting/updatePassword';
 import PageNotFound from '../Animation/PageNotFound';
 import AuthFailed from '../Animation/AuthFailed';
 import MessageBox from '../Messages/MessageBox';
+import GroupMessage from '../Messages/GroupChat/GroupMessage';
 import API from '../../Services/API';
+
 
 const WebsiteLayout = () => {
 
@@ -90,6 +92,8 @@ const WebsiteLayout = () => {
           setDocTitle('Message');
         }  else if (currentLocation.startsWith('/searched-person')) {
           setDocTitle('View Profile');
+        }  else if (currentLocation.startsWith('/groupmessage')) {
+          setDocTitle('Group Message');
         } 
         
         else {
@@ -104,8 +108,7 @@ const WebsiteLayout = () => {
     if (loggedUserId && loggedUserId !== null) {
       API.post("/userLoggedDetails", { loggedUserId }).then((res) => {
         setUserPhoto(res.data);
-      })
-        .catch(() => {
+      }).catch(() => {
           console.log("Failed To Get Profile Photo");
         })
     }
@@ -119,28 +122,28 @@ const WebsiteLayout = () => {
       <div className='flex'>
       {/* // eslint-disable-next-line */}
         {docTitle !== '404 - Page Not Found' && currentLocation !== '/auth-failed' && currentLocation !== '/' && currentLocation !== '/signup' && loggedUserId !== null && !currentLocation.startsWith("/searched-profile") && <Dashboard dashboardDisplay={dashboardDisplay} setDashboardDisplay={setDashboardDisplay} />}
-        {/* // eslint-disable-next-line */}
+        {/* eslint-disable-next-line */}
         <div className={`w-full ${!(currentLocation.startsWith("/message") && splitCuurPath.length === 3 || loggedUserId == null) ? 'lg:pt-4 lg:pb-5' : ''}`}>
-        {/* // eslint-disable-next-line */}
+        {/* eslint-disable-next-line */}
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/home" element={<><UserProfileLayout userPhoto={userPhoto} /></>} />
-            <Route path="/message" element={<><MessageLayout userPhoto={userPhoto} /></>} />
-            <Route path="/message/:roomID" element={<><MessageBox userPhoto={userPhoto} /></>} />
-            <Route path="/message/group" element={<GroupMessage />} />
-            <Route path="/friends" element={<><FrinedList /></>} />
-            <Route path="/blog" element={<><BlogLayout /></>} />
-            <Route path="/blog" element={<><BlogPage /></>} />
-            <Route path="/blog/ReadContent/:articleName/:id" element={<><BlogContent /></>} />
-            <Route path="/blog/CreateBlog" element={<><CreateBlog /></>} />
-            <Route path="/news" element={<><News /></>} />
-            <Route path="/account-setting" element={<><SettingsOptions /></>} />
-            <Route path="/update-profile" element={<><UpdateProfile /></>} />
-            <Route path="/update-password" element={<><UpdatePassword /></>} />
-            <Route path="/create-story" element={<><CreateStory /></>} />
-            <Route path="/story/view-story/:storyId" element={<><ShowSelectedStory /></>} />
-            <Route path="/create-post" element={<><CreatePost /></>} />
+            <Route path="/home" element={<ProtectedRoute><UserProfileLayout userPhoto={userPhoto} /></ProtectedRoute>} />
+            <Route path="/message" element={<ProtectedRoute><MessageLayout userPhoto={userPhoto} /></ProtectedRoute>} />
+            <Route path="/message/:roomID" element={<ProtectedRoute><MessageBox userPhoto={userPhoto} /></ProtectedRoute>} />
+            <Route path="/groupmessage/:groupId" element={<GroupMessage />} />
+            <Route path="/friends" element={<ProtectedRoute><FrinedList /></ProtectedRoute>} />
+            <Route path="/blog" element={<ProtectedRoute><BlogLayout /></ProtectedRoute>} />
+            <Route path="/blog" element={<ProtectedRoute><BlogPage /></ProtectedRoute>} />
+            <Route path="/blog/ReadContent/:articleName/:id" element={<ProtectedRoute><BlogContent /></ProtectedRoute>} />
+            <Route path="/blog/CreateBlog" element={<ProtectedRoute><CreateBlog /></ProtectedRoute>} />
+            <Route path="/news" element={<ProtectedRoute><News /></ProtectedRoute>} />
+            <Route path="/account-setting" element={<ProtectedRoute><SettingsOptions /></ProtectedRoute>} />
+            <Route path="/update-profile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
+            <Route path="/update-password" element={<ProtectedRoute><UpdatePassword /></ProtectedRoute>} />
+            <Route path="/create-story" element={<ProtectedRoute><CreateStory /></ProtectedRoute>} />
+            <Route path="/story/view-story/:storyId" element={<ProtectedRoute><ShowSelectedStory /></ProtectedRoute>} />
+            <Route path="/create-post" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
             <Route path="/searched-person/:searchedUserId" element={<SearchedPerosn />} />
             <Route path="/auth-failed" element={<AuthFailed />} />
             <Route path="*" element={<PageNotFound />} />

@@ -2,9 +2,10 @@
   "name": "socialmedia",
   "version": "0.1.0",
   "private": true,
-  "proxy":"http://127.0.0.1:8080/auth",
+  "proxy": "http://127.0.0.1:8080/auth",
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
+    "@tanstack/react-query": "^5.62.15",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
