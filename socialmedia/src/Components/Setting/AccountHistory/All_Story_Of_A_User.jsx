@@ -46,7 +46,7 @@ const All_Story_Of_A_User = () => {
 
     return (
         <>
-            <div className='w-full border-b pl-2 xl:pt-1 pb-2 mt-2'>
+            <div className='w-full border-b pl-2 xl:pt-1 mt-2'>
                 <div className='flex items-center'>
                     <h2 className="text-2xl pb-1 sm:leading-snug tracking-wide font-bold">Your Stories</h2>
                     {storyDetails.length === 0 && !isLoading && (

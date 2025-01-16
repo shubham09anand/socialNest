@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux';
-import { setMessagingData } from "../../Features/Counter/counterSlice";
-import { Link } from "react-router-dom";
 import FriendProfileLoadingAnimation from "../Animation/FriendProfileLoadingAnimation";
 import noProfilePicture from '../../Assets/NoProileImage.png';
 import API from '../../Services/API';
 import GroupList from './GroupChat/GroupList';
+import { useSelector, useDispatch } from 'react-redux';
+import { setMessagingData } from "../../Features/Counter/counterSlice";
+import { Link } from "react-router-dom";
+import { useQuery } from '@tanstack/react-query';
 
 const ContactList = ({ toggleDisplay }) => {
 
      const dispatch = useDispatch()
      const loggedUser = useSelector((state) => state.LoginSlice.loggedUserId);
-     const [chatList, setchatList] = useState("");
-     const [isLaoding, setIsLaoding] = useState(true);
      const [display, setDisplay] = useState(false)
 
      function getChatLink(loggedUser, personId) {
@@ -23,19 +22,17 @@ const ContactList = ({ toggleDisplay }) => {
           return `/message/${convoId}`;
      }
 
-     const getChatList = () => {
-          API.post("/contactList").then((res) => {
-               setchatList(res.data);
-               setIsLaoding(false)
-          })
-               .catch((error) => {
-                    console.log(error);
-               });
-     };
+     const getChatLists = async () => {
+          const response = await API.post("/contactList");
+          return response.data;
+     }
 
-     useEffect(() => {
-          getChatList();
-     }, []);
+     const { data:chatList, isLoading:isLaoding } = useQuery({
+          queryKey: (['contactList']),
+          queryFn: getChatLists,
+          enabled: !!loggedUser,
+          staleTime:Infinity,
+     })
 
      const handleItemClick = (senderId, receiverId, reciverPhoto) => {
           localStorage.setItem('receiverId', receiverId);
@@ -66,10 +63,10 @@ const ContactList = ({ toggleDisplay }) => {
                                         </>
                                    ) : (
                                         <div className="overflow-y-auto w-full divide-y divide-gray-400/20">
-                                             {chatList.chatList?.filter(person => person._id !== loggedUser).map((person, index) => (
-                                                  <Link to={getChatLink(loggedUser, person._id)} style={{ textDecoration: 'none' }} key={index} onClick={() => handleItemClick(loggedUser, person._id, person.secondPerson[0]?.profilePhoto)} className="cursor-pointer relative flex items-center gap-4 p-2 duration-200 active:opacity-60">
+                                             {chatList?.chatList?.filter(person => person?._id !== loggedUser).map((person, index) => (
+                                                  <Link to={getChatLink(loggedUser, person?._id)} style={{ textDecoration: 'none' }} key={index} onClick={() => handleItemClick(loggedUser, person._id, person?.secondPerson[0]?.profilePhoto)} className="cursor-pointer relative flex items-center gap-4 p-2 duration-200 active:opacity-60">
                                                        <div className="relative w-14 h-14 shrink-0">
-                                                            <img src={person.secondPerson[0]?.profilePhoto || noProfilePicture} onError={(e) => { e.target.src = noProfilePicture }} alt="imgErr" className="object-contain w-full h-full rounded-full" style={{ border: "1px solid gray" }} />
+                                                            <img src={person?.secondPerson[0]?.profilePhoto || noProfilePicture} onError={(e) => { e.target.src = noProfilePicture }} alt="imgErr" className="object-contain w-full h-full rounded-full" style={{ border: "1px solid gray" }} />
                                                        </div>
                                                        <div className="flex-1 min-w-0">
                                                             <div className="flex items-center gap-2 mb-1.5">
@@ -85,9 +82,13 @@ const ContactList = ({ toggleDisplay }) => {
                               }
                          </div>
 
-                         <div className={`w-full flex-shrink-0 duration-500 ${display ? '-translate-x-full' : '-translate-x-0'}`}>
-                              <GroupList display={display} />
-                         </div>
+                         {display && (
+
+                              <div className={`w-full flex-shrink-0 duration-500 ${display ? '-translate-x-full' : '-translate-x-0'}`}>
+                                   <GroupList display={display} />
+                              </div>
+                         )
+                         }
                     </div>
                </div>
 

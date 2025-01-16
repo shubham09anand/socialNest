@@ -1,39 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import MakeComment from '../Post/MakeComment';
 import ShowCommentsAndLike from '../Post/ShowCommentsAndLike';
 import noProfilePicture from '../../Assets/NoProileImage.png';
 import API from '../../Services/API';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import AllStoryOfAUser from '../Setting/AccountHistory/All_Story_Of_A_User';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import ServerError from "../Animation/ServerError";
+import PostAniamtion from "../Animation/PostAniamtion";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 const SearchedPersonPost = () => {
 
      const postImagErr = 'https://icons.veryicon.com/png/o/education-technology/alibaba-cloud-iot-business-department/image-load-failed.png';
-     const { searchedUserId } = useParams();
      const likedBy = useSelector((state) => (state.LoginSlice.loggedUserId));
-     const [postDetails, setPostDetails] = useState([]);
+     const queryClient = useQueryClient();
+     const { searchedUserId } = useParams();
      const [delteOption, setDeleteOption] = useState(null);
-     // eslint-disable-next-line
 
-     useEffect(() => {
-          if (searchedUserId) {
-               API
-                    .post('/searchedPerosnPost', { userId: searchedUserId })
-                    .then((res) => {
-                         setPostDetails(res.data.Post || []);
-                    })
-                    .catch(() => {
-                         toast.error("Someting Went Wrong");
-                    });
-          }
-     }, [searchedUserId]);
+     const fetchSearchedPost = async () => {
+          const response = await API.post('/searchedPerosnPost', { userId: searchedUserId })
+          return response.data;
+     }
+
+     const { data: PostDetails, isLoading, isError } = useQuery({
+          queryFn: fetchSearchedPost,
+          queryKey: ['searchedPost', searchedUserId],
+          enabled: !!searchedUserId,
+          staleTime: Infinity
+     })
 
      const handleLike = async (postId) => {
           try {
@@ -44,19 +45,15 @@ const SearchedPersonPost = () => {
           }
      }
 
-     const deletePost = async (postId, index) => {
+     const deletePost = async (postId) => {
           try {
                const res = await API.post("/deletePost", { postId: postId });
-               if (res?.data?.deletedCount === 1) {
-                    setPostDetails(postDetails.filter((_, i) => i !== index));
-                    toast.success("Post has Been Deleted")
-               }
-               else if (res?.data?.deletedCount === 0) {
-                    toast.success("Someting Went Wrong")
+               if (res.status) {
+                    setDeleteOption(null);
+                    queryClient.invalidateQueries(['searchedPerosnPost']);
                }
           } catch (error) {
                toast.error("Someting Went Wrong")
-               console.log(error);
           }
      }
 
@@ -84,10 +81,16 @@ const SearchedPersonPost = () => {
 
      return (
           <div className="w-full max-h-[200vh] overflow-y-scroll example lg:w-4/5 md:border-r">
+               
                <ToastContainer />
+
                {searchedUserId === likedBy && <AllStoryOfAUser />}
 
-               {postDetails?.length === 0 ? (
+               {isError && (<ServerError width={60} height={32} paddingTop={10}/>)}
+
+               {isLoading && (<PostAniamtion/>)}
+
+               {PostDetails?.data?.length === 0 ? (
                     <div className="text-center mt-4 text-gray-500">
                          <div className='w-fit h-fit rounded-full mb-2 p-3 border-2 border-black mx-auto'>
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth=".7" stroke="black" className="size-20">
@@ -98,11 +101,11 @@ const SearchedPersonPost = () => {
                          No posts available this user.
                     </div>
                ) : (
-                    postDetails?.map((post, index) => (
+                    PostDetails?.Post?.map((post, index) => (
                          <div key={index} className="p-2 w-full bg-white rounded-lg text-sm font-medium border-1 mx-auto shadow-sm">
                               <div className='flex justify-between place-content-center items-center'>
                                    <div className="flex gap-3 sm:p-4 p-2.5 pl-0 text-sm font-medium">
-                                        <img src={postDetails[0]?.postMaker[0].profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="" className="w-9 h-9 rounded-full object-cover border-black" style={{ border: '2px solid' }} />
+                                        <img src={PostDetails?.Post[0]?.postMaker[0].profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="" className="w-9 h-9 rounded-full object-cover border-black" style={{ border: '2px solid' }} />
                                         <div className="flex-1">
                                              <div>
                                                   <div className="text-black">{post?.userSignupInfo[0]?.firstName}{' '} {post?.userSignupInfo[0]?.lastName}</div>

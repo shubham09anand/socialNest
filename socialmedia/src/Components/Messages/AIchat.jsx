@@ -9,7 +9,7 @@ const AIchat = () => {
 
      // process to handle ai 
      const aiData = () => {
-          if (aiInput === "" || aiInput.trim() === "") {
+          if (aiInput.trim() === "") {
                alert("filed empty")
                return false;
           };

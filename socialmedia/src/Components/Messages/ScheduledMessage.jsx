@@ -30,9 +30,11 @@ const ScheduledMessage = ({ toggleprofileDisplay }) => {
     const handleMessageChange = useCallback((e) => {
         setMessage(e.target.value);
     }, []);
+
     const handleTimeChange = useCallback((e) => {
         setTime(e.target.value);
     }, []);
+    
     const handleDateChange = useCallback((e) => {
         setDate(e.target.value);
     }, []);

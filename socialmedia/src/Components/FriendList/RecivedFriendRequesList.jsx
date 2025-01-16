@@ -1,65 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import noProfilePicture from '../../Assets/NoProileImage.png';
 import FriendProfileLoadingAnimation from "../Animation/FriendProfileLoadingAnimation";
 import API from "../../Services/API";
-import { ToastContainer, toast } from 'react-toastify';
+import ServerError from '../Animation/ServerError'
 import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer, toast } from 'react-toastify';
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const RecivedFriendRequesList = () => {
-  const [RecivedRequest, setRecivedRequest] = useState();
-  const [action, setAction] = useState(true);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const userId = useSelector((state) => state.LoginSlice.loggedUserId);
+  const queryClient = useQueryClient();
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
-  useEffect(() => {
-    const recivedRequest = async () => {
-      try {
-        const response = await API.post("/recivedFriendRequest", { userId: userId });
-        setRecivedRequest(response.data);
-        setAction(false);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-    recivedRequest();
-  }, [userId]);
+  const recivedRequest = async () => {
+    const response = await API.post("/recivedFriendRequest", { userId: userId });
+    return response?.data
+  }
+
+  const { data: RecivedRequest, isLoading: action, isError } = useQuery({
+    queryKey: (['recivedFriendRequest', userId]),
+    queryFn: recivedRequest,
+    enabled: !!userId,
+    staleTime: Infinity,
+  })
 
   const updateFriendStatus = async (action, senderId) => {
     setButtonDisabled(true);
     try {
-      const response = await API.post("/processFriendRequest", {
-        senderId: senderId,
-        reciverId: userId,
-        action: action,
-      });
-
-      if (response.data.status === 1 && action === "Accepted") {
-
-        setRecivedRequest((prevFriendList) => {
-          const updatedFriendList = { ...prevFriendList };
-          updatedFriendList.FriendRequestList = updatedFriendList.FriendRequestList.filter(
-            (friend) => friend.senderProfile[0]._id !== senderId
-          );
-          toast.success("Friend Reuest Accepted")
-          return updatedFriendList;
-          
-        });
-      } else if (response.data.status === 0 && action === "Rejected") {
-        
-        setRecivedRequest((prevFriendList) => {
-          const updatedFriendList = { ...prevFriendList };
-          updatedFriendList.FriendRequestList = updatedFriendList.FriendRequestList.filter(
-            (friend) => friend.senderProfile[0]._id !== senderId
-          );
-          toast.success("Friend Reuest Rejeted")
-          return updatedFriendList;
-        });
+      const response = await API.post("/processFriendRequest", { senderId: senderId, reciverId: userId, action: action, });
+      if (response.status === 200 && (response.data.status === 1 || response.data.status === 0)) {
+        queryClient.invalidateQueries(['recivedFriendRequest', userId]);
+      }
+      else {
+        toast.error("Something Went Wrong")
       }
     } catch (error) {
-      console.error("Error updating friend status");
+      toast.error("Something Went Wrong")
     } finally {
       setButtonDisabled(false);
     }
@@ -90,7 +69,7 @@ const RecivedFriendRequesList = () => {
               <li key={friend._id} className="lg:px-40 py-3 pb-0 flex flex-col sm:flex-row space-y-4 md:space-y-0 justify-between place-content-center items-center">
                 <Link to={`/searched-person/${friend.senderProfile[0]?._id}`} style={{ textDecoration: "none" }} className="flex items-center space-x-4 rtl:space-x-reverse">
                   <div className="flex-shrink-0">
-                    {friend?.senderPhoto[index]?.profilePhoto && (<img className="w-16 h-16 rounded-full object-contain border-black" style={{ border: '3px solid black' }} src={friend?.senderPhoto[index]?.profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="Profile avatar" />)}
+                    {friend?.senderPhoto[index]?.profilePhoto && (<img className="w-16 h-16 rounded-full object-contain border-black" style={{ border: '1px solid black' }} src={friend?.senderPhoto[index]?.profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="Profile avatar" />)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-lg font-semibold text-gray-900 w-40 truncate">{friend?.senderProfile[0]?.firstName} {friend?.senderProfile[0]?.lastName}</p>
@@ -98,8 +77,8 @@ const RecivedFriendRequesList = () => {
                   </div>
                 </Link>
                 <div className="flex space-x-5">
-                  <button disabled={buttonDisabled} onClick={() => updateFriendStatus("Accepted", friend?.senderProfile[0]?._id)} className={`bg-blue-600 text-white rounded-sm px-4 py-1 ${buttonDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} w-fit h-fit`}>Accept</button>
-                  <button disabled={buttonDisabled} onClick={() => updateFriendStatus("Rejected", friend?.senderProfile[0]?._id)} className={`bg-red-600 text-white rounded-sm px-4 py-1 ${buttonDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} w-fit h-fit`}>Reject</button>
+                  <button disabled={buttonDisabled} onClick={() => updateFriendStatus("Accepted", friend?.senderProfile[0]?._id)} className={`bg-blue-600 text-white rounded-xl px-4 py-1 ${buttonDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} w-fit h-fit`}>Accept</button>
+                  <button disabled={buttonDisabled} onClick={() => updateFriendStatus("Rejected", friend?.senderProfile[0]?._id)} className={`bg-red-600 text-white rounded-xl px-4 py-1 ${buttonDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} w-fit h-fit`}>Reject</button>
                 </div>
               </li>
             ))}
@@ -108,6 +87,9 @@ const RecivedFriendRequesList = () => {
       ) : (
         <div className="text-gray-500 mt-6 px-2 text-center">No Friend Requests. Well, seems like no one likes you!</div>
       )}
+      <>
+        {isError && (<ServerError width={72} height={36} paddingTop={10} />)}
+      </>
     </>
   );
 };

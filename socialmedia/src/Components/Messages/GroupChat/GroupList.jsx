@@ -52,7 +52,7 @@ const GroupList = () => {
                                         {data?.groupList?.map((items, index) => (
                                              <Link to={`/groupmessage/${items?._id}`} key={index} style={{ textDecoration: 'none' }} className="w-full text-left cursor-pointer hover:opacity-80 active:opacity-35 focus:outline-none focus-visible:bg-indigo-50">
                                                   <div className="py-2 flex items-center space-x-3 px-1 border-b-[1px] border-slate-300/40">
-                                                       <div className='relative w-14 h-14 shrink-0 border-[1px] rounded-full border-gray-600 overflow-hidden'>
+                                                       <div className='relative w-14 h-14 shrink-0 border-[1px] rounded-full border-gray-700 overflow-hidden'>
                                                             <img className="object-contain w-full h-full" src={items?.groupIcon || groupPhoto} onError={(e) => e.target.src = groupPhoto} width="32" height="32" alt="Group Icon" />
                                                        </div>
                                                        <div>

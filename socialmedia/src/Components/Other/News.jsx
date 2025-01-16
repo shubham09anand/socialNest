@@ -1,31 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import newsTemplate from '../../Assets/images/NewsImage.jpg';
 import LoadingNewsAnimation from '../Animation/LoadingNewsAnimation';
-import Error from '../Animation/Error';
+import ServerError from '../Animation/ServerError';
+import { useQuery } from '@tanstack/react-query';
 
 const News = () => {
-     const [newsData, setNewsData] = useState([]);
-     const [error, setError] = useState(true);
-     const [loading, setLoading] = useState(true);
 
-     useEffect(() => {
-          const fetchData = async () => {
-               const apiKey = 'xNomhkVetThz3DOz48oQXTspUZi6gxG9';
-               const apiUrl = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${apiKey}`;
-               try {
-                    const response = await axios.get(apiUrl);
-                    setNewsData(response.data.results);
-                    setError(false)
-               } catch (error) {
-                    console.error('Error fetching NYT API:', error);
-               } finally {
-                    setLoading(false);
-               }
-          };
-          fetchData();
-     }, []);
+     const fetchData = async () => {
+          const apiKey = 'xNomhkVetThz3DOz48oQXTspUZi6gxG9';
+          const apiUrl = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${apiKey}`;
+          const response = await axios.get(apiUrl);
+          return response?.data?.results;
+     }
+
+     const { data: newsData, isLoading: loading, isError: error } = useQuery({
+          queryKey: (['getNews']),
+          queryFn: fetchData,
+          staleTime: Infinity,
+     })
 
      return (
           <div className="w-full lg:w-[85%] lg:p-5 lg:absolute right-0 pt-4 pb-12 lg:py-12">
@@ -42,7 +36,7 @@ const News = () => {
                                         ) : (
                                              <>
                                                   {record.multimedia.slice(0, 1).map((media, index) => (
-                                                       <img key={index} className="h-52  w-full object-cover" src={media.url} alt={`Media ${index}`} />
+                                                       <img key={index} className="h-52 w-full object-cover" src={media.url} alt={`Media ${index}`} />
                                                   ))}
                                              </>
                                         )}
@@ -71,7 +65,7 @@ const News = () => {
                          <LoadingNewsAnimation />
                          <LoadingNewsAnimation />
                     </div>}
-               {error && <div><Error /></div>}
+               {error && <ServerError width={96} height={52} paddingTop={20} />}
           </div>
      );
 };

@@ -1,42 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
 import FriendProfileLoadingAnimation from "../Animation/FriendProfileLoadingAnimation";
 import noProfilePicture from '../../Assets/NoProileImage.png';
 import API from '../../Services/API';
+import ServerError from '../Animation/ServerError';
+import { useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const SendedFriendReuest = () => {
 
+  const qeryClient = useQueryClient()
   const userId = useSelector((state) => state.LoginSlice.loggedUserId);
-  const [sendedRequest, setSendedRequest] = useState([]);
-  const [action, setAction] = useState(true); // Controls loading animation
   const [button, setButton] = useState(false);
 
-  useEffect(() => {
-    const fetchSendedRequest = async () => {
-      try {
-        const response = await API.post('/sendedRequest', { userId: userId });
-        setSendedRequest(response.data);
-        setAction(false);
-      } catch (error) {
-        console.error('Error:', error);
-        setAction(false);
-      }
-    };
+  const fetchSendedRequest = async () => {
+    const response = await API.post('/sendedRequest', { userId: userId });
+    return response.data
+  }
 
-    fetchSendedRequest();
-  }, [userId]);
+  const { data: sendedRequest, isLoading: action, isError } = useQuery({
+    queryKey: ['sendedRequest'],
+    queryFn: fetchSendedRequest,
+    enabled: !!userId,
+    staleTime: Infinity,
+  })
 
   const handleCancle = async (reciverId) => {
     setButton(true);
     try {
       const response = await API.post('/deleteSendedRequest', { senderId: userId, reciverId: reciverId });
       if (response.data.status === 1) {
-        setSendedRequest((prev) => ({...prev,
-          FriendRequestList: prev.FriendRequestList.filter(
-            (friend) => friend.reciverProfile[0]._id !== reciverId
-          ),
-        }));
+        qeryClient.invalidateQueries(['sendedRequest']);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -69,11 +63,7 @@ const SendedFriendReuest = () => {
               <div key={index} className="lg:px-40 py-3 pb-0 flex flex-col sm:flex-row space-y-4 md:space-y-0 justify-between place-content-center items-center">
                 <Link style={{ textDecoration: "none" }} to={`/searched-person/${request._id}`} className="flex items-center space-x-4 rtl:space-x-reverse">
                   <div className="flex-shrink-0">
-                    <img className="w-16 h-16 object-contain rounded-full border-black"
-                      style={{ border: '3px solid black' }}
-                      src={request?.senderPhoto[0]?.profilePhoto || noProfilePicture}
-                      onError={(e) => e.target.src = noProfilePicture}
-                      alt="Profile avatar" />
+                    <img className="w-16 h-16 object-contain rounded-full border-black" style={{ border: '1px solid black' }} src={request?.senderPhoto[0]?.profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="Profile avatar" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-bold text-gray-900 truncate text-lg w-40">
@@ -82,15 +72,18 @@ const SendedFriendReuest = () => {
                     <p className="text-sm text-gray-700 truncate">{request?.reciverProfile[0]?.userName}</p>
                   </div>
                 </Link>
-                <button disabled={button} onClick={() => handleCancle(request.reciverProfile[0]._id)} className={`bg-red-600 text-white cursor-pointer select-none active:opacity-75 rounded-sm font-medium px-4 py-1 mt-4 w-fit h-fit ${button ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
+                <button disabled={button} onClick={() => handleCancle(request.reciverProfile[0]._id)} className={`bg-red-600 text-white cursor-pointer select-none active:opacity-75 rounded-xl font-medium px-4 py-1 mt-4 w-fit h-fit ${button ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
                   Cancel
                 </button>
               </div>
             ))}
           </ul>
         ) : (
-          <div className="mt-6 text-center text-gray-500">No requests Sent. Be alone, Die Alone !!!</div>
+          null
         )}
+        {sendedRequest?.FriendRequestList?.length === 0 &&  <div className="mt-6 text-center text-gray-500">No requests Sent. Be alone, Die Alone !!!</div>}
+        
+        {isError && (<ServerError width={72} height={36} paddingTop={10}/>)}
       </div>
     </>
   );

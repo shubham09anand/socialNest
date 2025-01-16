@@ -23,30 +23,39 @@ const ProcessJoingRequest = async (req, res) => {
                     });
                }
 
-               group.members.push(requesterId);
+               if (!group.members.includes(requesterId)) {
+                    group.members.push(requesterId);
 
-               const updatedGroup = await group.save();
+                    const updatedGroup = await group.save();
 
-               if (!updatedGroup) {
-                    return res.status(500).json({
+                    if (!updatedGroup) {
+                         return res.status(500).json({
+                              success: false,
+                              message: "Failed to add member to the group",
+                         });
+                    }
+
+                    const deleteRequest = await GroupJoingSchema.deleteOne({ _id: requestId });
+
+                    if (deleteRequest.deletedCount > 0) {
+                         return res.status(200).json({
+                              success: true,
+                              message: "Person joined the group and request deleted",
+                         });
+                    } else {
+                         return res.status(500).json({
+                              success: false,
+                              message: "Failed to delete the join request",
+                         });
+                    }
+               }else{
+                    return res.status(400).json({
                          success: false,
-                         message: "Failed to add member to the group",
+                         message: "Person is already in group",
                     });
                }
 
-               const deleteRequest = await GroupJoingSchema.deleteOne({ _id: requestId });
 
-               if (deleteRequest.deletedCount > 0) {
-                    return res.status(200).json({
-                         success: true,
-                         message: "Person joined the group and request deleted",
-                    });
-               } else {
-                    return res.status(500).json({
-                         success: false,
-                         message: "Failed to delete the join request",
-                    });
-               }
           } else if (action === 'reject') {
 
                const deleteRequest = await GroupJoingSchema.deleteOne({ _id: requestId });

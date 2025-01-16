@@ -1,32 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+import React from "react";
 import moment from "moment/moment";
 import LoadindBlogCard from "../Animation/LoadindBlogCard";
-import API from "../../Services/API";
 import noProfilePicture from '../../Assets/NoProileImage.png';
+import API from "../../Services/API";
+import { Link } from 'react-router-dom';
+import { useQuery } from "@tanstack/react-query";
+import ServerError from "../Animation/ServerError";
 
 const BlogPage = () => {
 
      const postImagErr = 'https://icons.veryicon.com/png/o/education-technology/alibaba-cloud-iot-business-department/image-load-failed.png';
-     const [article, setArticle] = useState();
-     const [error, setError] = useState();
-     const [loading, setLoading] = useState(true);
 
-     useEffect(() => {
-          API.get("/getArticle")
-               .then((res) => {
-                    setArticle(res.data.article);
-                    setLoading(false);
-               })
-               .catch((error) => {
-                    setError(error);
-                    setLoading(false);
-               });
-     }, []);
+     const getBlogs = async () => {
+          const response = await API.get("/getArticle");
+          return response?.data
+     }
+
+     const { data: article, isLoading: loading, isError: error } = useQuery({
+          queryKey: (['getArticle']),
+          queryFn: getBlogs,
+          staleTime: Infinity,
+     })
 
      return (
           <div className="no-underline space-y-4 w-full overflow-y-scroll example">
-               {loading || error ? (
+
+               {error && <ServerError width={80} height={44} paddingTop={10} />}
+
+
+               {loading ? (
                     <div>
                          <LoadindBlogCard />
                          <LoadindBlogCard />
@@ -34,7 +36,7 @@ const BlogPage = () => {
                          <LoadindBlogCard />
                     </div>
                ) : (
-                    article?.map((record) => (
+                    article?.article?.map((record) => (
                          <div key={record._id} className="w-full p-2 flex gap-10 active:opacity-60 no-underline">
                               <div title={"Read " + record.articleTitle} className="no-underline flex flex-col justify-center">
                                    <div className="relative flex flex-col md:flex-row md:space-x-5 md:pl-5 space-y-3 md:space-y-0 pb-2 border-b w-full md:max-w-3xl mx-auto bg-white">
@@ -59,7 +61,9 @@ const BlogPage = () => {
                          </div>
                     ))
                )}
+
                {article?.length === 0 && <div className="text-gray-400 text-center">No Blog Avilabe</div>}
+
           </div>
      );
 };
