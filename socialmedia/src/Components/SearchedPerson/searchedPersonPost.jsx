@@ -90,7 +90,7 @@ const SearchedPersonPost = () => {
 
                {isLoading && (<PostAniamtion/>)}
 
-               {PostDetails?.data?.length === 0 ? (
+               {PostDetails?.Post?.length === 0 ? (
                     <div className="text-center mt-4 text-gray-500">
                          <div className='w-fit h-fit rounded-full mb-2 p-3 border-2 border-black mx-auto'>
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth=".7" stroke="black" className="size-20">

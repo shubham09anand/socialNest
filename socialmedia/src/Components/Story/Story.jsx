@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import StoryLoadingHomePage from '../Animation/StoryLoadingHomePage';
 import API from '../../Services/API';
 import { Link } from 'react-router-dom';

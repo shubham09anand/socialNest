@@ -25,7 +25,7 @@ import UpdatePassword from '../Setting/updatePassword';
 import PageNotFound from '../Animation/PageNotFound';
 import AuthFailed from '../Animation/AuthFailed';
 import MessageBox from '../Messages/MessageBox';
-import GroupMessage from '../Messages/GroupChat/GroupMessage';
+import GroupMessage from '../GroupChat/GroupMessage';
 import API from '../../Services/API';
 
 

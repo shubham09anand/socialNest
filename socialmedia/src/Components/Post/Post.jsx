@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -10,9 +9,10 @@ import ShowCommentsAndLike from './ShowCommentsAndLike';
 import Story from '../Story/Story';
 import noProfilePicture from '../../Assets/NoProileImage.png';
 import API from '../../Services/API';
-import { useSelector } from 'react-redux';
 import Deveplores from "../Deveplores";
 import Slider from "react-slick";
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Post = () => {
 
@@ -73,7 +73,7 @@ const Post = () => {
   };
 
   const settings = {
-    arrows: true,  // This should be true for arrows to show
+    arrows: true,
     dots: true,
     infinite: true,
     speed: 500,

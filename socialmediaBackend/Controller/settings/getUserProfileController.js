@@ -6,14 +6,12 @@ const getUserProfile = async (req, res) => {
     try {
         const userId = req.body.userId;
 
-        // Check if userId is null or equal to the string "null"
         if (!userId || userId === "null") {
             return res.status(200).json({
                 message: "Invalid request, userId is required",
             });
         }
 
-        // Check if the userId is a valid ObjectId
         if (!mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(200).json({
                 message: "Invalid userId format",

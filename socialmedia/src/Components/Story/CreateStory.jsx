@@ -17,7 +17,6 @@ const CreateStory = () => {
 
     let handleImageChange = (e) => {
         const files = e.target.files;
-        console.log(files.size)
         const filesArray = Array.from(files);
         let totalSize = 0;
 

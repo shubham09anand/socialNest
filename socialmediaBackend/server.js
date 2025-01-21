@@ -88,6 +88,8 @@ app.use("/auth", require('./Routes/settingRoutes'));
 app.use("/auth", require('./Routes/searchedRoutes'));
 app.use("/auth", require('./Routes/scheduledRoutes'));
 app.use("/auth", require('./Routes/userInfo'));
+app.use("/auth", require('./Routes/GroupPostRoutes.js'));
+app.use("/auth", require('./Routes/GroupMessageRoute.js'));
 
 // Schedule cron jobs
 scheduleCronJob();

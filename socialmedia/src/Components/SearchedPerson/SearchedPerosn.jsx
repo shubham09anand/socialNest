@@ -1,55 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { setLoginData } from '../../Features/Counter/LoginSlice';
 import noProfilePicture from '../../Assets/NoProileImage.png';
 import UserProfile from '../Profile/UserProfile';
 import SearchedPersonPost from './searchedPersonPost';
 import CheckFriendStatus from './CheckFriendStatus';
 import API from '../../Services/API';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setLoginData } from '../../Features/Counter/LoginSlice';
+import { useQuery } from '@tanstack/react-query';
 
 const SearchedPerson = () => {
 
   const navigator = useNavigate();
   const dispatch = useDispatch();
+  const userToken = localStorage.getItem('userToken');
+  const userId = localStorage.getItem('userId');
   const loggedUser = useSelector((state) => (state.LoginSlice.loggedUserId));
   const { searchedUserId } = useParams();
   const [ListDisplay, setListDisplay] = useState(0);
-  const [info, setInfo] = useState(null);
-  const [UserData, setUserData] = useState({});
+  // const [info, setInfo] = useState(null);
+  // const [UserData, setUserData] = useState({});
 
   const toggleListDisplay = (value) => {
     setListDisplay(value);
   };
 
-  useEffect(() => {
-    if (searchedUserId) {
-      API.post("/getUserProfile", { userId: searchedUserId }).then((res) => {
-        setUserData(res.data);
-      })
-        .catch(() => {
-          navigator('*')
-          console.error('Error fetching user profile');
-        });
+  const getUserProfile = async () => {
+    try {
+      const response = await API.post("/getUserProfile", { userId: searchedUserId });
+      return response.data;
+    } catch (error) {
+      navigator('*')
     }
-  }, [searchedUserId, navigator]);
+  }
 
-  //getting user frined and post count
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await API.post("/userDetails", { userId: searchedUserId });
-        setInfo(response.data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-    fetchData();
-  }, [searchedUserId]);
+  const { data: UserData, isLoading, isError } = useQuery({
+    queryKey: (['getUserProfile', searchedUserId]),
+    queryFn: getUserProfile,
+    enabled: !!searchedUserId,
+    staleTime: Infinity
+  })
 
-  const userToken = localStorage.getItem('userToken');
-  const userId = localStorage.getItem('userId');
+  const userDetails = async () => {
+    const response = await API.post("/userDetails", { userId: searchedUserId });
+    return response.data;
+  }
+
+  const { data: info } = useQuery({
+    queryKey: (['userDetails', searchedUserId]),
+    queryFn: userDetails,
+    enabled: !!searchedUserId,
+    staleTime: Infinity
+  })
 
   useEffect(() => {
     if (userToken && userId) {
@@ -71,8 +74,8 @@ const SearchedPerson = () => {
           <div className="px-3">
             <div className="flex flex-col justify-center md:items-center lg:-mt-32 sm:-mt-16 -mt-20">
               <div className="relative z-10">
-                <div className="mx-auto relative overflow-hidden rounded-full mt-3 h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 md:border-[6px] border-gray-900 shrink-0 shadow">
-                  {UserData?.userProfile2 ? <img src={UserData?.userProfile2?.profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="imgErr" className="h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 object-cover inset-0 rounded-full " style={{ border: '2px solid black' }} /> : <img src={noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="imgErr" className="h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 object-cover inset-0 rounded-full" style={{ border: '2px solid black' }} />}
+                <div className="mx-auto relative overflow-hidden rounded-full mt-3 h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 border-gray-900 shrink-0 shadow">
+                  {UserData?.userProfile2 ? <img src={UserData?.userProfile2?.profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="imgErr" className="h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 object-cover inset-0 rounded-full border-gray-700" style={{ border: '3px solid' }} /> : <img src={noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="imgErr" className="h-24 w-24 md:h-32 md:w-32 lg:h-48 lg:w-48 object-cover inset-0 rounded-full" style={{ border: '2px solid black' }} />}
                 </div>
               </div>
             </div>
@@ -136,7 +139,7 @@ const SearchedPerson = () => {
                   <>
                     {searchedUserId ? <SearchedPersonPost searchedUserId={searchedUserId} /> : null}
                     <div className='hidden ml-2 md:block h-fit'>
-                      <UserProfile userProfile={UserData?.userProfile2} userName={UserData?.userProfile1?.userName} joinedOn={UserData?.userProfile1?.createdAt} />
+                      <UserProfile isLoading={isLoading} isError={isError} userProfile={UserData?.userProfile2} userName={UserData?.userProfile1?.userName} joinedOn={UserData?.userProfile1?.createdAt} />
                     </div>
                   </>
                 );
@@ -144,7 +147,7 @@ const SearchedPerson = () => {
                 return null;
               } else if (ListDisplay === 2) {
                 return <div className='md:hidden'>
-                  <UserProfile userProfile={UserData?.userProfile2} userName={UserData?.userProfile1?.userName} joinedOn={UserData?.userProfile1?.createdAt} />
+                  <UserProfile isLoading={isLoading} isError={isError} userProfile={UserData?.userProfile2} userName={UserData?.userProfile1?.userName} joinedOn={UserData?.userProfile1?.createdAt} />
                 </div>;
               }
             })()}

@@ -5,7 +5,6 @@ const countInfo = async (req, res) => {
     try {
         const { userId } = req.body;
 
-        // Count the number of friends
         const friendCount = await FriendRecordModel.countDocuments({
             $or: [
                 { friend_1: userId },
@@ -13,7 +12,6 @@ const countInfo = async (req, res) => {
             ]
         });
 
-        // Count the number of posts
         const postCount = await PostModel.countDocuments({ userId: userId });
 
         res.status(200).json({ friendCount, postCount });

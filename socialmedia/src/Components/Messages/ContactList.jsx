@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import FriendProfileLoadingAnimation from "../Animation/FriendProfileLoadingAnimation";
 import noProfilePicture from '../../Assets/NoProileImage.png';
 import API from '../../Services/API';
-import GroupList from './GroupChat/GroupList';
+import GroupList from '../GroupChat/GroupList';
 import { useSelector, useDispatch } from 'react-redux';
 import { setMessagingData } from "../../Features/Counter/counterSlice";
 import { Link } from "react-router-dom";
@@ -66,7 +66,7 @@ const ContactList = ({ toggleDisplay }) => {
                                              {chatList?.chatList?.filter(person => person?._id !== loggedUser).map((person, index) => (
                                                   <Link to={getChatLink(loggedUser, person?._id)} style={{ textDecoration: 'none' }} key={index} onClick={() => handleItemClick(loggedUser, person._id, person?.secondPerson[0]?.profilePhoto)} className="cursor-pointer relative flex items-center gap-4 p-2 duration-200 active:opacity-60">
                                                        <div className="relative w-14 h-14 shrink-0">
-                                                            <img src={person?.secondPerson[0]?.profilePhoto || noProfilePicture} onError={(e) => { e.target.src = noProfilePicture }} alt="imgErr" className="object-contain w-full h-full rounded-full" style={{ border: "1px solid gray" }} />
+                                                            <img src={person?.secondPerson[0]?.profilePhoto || noProfilePicture} onError={(e) => { e.target.src = noProfilePicture }} alt="imgErr" className="object-cover w-full h-full rounded-full" style={{ border: "1px solid gray" }} />
                                                        </div>
                                                        <div className="flex-1 min-w-0">
                                                             <div className="flex items-center gap-2 mb-1.5">

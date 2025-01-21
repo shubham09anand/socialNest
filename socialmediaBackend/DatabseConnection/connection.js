@@ -4,7 +4,6 @@ dotenv.config();
 
 const connectDB = async () => {
     try {
-        // const mongoUrl = process.env.DATABASE;
         const mongoUrl = 'mongodb://192.168.1.6:27017/SocialMeida';
         await mongoose.connect(mongoUrl);
         const db = mongoose.connection;
