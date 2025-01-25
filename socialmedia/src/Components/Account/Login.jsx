@@ -88,7 +88,7 @@ const Login = () => {
                                                        </div>
                                                   </div>
                                                   <div className="mb-6 text-center bg-[#4f74d4] hover:bg-[#2f5ed5] rounded-full">
-                                                       <button className={`w-full px-4 py-2 font-bold text-white rounded-full ${button ? 'opacity-50 cursor-wait' : 'cursor-pointer'}`} type="">
+                                                       <button className={`w-full px-4 py-2 font-bold text-white rounded-full ${button ? 'opacity-50 cursor-wait animate-pulse' : 'cursor-pointer'}`} type="">
                                                             Login Account
                                                        </button>
                                                   </div>

@@ -100,7 +100,7 @@ const Signup = () => {
                                    <label htmlFor="password" className="block text-gray-600">Password</label>
                                    <input required placeholder="Enter a password" type="password" id="password" className="w-full border-2 border-[#4f74d4] focus:border-[#032478] rounded-md py-2 px-3 focus:outline-none" autoComplete="off" value={password} onChange={(e) => setPassword(e.target.value)} />
                               </div>
-                              <button type="submit" disabled={button} className={`mt-2 bg-[#7090e3] text-white font-semibold rounded-sm py-2 px-4 w-full ${button ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
+                              <button type="submit" disabled={button} className={`mt-2 bg-[#7090e3] text-white font-semibold rounded-sm py-2 px-4 w-full ${button ? 'animate-pulse cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
                                    {button ? 'Signing Up...' : 'Sign Up'}
                               </button>
                          </form>
