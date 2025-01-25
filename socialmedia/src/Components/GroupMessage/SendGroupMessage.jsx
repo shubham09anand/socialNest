@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-// import { useSelector } from 'react-redux';
-// import { useParams } from 'react-router-dom';
-// import { io } from 'socket.io-client';
-import {  toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from 'react';
 import AIchat from '../Messages/AIchat';
 import GroupScheduledMessage from './GroupScheduledMessage';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { io } from 'socket.io-client';
 
-const SendGroupMessage = ({expand}) => {
+const SendGroupMessage = ({ expand, setTotalMessage }) => {
 
+     const { groupId } = useParams();
      const postImagErr = 'https://icons.veryicon.com/png/o/education-technology/alibaba-cloud-iot-business-department/image-load-failed.png';
-
+     const senderId = useSelector((state) => state.LoginSlice.loggedUserId);
      const [image, setImage] = useState([]);
      const [message, setMessage] = useState("");
      const [aiSection, setAiSection] = useState(false);
+     const [socket, setSocket] = useState(null);
 
      const handleImageUpload = (e) => {
           const files = Array.from(e.target.files);
@@ -43,9 +45,75 @@ const SendGroupMessage = ({expand}) => {
           setImage([]);
      }
 
+     useEffect(() => {
+          const s = io('http://192.168.1.6:8080');
+          setSocket(s);
+
+          if (groupId && s) {
+               s.emit("join_group_room", groupId);
+          }
+
+          return () => {
+               s.disconnect();
+          };
+     }, [groupId]);
+
+     useEffect(() => {
+          if (!socket) return;
+
+          socket.on("forward_group_message", (data)=>{
+               console.log(data)
+               if (data?.result?.success) {
+                    setTotalMessage((prev)=>{
+                         return [...prev,data.result.newGroupMessage]
+                    })
+               }
+          });
+
+          return () => {
+               socket.off("forward_group_message");
+          };
+     }, [socket]);
+
+
+     useEffect(() => {
+          if (!socket) return;
+
+          const handleGroupMessage = (messageData) => {
+               console.log("New message:", messageData);
+          };
+
+          socket.on("send_group_message", handleGroupMessage);
+
+          return () => {
+               socket.off("send_group_message", handleGroupMessage);
+          };
+     }, [socket]);
+
+     const handleSendMessage = () => {
+          if (!message.trim() && image.length === 0) {
+               return alert("Cannot send an empty message.");
+          }
+
+          const data = {
+               groupId,
+               senderId,
+               message,
+               messagePhoto: image,
+               createdAt:new Date(),
+          };
+
+          if (socket) {
+               socket.emit("send_group_message", data);
+               setMessage("");
+               resetImageUpload();
+          }
+     };
+
+
      return (
           <div className={`${expand ? 'w-full lg:w-4/5' : 'w-full md:w-1/2 lg:w-2/5'} bg-white border-t h-fit items-center fixed z-20 bottom-11 lg:bottom-0 example`}>
-               <form className="w-full items-center gap-1">
+               <div className="w-full items-center gap-1">
 
                     {aiSection && <AIchat />}
 
@@ -89,7 +157,7 @@ const SendGroupMessage = ({expand}) => {
                               )}
 
                               {!aiSection &&
-                                   <button title='Send Message' className='cursor-pointer outline-none bg-[#708fe3] rounded-full' type="submit">
+                                   <button onClick={()=>handleSendMessage(groupId, message, senderId, image)} title='Send Message' className='cursor-pointer outline-none bg-[#2c4ba0] rounded-full' type="submit">
                                         <svg className={`text-gray-800 outline-none active:opacity-70 origin-center transform rotate-90 ${!true ? 'p-2 w-10 h-10' : 'w-7 h-7 p-2 md:w-10 md:h-10'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white">
                                              <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                                         </svg>
@@ -97,7 +165,7 @@ const SendGroupMessage = ({expand}) => {
                               }
                          </div>
                     </div>
-               </form>
+               </div>
           </div>
      );
 };

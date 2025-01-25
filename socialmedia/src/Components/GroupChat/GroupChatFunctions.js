@@ -7,6 +7,16 @@ export const warning = (hook, value, time) => {
      }, time);
 }
 
+export const getJoinedGroupList = async (userId) => {
+     const response = await API.post('/groupList', { userId: userId });
+     return response.data;
+}
+
+export const getNotJoinedGroupList = async (userId) => {
+     const response = await API.post('/notJoinedGroup', { userId });
+     return response.data;
+}
+
 export const handleUpdateDesc = async ({ groupId, editedName, editedDesc }) => {
      if (!editedName.trim() || !editedDesc.trim()) {
           alert("Group name and description cannot be empty or just spaces.");

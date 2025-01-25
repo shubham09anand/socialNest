@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+import API from "../../Services/API";
+import LoadComment from "../Animation/LoadComment";
+import Deveplores from "../Deveplores";
+import ServerError from "../Animation/ServerError";
+import noProfilePicture from '../../Assets/NoProileImage.png';
 import { useQuery } from "@tanstack/react-query";
 import { getPostComment } from "./CommunityPostFunction";
-import API from "../../Services/API";
 
 const DisplayComment = ({ postId, setSelectCommet }) => {
 
@@ -9,7 +13,7 @@ const DisplayComment = ({ postId, setSelectCommet }) => {
      const [commenterId, setCommenterId] = useState([]);
      const [page, setPage] = useState(1);
 
-     const { data: comment } = useQuery({
+     const { data: comment, isError, isLoading } = useQuery({
           queryKey: ['groupPostComment', postId, page],
           queryFn: () => getPostComment({ postId, page }),
           enabled: !!postId,
@@ -53,14 +57,14 @@ const DisplayComment = ({ postId, setSelectCommet }) => {
                </div>
 
                <div className="example pb-32 border-gray-200 border-b-0 font-normal space-y-3 relative h-80 overflow-y-scroll">
-                    {comment?.comment?.map((items) => (
+                    {(!isError && !isLoading) && comment?.comment?.map((items) => (
                          <div key={items?._id} className=" items-start gap-3 relative pl-2 border-b pb-2">
                               <div className="flex place-content-center items-center w-fit space-x-2">
                                    <a style={{ color: "black", textDecoration: "none" }} href="/searched-person/65f3191584b3dc332a641181">
                                         {profilePhoto?.map((pic) => (
                                              <>
                                                   {items?.commenterId === pic?.userId && (
-                                                       <img style={{ border: '1px black solid' }} key={pic._id} src={pic.profilePhoto} alt="Profile" className="w-8 h-8 mt-1 rounded-full object-contain" />
+                                                       <img style={{ border: '1px black solid' }} key={pic._id} src={pic.profilePhoto || noProfilePicture} onError={(e)=> e.target.src = noProfilePicture} alt="Profile" className="w-10 h-10 mt-1 rounded-full object-cover" />
                                                   )}
                                              </>
                                         ))}
@@ -69,22 +73,41 @@ const DisplayComment = ({ postId, setSelectCommet }) => {
                                         )}
                                    </a>
                                    <div>
-                                        <div className="text-black flex place-content-center items-center text-sm font-semibold">{items?.userDetails[0]?.firstName} {items?.userDetails[0]?.lastName}</div>
-                                        <div className="text-black text-xs font-extralight -mt-.5">{items?.userDetails[0]?.userName}</div>
+                                        <div className="text-black flex text-sm font-semibold">{items?.userDetails[0]?.firstName} {items?.userDetails[0]?.lastName}</div>
+                                        <div className="flex space-x-5">
+                                             <div className="text-black text-xs font-extralight -mt-.5">{items?.userDetails[0]?.userName}</div>
+                                             {(items?.userDetails[0]?.userName === '@shubham' || items?.userDetails[0]?.userName === 'shubham09anand') && (<Deveplores size={3} />)}
+                                        </div>
+
                                    </div>
                               </div>
                               <p className="pl-10 text-sm sm:text-base max-h-20 overflow-y-scroll">{items?.comment}</p>
                          </div>
                     ))}
-                    {comment?.comment.length === 0 && (<div className="text-center text-gray-600 py-20">No Comment Yet . . .</div>)}
+
+                    {isLoading &&
+                         <>
+                              {[...Array(4)].map((_, index) => (
+                                   <div key={index + 1000}>
+                                        <LoadComment />
+                                   </div>
+                              ))}
+                         </>
+                    }
+
+                    {(!isError && !isLoading) && comment?.comment.length === 0 && (<div className="text-center text-gray-600 py-20">No Comment Yet . . .</div>)}
+
+                    {(isError && !isLoading) && <ServerError width={40} height={20} paddingTop={20} />}
+
                </div>
-                    <div className=" w-full -mt-20 absolute z-20 flex justify-center pb-4">
-                         {Array.from({ length: Math.ceil(comment?.totalComment / 2) }, (_, index) => (
-                              <button key={index + 1} onClick={() => setPage(index + 1)} className={`text-[10px] mx-1 px-2 py-1 rounded ${page === index + 1 ? 'bg-[#7090e3] text-white' : 'bg-gray-200 text-black'}`} disabled={page === index + 1}>
-                                   {index + 1}
-                              </button>
-                         ))}
-                    </div>
+               <div className=" w-full -mt-20 absolute z-20 flex justify-center pb-4">
+                    {Array.from({ length: Math.ceil(comment?.totalComment / 2) }, (_, index) => (
+                         <button key={index + 1} onClick={() => setPage(index + 1)} className={`text-[10px] mx-1 px-2 py-1 rounded ${page === index + 1 ? 'bg-[#7090e3] text-white' : 'bg-gray-200 text-black'}`} disabled={page === index + 1}>
+                              {index + 1}
+                         </button>
+                    ))}
+               </div>
+
           </div>
      );
 }

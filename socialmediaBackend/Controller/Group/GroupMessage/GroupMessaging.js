@@ -1,30 +1,37 @@
 const GroupMessageSchema = require('../../../Models/GroupMessageSchema');
 
-const GroupMessage = async (req, res) => {
+const GroupMessage = async (data) => {
      try {
-          
-          const data = req.body;
+
+          if (!data) {
+               return ({
+                    success: false,
+                    message: 'No message recived',
+               })
+          }
 
           const newGroupMessage = await GroupMessageSchema.create(data);
 
           if (newGroupMessage) {
-               return res.status(200).json({
+               return ({
                     success: true,
-                    message:'message saved',
+                    message: 'message saved',
+                    newGroupMessage: newGroupMessage
                })
           } else {
-               return res.status(400).json({
+               return ({
                     success: false,
-                    message:'Process failed',
+                    newGroupMessage: [],
+                    message: 'Process failed',
                })
           }
 
      } catch (error) {
-          return res.status(500).json({
+          return ({
                success: false,
-               message:'Server Error',
+               message: 'Server Error',
           })
      }
 }
 
-module.exports = {GroupMessage}
+module.exports = { GroupMessage }

@@ -25,7 +25,7 @@ import UpdatePassword from '../Setting/updatePassword';
 import PageNotFound from '../Animation/PageNotFound';
 import AuthFailed from '../Animation/AuthFailed';
 import MessageBox from '../Messages/MessageBox';
-import GroupMessage from '../GroupChat/GroupMessage';
+import GroupMessageLayout from '../GroupMessage/GroupMessageLayout';
 import API from '../../Services/API';
 
 
@@ -131,7 +131,7 @@ const WebsiteLayout = () => {
             <Route path="/home" element={<ProtectedRoute><UserProfileLayout userPhoto={userPhoto} /></ProtectedRoute>} />
             <Route path="/message" element={<ProtectedRoute><MessageLayout userPhoto={userPhoto} /></ProtectedRoute>} />
             <Route path="/message/:roomID" element={<ProtectedRoute><MessageBox userPhoto={userPhoto} /></ProtectedRoute>} />
-            <Route path="/groupmessage/:groupId" element={<GroupMessage />} />
+            <Route path="/groupmessage/:groupId" element={<GroupMessageLayout />} />
             <Route path="/friends" element={<ProtectedRoute><FrinedList /></ProtectedRoute>} />
             <Route path="/blog" element={<ProtectedRoute><BlogLayout /></ProtectedRoute>} />
             <Route path="/blog" element={<ProtectedRoute><BlogPage /></ProtectedRoute>} />

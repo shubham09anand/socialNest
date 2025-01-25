@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import noProfilePicture from '../../Assets/NoProileImage.png';
 import API from '../../Services/API';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,8 +7,8 @@ import { useSelector } from 'react-redux';
 
 const CreateGroup = ({ displayModal }) => {
 
-     const queryClient = useQueryClient()
-
+     const groupPhoto = 'https://cdn.pixabay.com/photo/2016/11/14/17/39/group-1824145_1280.png';
+     const queryClient = useQueryClient();
      const [image, setImage] = useState(null);
      const [warning, setWarning] = useState(false);
      const [groupName, setGroupName] = useState("");
@@ -35,20 +34,20 @@ const CreateGroup = ({ displayModal }) => {
                setWarning(true);
           }
      };
-
+     
      const handleMakeGroup = async () => {
           if (!groupName.trim() || !groupDesc.trim()) {
-               toast.info("Name and Description required");
+               setWarning(true);
                return null;
           }
-
+          
           if (!ownerID) {
-               toast.info("Owner ID is required");
+               setWarning(true);
                return null;
           }
 
           const response = await API.post('/createMessageGroup', { groupName, groupDesc, groupIcon: image, ownerID: ownerID });
-          return response.data;
+          return response?.data;
      };
 
      const { mutate: makegroup } = useMutation({
@@ -68,7 +67,7 @@ const CreateGroup = ({ displayModal }) => {
 
      const handleCreateGroup = () => {
           if (!groupName.trim() || !groupDesc.trim()) {
-               toast.info("Name and Description required");
+               setWarning(true);
           } else {
                makegroup();
           }
@@ -79,40 +78,39 @@ const CreateGroup = ({ displayModal }) => {
      return (
           <>
                <ToastContainer />
-               {displayModal && (
-                    <div className='absolute top-0 w-full h-full bg-white'>
-                         <div className='mx-auto duration-150'>
-                              <div className="rounded-lg mx-auto max-w-3xl" data-id="1" data-v0-t="card">
-                                   <div className="flex flex-col space-y-1.5 p-6" data-id="2">
-                                        <h3 className="text-2xl font-semibold leading-none tracking-tight" data-id="3">Create New Group</h3>
-                                   </div>
-                                   <div className="p-6 pt-0 space-y-4" data-id="5">
-                                        <div className="">
-                                             <div className='flex items-center space-x-6'>
-                                                  <div className="shrink-0 border-2 border-black rounded-full w-fit h-fit">
-                                                       <img className="h-16 w-16 object-scale-down rounded-full" onError={(e) => { e.target.src = noProfilePicture }} src={image || noProfilePicture} alt="Group profilephoto" />
-                                                  </div>
-                                                  <label className="block">
-                                                       <span className="sr-only">Choose group profile photo</span>
-                                                       <input onChange={(e) => handleImageChange(e)} type="file" className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
-                                                  </label>
+               <div className={`w-full h-full bg-white absolute duration-500 top-0 ${displayModal ? '-translate-x-0' : '-translate-x-full'}`}>
+                    <div className='mx-auto duration-150'>
+                         <div className="rounded-lg mx-auto max-w-3xl" data-id="1" data-v0-t="card">
+                              <div className="flex flex-col space-y-1.5 p-6" data-id="2">
+                                   <h3 className="text-xl md:text-2xl leading-none tracking-tight" data-id="3">Create New Group</h3>
+                              </div>
+                              <div className="p-6 pt-0 space-y-4" data-id="5">
+                                   <div className="">
+                                        <div className='flex items-center space-x-6'>
+                                             <div className="shrink-0 border-2 border-black rounded-full w-fit h-fit">
+                                                  <img className="h-16 w-16 object-scale-down rounded-full" onError={(e) => { e.target.src = groupPhoto }} src={image || groupPhoto} alt="Group profilephoto" />
                                              </div>
-                                             <div className={`text-xs pl-24 -mt-2 text-red-500 italic ${!warning ? 'hidden' : 'block'}`}>Only JEPG, JPG, PNG are allowed with having less than 10Mb in size,</div>
+                                             <label className="block">
+                                                  <span className="sr-only">Choose group profile photo</span>
+                                                  <input onChange={(e) => handleImageChange(e)} type="file" className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
+                                             </label>
                                         </div>
-                                        <div className="items-center">
-                                             <label className="text-sm font-semibold text-gray-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 w-[200px]" htmlFor="group_name">Group Name</label>
-                                             <input onChange={(e) => setGroupName(e.target.value)} value={groupName} className="flex h-10 w-full rounded-md text-gray-900 outline-none border-2 border-gray-400 pl-2 py-2 text-sm" id="group_name" placeholder="Enter group name" />
-                                        </div>
-                                        <div className="items-center">
-                                             <label className="text-sm font-semibold text-gray-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 w-[200px]" htmlFor="group_description">Group Description</label>
-                                             <input onChange={(e) => setGroupDesc(e.target.value)} value={groupDesc} className="flex h-10 w-full rounded-md text-gray-900 outline-none border-2 border-gray-400 pl-2 py-2 text-sm" id="group_description" placeholder="Enter group description" type="text" />
-                                        </div>
-                                        <button onClick={() => handleCreateGroup()} disabled={isMutating} className={`px-4 py-2 bg-[#708fe3] font-semibold text-white rounded-md ${isMutating ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}>{isMutating ? 'Creating.....' : 'Create'}</button>
                                    </div>
+                                   <div className="items-center">
+                                        <label className="text-sm font-semibold text-gray-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 w-[200px]" htmlFor="group_name">Group Name</label>
+                                        <input required onChange={(e) => setGroupName(e.target.value)} value={groupName} className="flex h-10 w-full rounded-md text-gray-900 outline-none border-2 border-gray-400 pl-2 py-2 text-sm" id="group_name" placeholder="Enter group name" />
+                                   </div>
+                                   <div className="items-center">
+                                        <label className="text-sm font-semibold text-gray-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 w-[200px]" htmlFor="group_description">Group Description</label>
+                                        <input required onChange={(e) => setGroupDesc(e.target.value)} value={groupDesc} className="flex h-10 w-full rounded-md text-gray-900 outline-none border-2 border-gray-400 pl-2 py-2 text-sm" id="group_description" placeholder="Enter group description" type="text" />
+                                   </div>
+                                   <div className={`text-xs -mt-2 text-red-500 italic ${!warning ? 'hidden' : 'block'}`}>Name and Description require. Only JEPG, JPG, PNG are allowed with having less than 10Mb in size.</div>
+
+                                   <button onClick={() => handleCreateGroup()} disabled={isMutating} className={`px-4 py-2 bg-[#708fe3] font-semibold text-white rounded-md ${isMutating ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}>{isMutating ? 'Creating.....' : 'Create'}</button>
                               </div>
                          </div>
                     </div>
-               )}
+               </div>
           </>
      );
 };

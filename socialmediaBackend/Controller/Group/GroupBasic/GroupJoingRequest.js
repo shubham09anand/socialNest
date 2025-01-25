@@ -5,13 +5,21 @@ const GroupJoing = async (req, res) => {
      try {
           const data = req.body;
 
-          const groupRequest = await GroupJoingSchema.create(data)
+          const checkExistingReq = await GroupJoingSchema.findOne({ groupId: data.groupId, requesterId: data.requesterId })
 
-          if (groupRequest) {
+          if (!checkExistingReq) {
+               const groupRequest = await GroupJoingSchema.create(data)
+
+               if (groupRequest) {
+                    return res.status(200).json({
+                         message: 'Request Sent',
+                         success: true,
+                    })
+               }
+          } else {
                return res.status(200).json({
-                    message: 'Request Sent',
-                    success: true,
-                    error: null,
+                    message: 'Request Already Exists',
+                    success: false,
                })
           }
 

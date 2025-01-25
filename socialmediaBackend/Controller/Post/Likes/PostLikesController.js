@@ -4,13 +4,11 @@ const postLike = async (req, res) => {
   try {
     const postLikeData = req.body;
 
-    // nullish coalescing to provide default empty strings if values are undefined
     const postId = (req.body.postId ?? '').trim();
     const likedBy = (req.body.likedBy ?? '').trim();
 
     const existingLike = await PostLikesModel.findOne({ postId, likedBy });
 
-     // If no existing like is found by the user, create a new like
     if (!existingLike) {
       const newPostLike = await PostLikesModel.create(postLikeData);
 
@@ -18,7 +16,6 @@ const postLike = async (req, res) => {
         message: 'Post liked successfully',
         like: newPostLike,
       });
-      // If the user has already liked the post, delete the existing like
     } else {
       await PostLikesModel.deleteOne({ postId, likedBy });
 

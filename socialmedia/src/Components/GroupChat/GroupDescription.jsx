@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import noProfilePicture from '../../Assets/NoProileImage.png';
 import { useMutation, useIsMutating } from '@tanstack/react-query';
 import { useParams } from "react-router-dom";
 import { handleUpdateDesc, warning } from './GroupChatFunctions';
@@ -8,6 +7,7 @@ import { handleUpdateDesc, warning } from './GroupChatFunctions';
 const GroupDescription = ({ setWarning, groupInfo, loggedUserId, listDisplay, setListDisplay }) => {
 
      const { groupId } = useParams();
+     const groupIcon = 'https://cdn.pixabay.com/photo/2016/11/14/17/39/group-1824145_1280.png';
      const [edit, setEdit] = useState(false);
      const [option, setOption] = useState(false);
      const [editedName, setEditedName] = useState(groupInfo?.groupName);
@@ -29,7 +29,7 @@ const GroupDescription = ({ setWarning, groupInfo, loggedUserId, listDisplay, se
      return (
           <div className="w-full relative">
                <div className="flex justify-center px-5 select-none">
-                    <img className={`bg-white p-2 rounded-full ${edit ? 'h-28 w-28' : 'h-28 w-28'}`} src={groupInfo?.groupIcon || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="group icon" />
+                    <img className={`grayscale bg-white p-2 rounded-full ${edit ? 'h-28 w-28' : 'h-28 w-28'}`} src={groupInfo?.groupIcon || groupIcon} onError={(e) => e.target.src = groupIcon} alt="group icon" />
                </div>
 
                {(groupInfo?.groupAdmins === loggedUserId || groupInfo?.ownerID === loggedUserId) &&

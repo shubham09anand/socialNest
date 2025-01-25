@@ -16,7 +16,7 @@ const fetchGroupPost = async (req, res) => {
                });
           }
 
-          const totalPost = await GroupPostSchema.countDocuments({groupId: groupId});
+          const totalPost = await GroupPostSchema.countDocuments({ groupId: groupId });
 
           const groupPost = await GroupPostSchema.aggregate([
                {
@@ -47,21 +47,21 @@ const fetchGroupPost = async (req, res) => {
           ]);
 
           if (groupPost.length > 0) {
-               res.status(200).json({
+               return res.status(200).json({
                     success: true,
                     post: groupPost,
-                    totalPost:totalPost,
+                    totalPost: totalPost,
                     message: 'Post Fetched',
                });
           } else {
-               res.status(200).json({
+               return res.status(200).json({
                     success: true,
                     post: [],
                     message: 'No Post Exists',
                });
           }
      } catch (error) {
-          res.status(500).json({
+          return res.status(500).json({
                success: false,
                message: 'Server Error',
           });

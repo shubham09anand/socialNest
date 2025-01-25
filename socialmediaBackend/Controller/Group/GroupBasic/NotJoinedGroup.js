@@ -1,6 +1,6 @@
 const groupSchema = require('../../../Models/GroupSchema');
 
-const GetGroupList = async (req, res) => {
+const NotJoinedGroup = async (req, res) => {
      try {
 
           if (!req.body.userId) {
@@ -10,16 +10,16 @@ const GetGroupList = async (req, res) => {
                });
           }
 
-          const list = await groupSchema.find({ members: req.body.userId });
+          const list = await groupSchema.find({ members: { $ne: req.body.userId } });
 
-          res.status(200).json({
+          return res.status(200).json({
                success: true,
                groupList: list
           });
-          
+
      } catch (error) {
 
-          res.status(500).json({
+          return res.status(500).json({
                success: false,
                groupList: [],
                message: "An error occurred while fetching the group list"
@@ -27,4 +27,4 @@ const GetGroupList = async (req, res) => {
      }
 }
 
-module.exports = { GetGroupList };
+module.exports = { NotJoinedGroup };

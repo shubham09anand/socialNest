@@ -41,7 +41,6 @@ const ProcessSchedulingMessage = async (_, res) => {
                });
           }
      } catch (error) {
-          console.error(error);
           return res.status(500).json({
                success: false,
                message: 'Server error occurred.',

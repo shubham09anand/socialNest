@@ -15,7 +15,7 @@ const fetchPostComment = async (req, res) => {
                });
           }
 
-          const countCommnet = await GroupPostCommentSchema.countDocuments({postId});
+          const countCommnet = await GroupPostCommentSchema.countDocuments({ postId });
 
           const postComment = await GroupPostCommentSchema.aggregate([
                {
@@ -50,22 +50,21 @@ const fetchPostComment = async (req, res) => {
           ]);
 
           if (postComment.length > 0) {
-               res.status(200).json({
+               return res.status(200).json({
                     success: true,
                     comment: postComment,
                     totalComment: countCommnet,
                     message: 'Comment Fetched',
                });
           } else {
-               res.status(200).json({
+               return res.status(200).json({
                     success: true,
                     comment: [],
                     message: 'No Comment Exists',
                });
           }
      } catch (error) {
-          console.error(error);
-          res.status(500).json({
+          return res.status(500).json({
                success: false,
                message: 'Server Error',
           });

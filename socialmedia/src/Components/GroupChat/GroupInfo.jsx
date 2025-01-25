@@ -14,7 +14,7 @@ const GroupInfo = ({ display, groupInfo, totalMember, groupAdmin, ownerId }) => 
      return (
 
           <>
-               <div className={`overflow-y-scroll border-black h-[calc(100%-40px)] sm:h-[calc(100%-160px)] border-l bg-white fixed right-0 top-16 lg:top-28 z-20 sm:z-0 pb-16 transition-all duration-[1s] overflow-hidden ${display === 2 ? " w-full sm:w-2/3 md:w-2/4 lg:w-[40%] xl:w-[27%]" : "w-0"}`}>
+               <div className={`overflow-y-scroll border-black h-[calc(100%-40px)] sm:h-[calc(100%-149px)] md:h-screen border-l bg-white fixed right-0 top-[60px] lg:top-28 z-30 pb-16 transition-all duration-[1s] overflow-hidden ${display === 2 ? " w-full sm:w-2/3 md:w-2/4 lg:w-[40%] xl:w-[27%]" : "w-0"}`}>
 
                     {warning && <div className='flex-shrink-0 text-lg text-center font-thin bg-red-600 text-white w-full absolute z-20 py-2'>Something Went Wrong</div>}
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import API from '../../Services/API';
 import ServerError from '../Animation/ServerError';
-import { getScheduledMessage } from './GroupChatFunctions';
+import { getScheduledMessage } from '../GroupChat/GroupChatFunctions';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useIsMutating, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -89,7 +89,7 @@ const GroupScheduledMessage = ({ display }) => {
 
           <>
 
-               <div className={`overflow-y-scroll border-y-0 h-[calc(100%-110px)] sm:h-[calc(100%-160px)] md:h-[calc(100%-160px)] pb-40 shadow-inner border-black border-l bg-white fixed z-20 sm:z-0 right-0 top-16 lg:top-28 transition-all duration-500 ${display === 1 ? 'w-full sm:w-1/2 lg:w-2/4 xl:w-[27%]' : 'w-0'}`}>
+               <div className={`overflow-y-scroll border-y-0 h-[calc(100%-110px)] sm:h-[calc(100%-160px)] md:h-screen pb-40 shadow-inner border-black border-l bg-white fixed z-20 right-0 top-16 lg:top-28 transition-all duration-500 ${display === 1 ? 'w-full sm:w-1/2 lg:w-2/4 xl:w-[27%]' : 'w-0'}`}>
 
                     <div className='w-full relative px-2'>
                          <div className='overflow-y-scroll relative'>

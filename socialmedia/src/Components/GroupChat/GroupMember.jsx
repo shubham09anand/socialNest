@@ -7,12 +7,12 @@ import { useMutation, useQuery, useQueryClient, useIsMutating } from '@tanstack/
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const GroupMember = ({ setWarning, totalMember, ownerId, groupAdmin }) => {
+const GroupMember = ({ setWarning, ownerId, groupAdmin }) => {
 
      const queryClient = useQueryClient();
      const { groupId } = useParams();
      const [option, setOption] = useState(null);
-     const loggedUserId = useSelector((state) => state.LoginSlice.loggedUserId)
+     const loggedUserId = useSelector((state) => state.LoginSlice.loggedUserId);
 
      const { data, isLoading, isError } = useQuery({
           queryKey: ['groupMemberList', groupId],
@@ -85,7 +85,6 @@ const GroupMember = ({ setWarning, totalMember, ownerId, groupAdmin }) => {
                     <div className='flex space-x-2 items-center'>
                          <div className='flex-shrink-0 text-lg font-semibold pl-2 cursor-pointer select-none'>Group Members</div>
                          <div className='w-1 h-1 rounded-full border-3 mt-1 bg-gray-700 border-gray-700'></div>
-                         <div className='text-sm text-gray-600 mt-1'>{totalMember} Members</div>
                     </div>
                </div>
 

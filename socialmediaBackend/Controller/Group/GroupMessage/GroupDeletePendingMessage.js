@@ -19,7 +19,6 @@ const handleGroupPendingMessgaeDelete = async (req, res) => {
                message: 'Message successfully deleted.'
           });
      } catch (error) {
-          console.error('Error deleting message:', error);
           return res.status(500).json({
                success: false,
                message: 'Server Error'

@@ -79,9 +79,8 @@ const ProcessJoingRequest = async (req, res) => {
                });
           }
      } catch (error) {
-          console.error("Error in ProcessJoingRequest:", error.message);
 
-          res.status(500).json({
+          return res.status(500).json({
                success: false,
                message: "Server Error",
           });

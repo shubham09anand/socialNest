@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const connectDB = require("./DatabseConnection/connection.js");
 const { scheduleCronJob } = require('./Routes/cronApi.js');
 const { sendMessage } = require("./Controller/Messages/sendMessage.js");
+const { groupSocket } = require("./groupMessageSocket.js");
 
 dotenv.config();
 connectDB();
@@ -19,7 +20,6 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     optionsSuccessStatus: 200
 }));
-
 
 const server = http.createServer(app);
 const port = process.env.PORT || 8080;
@@ -78,6 +78,8 @@ io.on('connection', (socket) => {
     });
 });
 
+groupSocket(server)
+
 // Include existing routes
 app.use("/auth", require('./authRoutes.js'));
 app.use("/auth", require('./Routes/postRoutes'));
@@ -98,3 +100,4 @@ scheduleCronJob();
 server.listen(port, () => {
     console.log(`Server and Socket.IO are running on port ${port}`);
 });
+

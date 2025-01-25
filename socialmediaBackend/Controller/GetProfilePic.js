@@ -3,8 +3,6 @@ const ProfileSchema = require("../Models/UserProfileModle");
 const profilePicture = async (req, res) => {
      try {
           const { userIdArray } = req.body;
-
-          console.log(userIdArray)
           
           if (!userIdArray || userIdArray.length === 0) {
                return res.status(400).json({

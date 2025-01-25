@@ -2,7 +2,7 @@ const GroupPostSchema = require('../../../Models/GroupPostModel');
 
 const CreateGroupPost = async (req, res) => {
      try {
-          console.log(req.body.postMessage);
+
           const newGroupPost = await GroupPostSchema.create(req.body);
 
           if (newGroupPost) {

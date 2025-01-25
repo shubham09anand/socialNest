@@ -10,7 +10,7 @@ const { deleteMessage } = require("../Controller/Messages/deletMessage");
 
 const { CreateGroup } = require("../Controller/Group/GroupBasic/CreateGroup")
 const { GroupJoing } = require("../Controller/Group/GroupBasic/GroupJoingRequest");
-const { GetGroupList } = require("../Controller/Group/GroupBasic/FetchGroupList");
+const { GetGroupList } = require("../Controller/Group/GroupBasic/FetchJoinedGroupList");
 const { GetgroupInfo } = require("../Controller/Group/GroupBasic/GroupInfo");
 const { LeaveGroup } = require("../Controller/Group/GroupBasic/LeaveGroup");
 const { UpdateGroupInfo } = require("../Controller/Group/GroupBasic/UpdateGroupInfo");
@@ -21,6 +21,8 @@ const { MakeMoreAdmin } = require("../Controller/Group/GroupBasic/MakeMoreAdmin"
 const { ProcessJoingRequest } = require("../Controller/Group/GroupBasic/ProcessJoingRequest");
 const { FetchAllPendingRequest } = require("../Controller/Group/GroupBasic/FetchAllPendingRequest");
 const { GroupMemberList } = require("../Controller/Group/GroupBasic/GroupMemberList");
+const { NotJoinedGroup } = require("../Controller/Group/GroupBasic/NotJoinedGroup");
+const { CheckReuestStatus } = require("../Controller/Group/GroupBasic/CheckReuestStatus");
 
 
 router.post('/sendMessage', sendMessage);
@@ -41,6 +43,9 @@ router.post('/makeMoreAdmin', MakeMoreAdmin);
 router.post('/processJoingRequest', ProcessJoingRequest);
 router.post('/fetchAllPendingRequest', FetchAllPendingRequest);
 router.post('/groupMemberList', GroupMemberList);
+router.post('/notJoinedGroup', NotJoinedGroup);
+router.post('/checkReuestStatus', CheckReuestStatus);
+
 
 
 module.exports = router;

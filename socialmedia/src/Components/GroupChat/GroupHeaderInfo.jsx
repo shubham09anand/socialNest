@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import noProfilePicture from '../../Assets/NoProileImage.png';
 
 const GroupHeaderInfo = ({ display, setDisplay, groupInfo, groupName, groupDesc, isLoading }) => {
+     
+     const groupIcon = 'https://cdn.pixabay.com/photo/2016/11/14/17/39/group-1824145_1280.png';
 
      return (
-          <div className="flex fixed w-full lg:w-[80%] right-0 bg-white items-center justify-between gap-2 px-3 z-20 border-b border-gray-400 py-2 example">
+          <div className="flex fixed w-full lg:w-[80%] right-0 -mt-1 bg-white items-center justify-between gap-2 px-3 z-50 border-b border-gray-400 py-2 example">
                <div className="flex space-x-4 place-content-center items-center text-start pb-0 text-sm">
                     <Link to="/message" className="p-1 hover:opacity-80 shadow-[1px_1px_black]" style={{ backgroundColor: "#556eaf", borderRadius: "100%" }}>
                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="white" className="-translate-x-[1px] w-5 sm:w-6 h-5 sm:h-6 active:opacity-60 cursor-pointer rounded-full">
@@ -15,11 +16,11 @@ const GroupHeaderInfo = ({ display, setDisplay, groupInfo, groupName, groupDesc,
                     {
                          isLoading ? (
                               <div className='animate-pulse  flex place-content-center items-center space-x-3'>
-                                   <img src={noProfilePicture} style={{ border: "1px solid gray" }} className="select-none w-10 h-10 rounded-full shadow object-contain" alt="group avatar" />
+                                   <img src={groupIcon} style={{ border: "1px solid gray" }} className="select-none w-10 h-10 rounded-full shadow object-contain" alt="group avatar" />
                               </div>
                          ) : (
                               <Link className="flex place-content-center items-center space-x-3" style={{ textDecoration: "none" }}>
-                                   <img src={groupInfo.groupIcon || noProfilePicture} onError={(e) => { e.target.src = noProfilePicture; }} style={{ border: "1px solid gray" }} className="select-none w-11 h-11 rounded-full shadow object-contain" alt="group avatar" />
+                                   <img src={groupInfo.groupIcon || groupIcon} onError={(e) => { e.target.src = groupIcon }} style={{ border: "1px solid gray" }} className="select-none w-11 h-11 rounded-full shadow object-contain" alt="group avatar" />
                                    <div>
                                         <div className="text-base font-medium text-black">{groupName}</div>
                                         <div style={{ textDecoration: 'none' }} className='flex space-x-2 place-content-center items-center'>
