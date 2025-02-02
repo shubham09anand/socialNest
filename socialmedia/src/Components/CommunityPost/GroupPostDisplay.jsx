@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { deletePost, fetchGroupPost, getProfilePic } from './CommunityPostFunction';
 import { useSelector } from 'react-redux';
 
-const GroupPostDisplay = ({ groupAdmins, ownerId, expand }) => {
+const GroupPostDisplay = ({ groupAdmins, ownerId, setExpand, expand }) => {
 
      const { groupId } = useParams();
      const queryClient = useQueryClient();
@@ -80,7 +80,11 @@ const GroupPostDisplay = ({ groupAdmins, ownerId, expand }) => {
           },
      });
 
-     const isPostDeleting = useIsMutating(['deleteGroupPost'])
+     const isPostDeleting = useIsMutating(['deleteGroupPost']);
+
+     useEffect(()=>{
+          post?.data?.post.length === 0 ? setExpand(true) : setExpand(false)
+     },[post, setExpand])
 
      return (
           <div className={`${expand ? 'w-0 overflow-hidden' : 'w-full md:w-1/2'} hidden md:block border-l-2 overflow-y-scroll h-full md:h-[780px]`}>

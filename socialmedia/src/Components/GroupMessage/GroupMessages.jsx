@@ -10,7 +10,7 @@ const GroupMessages = ({groupedMessages,message}) => {
 
      return (
           <>
-               <div className='space-y-5 pt-4 w-full'>
+               <div className='space-y- w-full'>
                     {Object.entries(groupedMessages).map(([date, messages]) => (
                          <div key={date}>
                               <div className='mt-2 flex flex-row-reverse select-none mx-auto px-1 w-fit h-fit rounded-md place-content-center items-center shadow-[1px_1px_1px_1px_gray]'>
@@ -21,22 +21,22 @@ const GroupMessages = ({groupedMessages,message}) => {
                               </div>
                               {messages.map((mess, index) => (
                                    <div key={index} className={`px-2 my-3 w-full flex gap-3 ${mess.senderId === userId ? 'ml-auto flex-row-reverse' : ''}`}>
-                                        <Link to={`/searched-person/${mess?.senderId}`}>
+                                        <Link style={{textDecoration: 'none'}} to={`/searched-person/${mess?.senderId}`}>
                                              <div className='select-none flex place-content-center items-center rounded-full w-8 h-8 bg-gray-800 text-white'>
-                                                  <div className='w-fit h-fit select-none'>{mess?.senderMessage?.[0]?.firstName?.[0]}</div>
+                                                  <div className='pb-0.5 w-fit h-fit select-none'>{mess?.senderMessage?.[0]?.firstName?.[0] || mess?.senderMessage?.firstName?.[0]}</div>
                                              </div>
                                         </Link>
                                         {(mess?.message) && (
                                              <div className={`select-none relative rounded-[15px] w-fit ${mess?.senderId === userId ? 'bg-white text-black shadow-[1px_2px_1px_gray]' : 'bg-white shadow-[1px_1px_1px_1px_gray]'}`}>
-                                                  <div className='px-3 pt-2 text-green-800 font-sans text-xs font-bold'>{mess?.senderMessage[0]?.firstName} {mess?.senderMessage[0]?.lastName}</div>
-                                                  <div className='px-3 font-sans pt-.5 pb-.5 ml-auto' style={{ lineHeight: "120%" }}>{mess?.message}</div>
+                                                  <div className='px-3 pt-2 text-green-800 font-sans text-xs font-bold'>{mess?.senderMessage[0]?.firstName || mess?.senderMessage?.firstName} {mess?.senderMessage[0]?.lastName || mess?.senderMessage?.lastName}</div>
+                                                  <div className='px-3 font-sans pt-.5 pb-.5 ml-auto' style={{ lineHeight: "120%" }}>{index} {mess?.message}</div>
                                                   <div className='px-3 text-[10px] italic font-semibold tracking-widest pt-1.5 pb-2.5'>{moment(mess?.createdAt).format('h:mm a')}</div>
                                              </div>
                                         )}
                                         {(mess?.messagePhoto.length > 0) && (
-                                             <div className={`select-none relative rounded-[15px] w-80 ${mess?.senderId === userId ? 'bg-white text-black' : 'bg-white shadow-[1px_1px_1px_1px_gray]'}`}>
-                                                  <div className='px-3 pt-2 text-green-800 font-sans text-xs font-bold'>{mess?.senderMessage[0]?.firstName} {mess?.senderMessage[0]?.lastName}</div>
-                                                  <img src={mess?.messagePhoto[0]?.base64 || postImagErr} alt={postImagErr} onError={(e) => e.target.src = postImagErr} className='pt-1 shadow-[1px_1px_1px_gray] object-contain w-full h-44 rounded-md' />
+                                             <div className={`select-none relative rounded-[15px] w-80 ${mess?.senderId === userId ? 'bg-white text-black' : 'bg-white'}`}>
+                                                  <div className='px-3 pt-2 text-green-800 font-sans text-xs font-bold'>{mess?.senderMessage[0]?.firstName || mess?.senderMessage?.firstName} {mess?.senderMessage[0]?.lastName || mess?.senderMessage?.lastName}</div>
+                                                  <img src={mess?.messagePhoto[0]?.base64 || postImagErr} alt={postImagErr} onError={(e) => e.target.src = postImagErr} className='pt-1 object-cover w-full h-44 rounded-md' />
                                                   <div className='px-3 text-[10px] italic font-semibold tracking-widest pt-1.5 pb-2.5'>{moment(mess?.createdAt).format('h:mm a')}</div>
                                              </div>
                                         )}

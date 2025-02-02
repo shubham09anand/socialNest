@@ -34,7 +34,7 @@ const WebsiteLayout = () => {
   const location = useLocation();
   const currentLocation = location.pathname;
   const loggedUserId = useSelector((state) => state.LoginSlice.loggedUserId);
-  const [userPhoto, setUserPhoto] = useState();
+  const [userDetails, setUserDetails] = useState();
   const [dashboardDisplay, setDashboardDisplay] = useState(false);
   const splitCuurPath = currentLocation.split("/");
   const [docTitle, setDocTitle] = useState('');
@@ -107,7 +107,7 @@ const WebsiteLayout = () => {
   useEffect(() => {
     if (loggedUserId && loggedUserId !== null) {
       API.post("/userLoggedDetails", { loggedUserId }).then((res) => {
-        setUserPhoto(res.data);
+        setUserDetails(res?.data?.user[0]);
       }).catch(() => {
           console.log("Failed To Get Profile Photo");
         })
@@ -117,7 +117,7 @@ const WebsiteLayout = () => {
   return (
     <>
     {/* // eslint-disable-next-line */}
-      {docTitle !== '404 - Page Not Found' && currentLocation !== '/' && currentLocation !== '/auth-failed' && currentLocation !== '/signup' && !currentLocation.startsWith('/searched-profile') && <Header userPhoto={userPhoto} dashboardDisplay={dashboardDisplay} toggleDashboard={() => setDashboardDisplay(prev => !prev)} />}
+      {docTitle !== '404 - Page Not Found' && currentLocation !== '/' && currentLocation !== '/auth-failed' && currentLocation !== '/signup' && !currentLocation.startsWith('/searched-profile') && <Header userPhoto={userDetails?.profilePhoto} dashboardDisplay={dashboardDisplay} toggleDashboard={() => setDashboardDisplay(prev => !prev)} />}
       {/* // eslint-disable-next-line */}
       <div className='flex'>
       {/* // eslint-disable-next-line */}
@@ -128,10 +128,10 @@ const WebsiteLayout = () => {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/home" element={<ProtectedRoute><UserProfileLayout userPhoto={userPhoto} /></ProtectedRoute>} />
-            <Route path="/message" element={<ProtectedRoute><MessageLayout userPhoto={userPhoto} /></ProtectedRoute>} />
-            <Route path="/message/:roomID" element={<ProtectedRoute><MessageBox userPhoto={userPhoto} /></ProtectedRoute>} />
-            <Route path="/groupmessage/:groupId" element={<GroupMessageLayout />} />
+            <Route path="/home" element={<ProtectedRoute><UserProfileLayout /></ProtectedRoute>} />
+            <Route path="/message" element={<ProtectedRoute><MessageLayout /></ProtectedRoute>} />
+            <Route path="/message/:roomID" element={<ProtectedRoute><MessageBox userPhoto={userDetails?.profilePhoto} /></ProtectedRoute>} />
+            <Route path="/groupmessage/:groupId" element={<GroupMessageLayout userDetails={userDetails?.details} />} />
             <Route path="/friends" element={<ProtectedRoute><FrinedList /></ProtectedRoute>} />
             <Route path="/blog" element={<ProtectedRoute><BlogLayout /></ProtectedRoute>} />
             <Route path="/blog" element={<ProtectedRoute><BlogPage /></ProtectedRoute>} />

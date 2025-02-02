@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>GitHub Contribution Activity</title>
+     <style>
+          body {
+               font-family: Arial, sans-serif;
+               margin: 20px;
+               background-color: #f9f9f9;
+          }
+
+          h1 {
+               font-size: 24px;
+               color: #333;
+          }
+
+          .contribution-grid {
+               display: grid;
+               grid-template-columns: repeat(52, 12px);
+               gap: 2px;
+               margin: 20px 0;
+          }
+
+          .contribution-day {
+               width: 12px;
+               height: 12px;
+               border-radius: 2px;
+               background-color: #ebedf0;
+          }
+
+          .contribution-day[data-count="0"] {
+               background-color: #ebedf0;
+          }
+
+          .contribution-day[data-count="1"] {
+               background-color: #c6e48b;
+          }
+
+          .contribution-day[data-count="2"] {
+               background-color: #7bc96f;
+          }
+
+          .contribution-day[data-count="3"] {
+               background-color: #239a3b;
+          }
+
+          .contribution-day[data-count="4"] {
+               background-color: #196127;
+          }
+
+          .activity-list {
+               margin-top: 20px;
+          }
+
+          .activity-item {
+               margin-bottom: 10px;
+               color: #555;
+          }
+
+          .activity-item a {
+               color: #0366d6;
+               text-decoration: none;
+          }
+
+          .activity-item a:hover {
+               text-decoration: underline;
+          }
+     </style>
+</head>
+
+<body>
+     <h1>GitHub Contribution Activity</h1>
+
+     <label for="token">Enter your GitHub Token:</label>
+     <input type="password" id="token" placeholder="GitHub Personal Access Token" />
+
+     <label for="year">Select Year:</label>
+     <select id="year">
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+     </select>
+
+     <button id="fetchData">Fetch Contributions</button>
+
+     <!-- Contribution Grid -->
+     <div class="contribution-grid" id="contributionGrid"></div>
+
+     <!-- Activity List -->
+     <div class="activity-list" id="activityList">
+          <h2>Recent Activity</h2>
+     </div>
+
+     <script>
+          const formatDate = (dateString) => {
+               const date = new Date(dateString);
+               const options = { day: "numeric", month: "short", year: "numeric" };
+               return date.toLocaleDateString("en-US", options); // Example: 1 Jan 2024
+          };
+          document.getElementById("fetchData").addEventListener("click", async () => {
+               const token = document.getElementById("token").value;
+               const year = document.getElementById("year").value;
+
+               if (!token) {
+                    alert("Please enter your GitHub token.");
+                    return;
+               }
+
+               // Set the date range for the selected year
+               const fromDate = `${year}-01-01T00:00:00Z`;
+               const toDate = `${year}-12-31T23:59:59Z`;
+
+               const query = `
+        query {
+          viewer {
+            contributionsCollection(from: "${fromDate}", to: "${toDate}") {
+              contributionCalendar {
+                totalContributions
+                weeks {
+                  contributionDays {
+                    date
+                    contributionCount
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
+
+               try {
+                    const response = await fetch("https://api.github.com/graphql", {
+                         method: "POST",
+                         headers: {
+                              "Content-Type": "application/json",
+                              Authorization: `Bearer ${token}`,
+                         },
+                         body: JSON.stringify({ query }),
+                    });
+
+                    if (!response.ok) {
+                         throw new Error(`Error: ${response.status} ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    const contributions =
+                         data.data.viewer.contributionsCollection.contributionCalendar;
+
+                    // Render Contribution Grid
+                    const grid = document.getElementById("contributionGrid");
+                    grid.innerHTML = ""; // Clear previous data
+                    contributions.weeks.forEach((week) => {
+                         week.contributionDays.forEach((day) => {
+                              const dayDiv = document.createElement("div");
+                              dayDiv.className = "contribution-day";
+                              const count =
+                                   day.contributionCount > 4
+                                        ? 4
+                                        : day.contributionCount; /* Limit to 4 levels */
+                              dayDiv.setAttribute("data-count", count);
+                              dayDiv.title = `${formatDate(day.date)}, Contributions: ${day.contributionCount}`;
+                              grid.appendChild(dayDiv);
+                         });
+                    });
+
+                    // Render Recent Activity List
+                    const activityList = document.getElementById("activityList");
+                    activityList.innerHTML = "<h2>Recent Activity</h2>"; // Reset
+                    contributions.weeks
+                         .slice(-2) // Take last two weeks for recent activity
+                         .forEach((week) => {
+                              week.contributionDays
+                                   .filter((day) => day.contributionCount > 0)
+                                   .forEach((day) => {
+                                        const item = document.createElement("div");
+                                        item.className = "activity-item";
+                                        item.textContent = `Date: ${day.date}, Contributions: ${day.contributionCount}`;
+                                        activityList.appendChild(item);
+                                   });
+                         });
+               } catch (error) {
+                    console.error("Error fetching contributions:", error);
+                    alert("Failed to fetch data. Check your token or network connection.");
+               }
+          });
+     </script>
+</body>
+
+</html>

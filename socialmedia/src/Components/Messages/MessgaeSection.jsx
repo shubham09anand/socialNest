@@ -21,6 +21,8 @@ const MessgaeSection = ({ userPhoto }) => {
     const [deleteStatus, setDeleteStatus] = useState(false);
     const navigate = useNavigate();
 
+    console.log(userPhoto)
+
     // function to get message at front end
     useEffect(() => {
         if (sender_id === "null" || reciver_id === "null") {
@@ -98,7 +100,7 @@ const MessgaeSection = ({ userPhoto }) => {
                         <>
                             {Messages?.map((msg, index) => (
                                 <div id={index} key={index} className={`flex gap-3 ${msg.sourceId === sender_id ? 'flex-row-reverse items-end' : ''}`}>
-                                    <img src={(msg.sourceId === sender_id ? userPhoto?.user?.profilePhoto : reciver_photo) || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="user" className={`${msg.sourceId === sender_id ? 'select-none w-9 h-9 rounded-full shadow object-contain -translate-y-4' : 'select-none w-9 h-9 rounded-full shadow object-contain'}`}/>
+                                    <img src={(msg.sourceId === sender_id ? userPhoto : reciver_photo) || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="user" className={`${msg.sourceId === sender_id ? 'select-none w-9 h-9 rounded-full shadow object-contain -translate-y-4' : 'select-none w-9 h-9 rounded-full shadow object-contain'}`}/>
                                     <div className="flex flex-col space-y-2">
                                         {msg.messagePhoto.length > 0 && (
                                             <div className='flex-col relative items-start w-fit h-full mx-auto space-y-3'>

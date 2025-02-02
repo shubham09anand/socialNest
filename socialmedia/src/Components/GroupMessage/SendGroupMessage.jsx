@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
-const SendGroupMessage = ({ expand, setTotalMessage }) => {
+const SendGroupMessage = ({ userDetails, expand, setTotalMessage }) => {
 
      const { groupId } = useParams();
      const postImagErr = 'https://icons.veryicon.com/png/o/education-technology/alibaba-cloud-iot-business-department/image-load-failed.png';
@@ -56,23 +56,34 @@ const SendGroupMessage = ({ expand, setTotalMessage }) => {
           return () => {
                s.disconnect();
           };
-     }, [groupId]);
+     }, [groupId, setTotalMessage]);
 
      useEffect(() => {
           if (!socket) return;
 
-          socket.on("forward_group_message", (data)=>{
-               console.log(data)
+          socket.on("forward_group_message", (data) => {
                if (data?.result?.success) {
-                    setTotalMessage((prev)=>{
-                         return [...prev,data.result.newGroupMessage]
-                    })
+                    const senderMessage = {
+                         _id: senderId,
+                         firstName: data?.content.firstName,
+                         lastName: data?.content.lastName,
+                         userName: data?.content.userName,
+                    };
+
+                    const newMessage = {
+                         ...data.result.newGroupMessage,
+                         senderMessage: senderMessage, // Adding senderMessage as a property
+                    };
+
+                    setTotalMessage((prev) => [...prev, newMessage]);
                }
+
           });
 
           return () => {
                socket.off("forward_group_message");
           };
+          // eslint-disable-next-line 
      }, [socket]);
 
 
@@ -80,7 +91,7 @@ const SendGroupMessage = ({ expand, setTotalMessage }) => {
           if (!socket) return;
 
           const handleGroupMessage = (messageData) => {
-               console.log("New message:", messageData);
+               return true
           };
 
           socket.on("send_group_message", handleGroupMessage);
@@ -88,20 +99,14 @@ const SendGroupMessage = ({ expand, setTotalMessage }) => {
           return () => {
                socket.off("send_group_message", handleGroupMessage);
           };
-     }, [socket]);
+     }, [socket, setTotalMessage]);
 
      const handleSendMessage = () => {
           if (!message.trim() && image.length === 0) {
                return alert("Cannot send an empty message.");
           }
 
-          const data = {
-               groupId,
-               senderId,
-               message,
-               messagePhoto: image,
-               createdAt:new Date(),
-          };
+          const data = { groupId, senderId, userName: userDetails[0]?.userName, firstName: userDetails[0]?.firstName, lastName: userDetails[0]?.lastName, message, messagePhoto: image, createdAt: new Date(), };
 
           if (socket) {
                socket.emit("send_group_message", data);
@@ -109,7 +114,6 @@ const SendGroupMessage = ({ expand, setTotalMessage }) => {
                resetImageUpload();
           }
      };
-
 
      return (
           <div className={`${expand ? 'w-full lg:w-4/5' : 'w-full md:w-1/2 lg:w-2/5'} bg-white border-t h-fit items-center fixed z-20 bottom-11 lg:bottom-0 example`}>
@@ -157,7 +161,7 @@ const SendGroupMessage = ({ expand, setTotalMessage }) => {
                               )}
 
                               {!aiSection &&
-                                   <button onClick={()=>handleSendMessage(groupId, message, senderId, image)} title='Send Message' className='cursor-pointer outline-none bg-[#2c4ba0] rounded-full' type="submit">
+                                   <button onClick={() => handleSendMessage(groupId, message, senderId, image)} title='Send Message' className='cursor-pointer outline-none bg-[#2c4ba0] rounded-full' type="submit">
                                         <svg className={`text-gray-800 outline-none active:opacity-70 origin-center transform rotate-90 ${!true ? 'p-2 w-10 h-10' : 'w-7 h-7 p-2 md:w-10 md:h-10'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white">
                                              <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                                         </svg>

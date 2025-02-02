@@ -74,7 +74,7 @@ const GroupList = () => {
                                    ))}
 
 
-                                   {data?.groupList.length === 0 && (<div className='text-[14px] pt-40 text-center text-gray-500 font-thin'>You haven't Join Any Group </div>)}
+                                   {data?.groupList.length === 0 && (<div className='text-[14px] text-center text-gray-500 font-thin'>You haven't Join Any Group </div>)}
                               </div>
                          </div>
                     }

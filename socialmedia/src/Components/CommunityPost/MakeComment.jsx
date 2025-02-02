@@ -15,7 +15,7 @@ const MakeComment = ({ setWarning, postId, setSelectCommet, index, selectCommet 
      const { groupId } = useParams();
      const userId = useSelector((state) => state.LoginSlice.loggedUserId);
 
-     const makeCommnet = async ({ postId: postId, commenterId: userId, comment: comment }) => {
+     const makeCommnet = async ({ postId, commenterId: userId,  comment }) => {
           const response = await API.post('/makeGroupPostComment', { postId: postId, commenterId: userId, comment: comment });
           return response.data;
      }

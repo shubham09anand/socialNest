@@ -17,7 +17,6 @@ const groupSocket = (server) => {
           // Handle joining a room
           socket.on('join_group_room', (room) => {
                if (room) {
-                    console.log(room)
                     socket.join(room);
                     io.to(room).emit('group_user_joined', socket.id);
                } else {
@@ -27,12 +26,11 @@ const groupSocket = (server) => {
 
           // Handle message sending
           socket.on('send_group_message', async (data) => {
-               const { groupId, senderId, message, messagePhoto } = data;
+               const { groupId, userName, firstName, lastName, senderId, message, messagePhoto } = data;
 
                // Validate the data
-               if (!groupId || !senderId || !(message || messagePhoto)) {
-                    console.error("Missing required data:", data);
-                    return;
+               if (!groupId || !senderId || !userName || !firstName || !lastName || !(message || messagePhoto)) {
+                    return 0;
                }
 
                try {

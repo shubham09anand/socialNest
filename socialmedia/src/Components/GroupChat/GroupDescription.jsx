@@ -29,7 +29,7 @@ const GroupDescription = ({ setWarning, groupInfo, loggedUserId, listDisplay, se
      return (
           <div className="w-full relative">
                <div className="flex justify-center px-5 select-none">
-                    <img className={`grayscale bg-white p-2 rounded-full ${edit ? 'h-28 w-28' : 'h-28 w-28'}`} src={groupInfo?.groupIcon || groupIcon} onError={(e) => e.target.src = groupIcon} alt="group icon" />
+                    <img className={`bg-white p-2 rounded-full ${edit ? 'h-28 w-28' : 'h-28 w-28'}`} src={groupInfo?.groupIcon || groupIcon} onError={(e) => e.target.src = groupIcon} alt="group icon" />
                </div>
 
                {(groupInfo?.groupAdmins === loggedUserId || groupInfo?.ownerID === loggedUserId) &&

@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 
 const UpdateProfile = () => {
 
@@ -147,7 +148,14 @@ const UpdateProfile = () => {
 
         <form className="w-full" onSubmit={handleSubmit}>
 
-          <div className='text-3xl font-bold mb-2 md:mb-0 pt-2 pl-4 pr-4'>Edit Profile</div>
+          <div className="flex place-content-center items-center space-x-2 w-fit ml-2">
+            <Link to={'/account-setting'} className="bg-[#2d51ab] hover:opacity-80 active:opacity-50 rounded-full p-1 cursor-pointer mt-1 pl-1">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="white" className="size-6 scale-75">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+              </svg>
+            </Link>
+            <div className='text-3xl font-bold mb-2 md:mb-0 pt-2 pl-4 pr-4'>Edit Profile</div>
+          </div>
 
           {isLoading && (<SettingAnimation />)}
 

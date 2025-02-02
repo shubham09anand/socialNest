@@ -7,7 +7,7 @@ import GroupMessages from './GroupMessages';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
-const GroupMessageDisplay = ({ expand, setExpand }) => {
+const GroupMessageDisplay = ({ userDetails, expand, setExpand }) => {
 
      const { groupId } = useParams();
      const [page, setPage] = useState(1);
@@ -54,7 +54,7 @@ const GroupMessageDisplay = ({ expand, setExpand }) => {
                          </svg>
                     </div>
                )}
-               {(message?.data?.length !== 0) && (
+               {(message?.data?.length !== 0 && totalMessage.length < message?.totalMessages) && (
                     <div className='w-fit mx-auto'>
                          <div onClick={() => setPage((prev) => prev + 1)} className='fixed mx-auto flex place-content-center items-center space-x-5 w-fit cursor-pointer'>
                               <div className='text-sm text-center text-gray-400'>More Messages</div>
@@ -69,7 +69,7 @@ const GroupMessageDisplay = ({ expand, setExpand }) => {
 
                <GroupMessages groupedMessages={groupedMessages} message={message} />
 
-               <SendGroupMessage expand={expand} totalMessage={totalMessage} setTotalMessage={setTotalMessage} />
+               <SendGroupMessage userDetails={userDetails} expand={expand} totalMessage={totalMessage} setTotalMessage={setTotalMessage} />
           </div>
      );
 };

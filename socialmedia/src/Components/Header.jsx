@@ -168,8 +168,8 @@ const Header = ({ toggleDashboard, userPhoto }) => {
                             <>
                                 {logedin_user_Id !== null && (
                                     <Link onClick={() => setDisplayValue(null)} to={`/searched-person/${logedin_user_Id}`} className="rounded-full relative bg-secondery cursor-pointer shrink-0" tabIndex="0" aria-haspopup="true" aria-expanded="false">
-                                        {userPhoto?.user?.profilePhoto ? (
-                                            <img src={userPhoto.user?.profilePhoto || noProfilePicture} alt="" onError={(e) => e.target.src = noProfilePicture} className="sm:w-10 sm:h-10 w-10 h-10 object-cover rounded-full shadow shrink-0" style={{ border: "2px black solid" }} />
+                                        {userPhoto ? (
+                                            <img src={userPhoto || noProfilePicture} alt="" onError={(e) => e.target.src = noProfilePicture} className="sm:w-10 sm:h-10 w-10 h-10 object-cover rounded-full shadow shrink-0" style={{ border: "2px black solid" }} />
                                         ) : (
                                             <img src={noProfilePicture} alt="imgErr" className="sm:w-10 sm:h-10 w-10 h-10 object-cover rounded-full shadow shrink-0" />
                                         )}

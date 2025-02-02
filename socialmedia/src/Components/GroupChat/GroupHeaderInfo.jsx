@@ -6,7 +6,7 @@ const GroupHeaderInfo = ({ display, setDisplay, groupInfo, groupName, groupDesc,
      const groupIcon = 'https://cdn.pixabay.com/photo/2016/11/14/17/39/group-1824145_1280.png';
 
      return (
-          <div className="flex fixed w-full lg:w-[80%] right-0 -mt-1 bg-white items-center justify-between gap-2 px-3 z-50 border-b border-gray-400 py-2 example">
+          <div className="flex fixed w-full lg:w-[80%] right-0 lg:-mt-2 bg-white items-center justify-between gap-2 px-3 z-50 border-b border-gray-400 py-2 example">
                <div className="flex space-x-4 place-content-center items-center text-start pb-0 text-sm">
                     <Link to="/message" className="p-1 hover:opacity-80 shadow-[1px_1px_black]" style={{ backgroundColor: "#556eaf", borderRadius: "100%" }}>
                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="white" className="-translate-x-[1px] w-5 sm:w-6 h-5 sm:h-6 active:opacity-60 cursor-pointer rounded-full">
