@@ -27,7 +27,7 @@ const Story = () => {
                 {storyDetails?.length === 0 && (<p className='text-center text-gray-300 ml-5'>No active stories</p>)}
             </div>
 
-            {storyDetails?.length === 0 && (<div className='text-lg text-gray-400 text-center pb-2'>Failed To Load Stories</div>)}
+            {storyDetails?.length === 0 && (<div className='text-lg text-gray-400 text-center pb-2'>No active stories</div>)}
             
             <div className="w-full h-fit overflow-y-hidden overflow-x-scroll example">
                 {isLoading ? (
