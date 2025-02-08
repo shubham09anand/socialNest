@@ -9,24 +9,29 @@ const Story = () => {
     const postImagErr = 'https://icons.veryicon.com/png/o/education-technology/alibaba-cloud-iot-business-department/image-load-failed.png';
 
     const getStory = async () => {
-        const response = await API.post("/storyDetails");
-        return response.data.storyDetails;
+        try {
+            const response = await API.post("/storyDetails");
+            return response?.data?.storyDetails || [];
+        } catch (error) {
+            return [];
+        }
     };
 
     const { data: storyDetails, isLoading } = useQuery({
         queryKey: (['getStory']),
         queryFn: getStory,
         staleTime: Infinity,
+        cacheTime: Infinity,
     })
-
 
     return (
         <div className='w-full border-b pl-2 xl:pt-1'>
             <div className='flex items-center'>
+                {storyDetails?.message}
                 <h2 className="text-2xl pb-1 sm:leading-snug tracking-wide font-bold -ml-1">Story</h2>
                 {storyDetails?.length === 0 && (<p className='text-center text-gray-300 ml-5'>No active stories</p>)}
             </div>
-            
+
             <div className="w-full h-fit overflow-y-hidden overflow-x-scroll example">
                 {isLoading ? (
                     <div className='flex gap-x-5'>
@@ -38,7 +43,7 @@ const Story = () => {
                     </div>
                 ) : (
                     <>
-                        {storyDetails?.length > 0 ? (
+                        {(!isLoading && storyDetails?.length > 0) ? (
                             <ul className="flex w-full h-fit md:h-28 overflow-x-scroll example gap-x-8">
                                 {storyDetails?.map((story) => (
                                     <Link style={{ textDecoration: "none" }} to={`/story/view-story/${encodeURIComponent(story?._id)}`} key={story?._id} className="flex flex-col space-y-1 rounded-full mb-4 md:pb-5">
