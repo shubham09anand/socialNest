@@ -13,7 +13,7 @@ const Story = () => {
         return response.data.storyDetails;
     };
 
-    const { data: storyDetails, isLoading, isError } = useQuery({
+    const { data: storyDetails, isLoading } = useQuery({
         queryKey: (['getStory']),
         queryFn: getStory,
         staleTime: Infinity,
@@ -24,10 +24,8 @@ const Story = () => {
         <div className='w-full border-b pl-2 xl:pt-1'>
             <div className='flex items-center'>
                 <h2 className="text-2xl pb-1 sm:leading-snug tracking-wide font-bold -ml-1">Story</h2>
-                {storyDetails?.storyDetails?.length === 0 && (<p className='text-center text-gray-300 ml-5'>No active stories</p>)}
+                {storyDetails?.length === 0 && (<p className='text-center text-gray-300 ml-5'>No active stories</p>)}
             </div>
-
-            {storyDetails?.storyDetails?.length === 0 && (<div className='text-lg text-gray-400 text-center pb-2'>No active stories</div>)}
             
             <div className="w-full h-fit overflow-y-hidden overflow-x-scroll example">
                 {isLoading ? (
