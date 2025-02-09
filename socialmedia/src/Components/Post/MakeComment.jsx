@@ -80,7 +80,7 @@ const MakeComment = ({ index, commentSection, setCommentSection, postId }) => {
                                    <div className='mb-2 mx-auto w-full border-b-[1px] border-gray-600'>
                                         <div className='w-fit mx-auto flex place-content-center items-center space-x-5 '>
                                              <div className='mt-2 font-semibold mb-2 text-center text-lg mx-auto pb-1 flex place-content-center items-center w-full'>Comments <span className='font-medium ml-2'>{'(' + postComment?.comments?.length + ')'}</span></div>
-                                             <svg onClick={() => setCommentSection((null))} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 animate-bounce mt-2 cursor-pointer">
+                                             <svg onClick={()=> setCommentSection(null)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 animate-bounce mt-2 cursor-pointer">
                                                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25 12 21m0 0-3.75-3.75M12 21V3" />
                                              </svg>
                                         </div>

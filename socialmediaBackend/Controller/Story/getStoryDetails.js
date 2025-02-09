@@ -50,7 +50,7 @@ const storyDetails = async (_, res) => {
     const activeStories = getActiveStories(Story);
 
     if (Story.length === 0) {
-      res.status(400).json({
+      res.status(200).json({
         message: "No Story Exists",
         storyDetails: activeStories,
       });

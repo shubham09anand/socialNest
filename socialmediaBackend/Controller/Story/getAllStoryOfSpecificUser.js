@@ -51,7 +51,7 @@ const getAllStoryOfSpecificUser = async (req, res) => {
     ]);
 
     if (Story.length === 0) {
-      res.status(400).json({
+      res.status(200).json({
         message: "No Story Exists",
         storyDetails: Story,
       });
