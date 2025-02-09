@@ -46,6 +46,7 @@ const SendGroupMessage = ({ userDetails, expand, setTotalMessage }) => {
      }
 
      useEffect(() => {
+          // const s = io('http://192.168.1.6:8080');
           const s = io('http://192.168.1.6:8080');
           setSocket(s);
 
