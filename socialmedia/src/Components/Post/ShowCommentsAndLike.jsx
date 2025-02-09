@@ -23,7 +23,7 @@ const ShowCommentsAndLike = ({ comments }) => {
                               <p className="pl-8 -mt-1.5 text-sm sm:text-base max-h-20 overflow-y-scroll">{comment?.commentBody}</p>
                          </div>
                     ))}
-                    {comments.length === 0 && (<div className='w-full text-center text-gray-600 text-sm'>No Comments Yet...</div>)}
+                    {comments?.length === 0 && (<div className='w-full text-center text-gray-600 text-sm'>No Comments Yet...</div>)}
                </div>
           </div>
      )

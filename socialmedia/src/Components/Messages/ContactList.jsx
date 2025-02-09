@@ -46,7 +46,7 @@ const ContactList = ({ toggleDisplay }) => {
                          <div onClick={() => setDisplay(false)} className={`flex cursor-pointer w-full pr-3 pb-.5 space-x-2 ${!display ? 'opacity-100' : 'opacity-50'}`}>
                               <div className="text-2xl font-semibold text-black text-left mt-1">Chats</div>
                          </div>
-                         <div onClick={() => setDisplay(true)} className={`hidden flex cursor-pointer place-content-end w-full pl-3 pb-.5 space-x-2 ${display ? 'opacity-100' : 'opacity-50'}`}>
+                         <div onClick={() => setDisplay(true)} className={`flex cursor-pointer place-content-end w-full pl-3 pb-.5 space-x-2 ${display ? 'opacity-100' : 'opacity-50'}`}>
                               <div className="text-2xl font-semibold text-black text-left mt-1">Gropu</div>
                          </div>
                     </div>

@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import PostAniamtion from '../Animation/PostAniamtion';
 import MakeComment from './MakeComment';
-import ShowCommentsAndLike from './ShowCommentsAndLike';
 import Story from '../Story/Story';
 import PostHeader from "./PostHeader"
 import { useSelector } from "react-redux";
-import { fetchPost } from "./PostFunctoion";
+import { fetchPost } from "./PostFunction";
 import { useQuery } from "@tanstack/react-query";
 import PostLikeSection from './PostLikeSection';
 import PostContent from './PostContent';
-import ServerError from "../Animation/ServerError"
+import ServerError from "../Animation/ServerError";
+import API from '../../Services/API';
 
 const Post = () => {
 
   const likedBy = useSelector((state) => (state.LoginSlice.loggedUserId));
+  const [commentSection, setCommentSection] = useState(null);
   const [page, setPage] = useState(1);
+  const [userId, setUserId] = useState([]);
 
   const { data: postDetails, isLoading, isError } = useQuery({
     queryKey: ['postDetails', page],
@@ -25,8 +27,30 @@ const Post = () => {
     staleTime: Infinity,
   });
 
+  useEffect(() => {
+    postDetails?.Post.forEach((id) => {
+      setUserId((prev) => {
+        return prev.includes(id.userId) ? prev : [...prev, id.userId];
+      })
+    })
+  }, [postDetails])
+
+  const getProfilePic = async () => {
+    if (Array.isArray(userId) && userId.length > 0) {
+      const response = await API.post('/profilePicture', { userIdArray: userId });
+      return response.data?.photo;
+    }
+  }
+
+  const { data: profilePhoto } = useQuery({
+    queryKey: ['profilePicture', userId],
+    queryFn: getProfilePic,
+    enabled: !!userId.length,
+    staleTime: Infinity,
+  });
+
   return (
-    <div className="w-full gap-y-5 max-h-[200vh] overflow-y-scroll example lg:w-4/5 md:border-r mb-20">
+    <div className={`w-full gap-y-5 max-h-[200vh] overflow-y-scroll example lg:w-4/5 md:border-r mb-20`}>
       <Story />
 
       <h2 className="text-2xl sm:text-3xl pl-1 sm:leading-snug tracking-wide font-bold mt-2">Post</h2>
@@ -41,12 +65,17 @@ const Post = () => {
         [...Array(4)].map((_, index) => (<PostAniamtion key={index} />))
       ) : (
         postDetails?.Post.map((post, index) => (
-          <div key={post._id} className="p-2 w-full sm:my-4 bg-white text-sm font-medium mx-auto border-b">
-            <PostHeader post={post} />
-            <PostContent post={post} />
-            <PostLikeSection postId={post._id} postTotalLike={post.likes?.length} postTotalComments={post.comments?.length} likedBy={likedBy} index={index} />
-            <MakeComment postId={post._id} />
-            <ShowCommentsAndLike comments={post.comments} />
+          <div key={post._id} className={`relative p-2 w-full sm:my-4 bg-white text-sm font-medium mx-auto border-b ${(post?.postPhoto?.length === 0 && commentSection === index ? 'h-96' : '')}`}>
+            <PostHeader profilePhoto={profilePhoto} post={post} />
+
+            <PostContent post={post} index={index} />
+
+            <PostLikeSection totalLike={post?.likeCount} index={index} setCommentSection={setCommentSection} postId={post._id} postTotalLike={post.likes?.length} likedBy={likedBy} />
+
+            {index === commentSection &&
+              <MakeComment index={index} commentSection={commentSection} setCommentSection={setCommentSection} comments={post.comments} postId={post._id} />
+            }
+
           </div>
         ))
       )}
