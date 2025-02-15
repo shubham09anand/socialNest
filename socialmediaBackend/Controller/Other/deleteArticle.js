@@ -15,14 +15,14 @@ const deleteArticle = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'Article deleted successfully',
       deletedCount: result.deletedCount,
     });
     
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       error: "Internal Server Error",
     });

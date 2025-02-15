@@ -21,14 +21,13 @@ const deleteMessage = async (req, res) => {
                });
           }
 
-          res.status(200).json({
+          return res.status(200).json({
                message: 'Message deleted successfully',
                deleteCount: conversationHistory.deletedCount,
                status: 200,
           });
      } catch (error) {
-          console.error('Error:', error);
-          res.status(500).json({
+          return res.status(500).json({
                message: 'Procedure Failed',
                status: 500,
                error: error.message,

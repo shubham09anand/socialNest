@@ -65,18 +65,18 @@ const updateProfile = async (req, res) => {
     }
 
     if (updatedProfile1 && updatedProfile2) {
-      res.status(200).json({
+      return res.status(200).json({
         message: "Profile Updated",
         status: 1
       });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         message: "Something went wrong",
       });
     }
   } catch (error) {
     console.error("Update Profile Failed:", error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Internal Server Error",
       error: error.message,
     });

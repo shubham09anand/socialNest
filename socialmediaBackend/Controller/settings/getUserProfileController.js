@@ -22,13 +22,13 @@ const getUserProfile = async (req, res) => {
         const userProfile2 = await User.findOne({ userId: userId });
 
         if (userProfile1) {
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Data Fetched",
                 userProfile1: userProfile1,
                 userProfile2: userProfile2,
             });
         } else {
-            res.status(400).json({
+            return res.status(400).json({
                 message: "User not found",
                 userProfile1: null,
                 userProfile2: null,
@@ -36,7 +36,7 @@ const getUserProfile = async (req, res) => {
         }
     } catch (error) {
         console.error("Error fetching user profile:", error);
-        res.status(500).json({
+        return res.status(500).json({
             message: "Internal Server Error",
             error: error.message,
         });

@@ -21,7 +21,7 @@ const createuserStory = async (req, res) => {
       // Save the updated story document
       await checkStoryExistance.save();
 
-      res.status(200).json({
+      return res.status(200).json({
         message: "Story added successfully",
         status:1
       });
@@ -40,7 +40,7 @@ const createuserStory = async (req, res) => {
         ],
       });
 
-      res.status(200).json({
+      return res.status(200).json({
         message: "Story created successfully",
         status: 1,
       });
@@ -48,7 +48,7 @@ const createuserStory = async (req, res) => {
 
   } catch (error) {
     console.error("Error creating story:", error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Internal server error",
       error: error.message,
     });

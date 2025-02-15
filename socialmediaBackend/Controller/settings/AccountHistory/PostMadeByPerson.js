@@ -139,19 +139,19 @@ const getUserPostActivity = async (req, res) => {
     ]);
 
     if (Post.length === 0) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "No Post Exists",
         getUserPostActivity: Post,
       });
     } else {
-      res.status(200).json({
+      return res.status(200).json({
         message: "Post Exists",
         getUserPostActivity: Post,
       });
     }
   } catch (error) {
     console.error("Procedure failed:", error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Internal Server Error",
       error: error.message,
     });

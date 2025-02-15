@@ -1,21 +1,18 @@
 const express = require("express");
 const http = require("http");
-const { Server } = require("socket.io");
 const cors = require('cors');
 const dotenv = require("dotenv");
 const bodyParser = require('body-parser');
-
 const connectDB = require("./DatabseConnection/connection.js");
 const { scheduleCronJob } = require('./Routes/cronApi.js');
-const { sendMessage } = require("./Controller/Messages/sendMessage.js");
 const { groupSocket } = require("./groupMessageSocket.js");
+const { sendMessageSocket } = require("./messageSocket.js");
 
 dotenv.config();
 connectDB();
 
 const app = express();
 app.use(cors({
-    // origin: [process.env.REACT_APP_API_SOCKET_NETWORK, process.env.REACT_APP_BASE_SOCKET_NETWORK, 'http://socialnest.shubham09anand.in', 'http://13.202.210.238:3000', 'https://socialnest.shubham09anand.in'],
     origin: ["http://localhost:3000", "http://127.0.0.1:3000", process.env.REACT_APP_API_SOCKET_NETWORK, process.env.REACT_APP_BASE_SOCKET_NETWORK, 'http://socialnest.shubham09anand.in', 'https://socialnest.shubham09anand.in'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     optionsSuccessStatus: 200
@@ -26,59 +23,11 @@ const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(express.json());
-app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
-const io = new Server(server, {
-    maxHttpBufferSize: 12 * 1024 * 1024,
-    cors: {
-        // origin: [process.env.REACT_APP_API_SOCKET_NETWORK, process.env.REACT_APP_BASE_SOCKET_NETWORK, 'http://13.202.210.238:3000', 'http://socialnest.shubham09anand.in:3000', 'https://socialnest.shubham09anand.in'],
-        origin: ["http://localhost:3000", "http://127.0.0.1:3000", process.env.REACT_APP_API_SOCKET_NETWORK, process.env.REACT_APP_BASE_SOCKET_NETWORK,'http://socialnest.shubham09anand.in:3000', 'https://socialnest.shubham09anand.in'],
-        methods: ['GET', 'POST'],
-        credentials: true
-    }
-});
-
-io.on('connection', (socket) => {
-
-    // Handle joining a room
-    socket.on('join_room', (room) => {
-        if (room) {
-            socket.join(room);
-            io.to(room).emit('user_joined', socket.id);
-        } else {
-            console.log(`Invalid room: ${room}`);
-        }
-    });
-
-    // Handle message sending
-    socket.on('send_message', async (data) => {
-        const { convoId, sourceId, reciverId, message, messagePhoto } = data;
-
-        // Validate the data
-        if (!convoId || !sourceId || !reciverId || !(message || messagePhoto)) {
-            console.error("Missing required data:", data);
-            return;
-        }
-
-        try {
-            // Join the conversation room
-            socket.join(convoId);
-
-            // Save and forward the message
-            const result = await sendMessage(data);
-            io.to(convoId).emit('forward_message', { content: data, result: result });
-        } catch (error) {
-            console.error("Error saving message:", error);
-        }
-    });
-
-    socket.on('disconnect', () => {
-        return false;
-    });
-});
-
-groupSocket(server)
+// sockets for normal message and gorup message
+sendMessageSocket(server);
+// groupSocket(server)
 
 // Include existing routes
 app.use("/auth", require('./authRoutes.js'));
@@ -100,4 +49,3 @@ scheduleCronJob();
 server.listen(port, () => {
     console.log(`Server and Socket.IO are running on port ${port}`);
 });
-

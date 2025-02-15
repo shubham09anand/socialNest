@@ -48,13 +48,13 @@ const userLoggedDetails = async (req, res) => {
       lastName: newUser.lastName,
     };
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'Photo fetched successfully',
       user: newUser,
     });
 
   } catch (error) {
-    res.status(200).json({
+    return res.status(200).json({
       message: 'Internal Server Error',
       error: error.message,
     });

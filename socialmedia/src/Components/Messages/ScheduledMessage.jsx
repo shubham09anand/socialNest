@@ -125,7 +125,7 @@ const ScheduledMessage = ({ toggleprofileDisplay }) => {
     }, [source_id]);
 
     return (
-        <div className={`overflow-y-scroll border-y-0 h-[calc(100%-110px)] sm:h-[calc(100%-160px)] md:h-[calc(100%-160px)] pb-10 shadow-inner border-black border-l bg-white fixed z-10 sm:z-0 right-0 top-16 lg:top-[110px] transition-all duration-500 ${toggleprofileDisplay ? 'px-4 w-full sm:w-1/2 lg:w-2/4 xl:w-[27%]' : 'w-0'}`}>
+        <div className={`overflow-y-scroll border-y-0 h-[calc(100%-110px)] sm:h-[calc(100%-160px)] md:h-[calc(100%-160px)] pb-10 shadow-inner border-black border-l bg-white fixed z-20 sm:z-0 right-0 top-16 lg:top-[110px] transition-all duration-500 ${toggleprofileDisplay ? 'px-4 w-full sm:w-1/2 lg:w-2/4 xl:w-[27%]' : 'w-0'}`}>
             <ToastContainer />
 
             <div className='overflow-y-scroll h-[200%]'>

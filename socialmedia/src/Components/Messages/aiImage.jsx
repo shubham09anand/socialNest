@@ -38,7 +38,6 @@ const AiImage = ({ setFileUploaded , setDisplay }) => {
           setFileUploaded(aiResponse?.imageUrls[0]);
           setDisplay(false)
      }
-     console.log(aiResponse?.imageUrls)
 
      return (
           <div className='flex place-content-center items-center w-full'>

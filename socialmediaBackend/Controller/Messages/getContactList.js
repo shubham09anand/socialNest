@@ -2,7 +2,7 @@ const UserSignupModel = require("../../Models/UserSignupModel");
 
 const contactList = async (req, res) => {
      try {
-          // console.log("Chat list");
+
           const getContactList = await UserSignupModel.aggregate([
                {
                     $lookup: {
@@ -19,24 +19,48 @@ const contactList = async (req, res) => {
                     }
                },
                {
+                    $lookup: {
+                         from: 'MessageCollection',
+                         let: { userIdObj: { $toString: '$_id' } },
+                         pipeline: [
+                              {
+                                   $match: {
+                                        $expr: {
+                                             $and: [
+                                                  { $eq: ['$reciverId', req.body.userId] },
+                                                  { $eq: ['$sourceId', '$$userIdObj'] },
+                                                  { $eq: ['$seen', 0] }
+                                             ]
+                                        }
+                                   }
+                              }
+                         ],
+                         as: 'unreadMessages'
+                    }
+               },
+               {
+                    $addFields: {
+                         unreadCount: { $size: "$unreadMessages" }
+                    }
+               },
+               {
                     $project: {
-                         "firstName":1,
-                         "lastName":1,
-                         "userName":1,
+                         "firstName": 1,
+                         "lastName": 1,
+                         "userName": 1,
                          "secondPerson.profilePhoto": 1,
+                         "unreadCount": 1  // Ensure it's included in the output
                     }
                }
           ]);
 
-
-          res.status(200).json({
+          return res.status(200).json({
                message: "Chat List",
                chatList: getContactList || [],
           });
 
      } catch (error) {
-          console.error('Error:', error);
-          res.status(500).json({
+          return res.status(500).json({
                message: 'Internal Server Error',
                error: error.message,
           });
@@ -44,3 +68,4 @@ const contactList = async (req, res) => {
 };
 
 module.exports = { contactList };
+

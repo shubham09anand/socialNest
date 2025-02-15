@@ -14,10 +14,10 @@ const countInfo = async (req, res) => {
 
         const postCount = await PostModel.countDocuments({ userId: userId });
 
-        res.status(200).json({ friendCount, postCount });
+        return res.status(200).json({ friendCount, postCount });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ message: 'Internal Server Error', error: error.message });
+        return res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
 };
 

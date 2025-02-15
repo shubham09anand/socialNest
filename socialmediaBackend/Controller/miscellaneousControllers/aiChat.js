@@ -15,7 +15,7 @@ const AIchat = async (req, res) => {
 
     const text = response.text();
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'Success',
       generatedText: text,
       resultRES:result
@@ -23,7 +23,7 @@ const AIchat = async (req, res) => {
 
   } catch (error) {
     console.error('Error Creating Post:');
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Internal Server Error',
       error: error.message,
     });

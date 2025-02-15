@@ -24,7 +24,7 @@ const loginController = async (req, res) => {
                });
           }
      } catch (error) {
-          res.status(500).send({
+          return res.status(500).send({
                success: false,
                message: "Error during login",
           });

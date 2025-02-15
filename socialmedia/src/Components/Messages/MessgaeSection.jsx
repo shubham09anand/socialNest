@@ -1,156 +1,151 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
-import API from '../../Services/API';
+import React, { useEffect, useRef, useState } from 'react';
 import noProfilePicture from '../../Assets/NoProileImage.png';
-import moment from 'moment';
 import SendMessage from './SendMessage';
+import LoadChat from "../Animation/LoadChat";
+import MessageContent from './MessageContent';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { getMessage } from './MessageFunction';
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useQueryClient } from '@tanstack/react-query';
 
-const MessgaeSection = ({ userPhoto }) => {
-    const postImagErr = 'https://icons.veryicon.com/png/o/education-technology/alibaba-cloud-iot-business-department/image-load-failed.png';
+const MessageSection = ({ userPhoto }) => {
+
+    const queryClient = useQueryClient();
+    const boxRef = useRef(null);
+    const navigate = useNavigate();
+    const [seenMessage, setSeenMessage] = useState([]);
+    const [conversation, setConversation] = useState(null);
     const sender_id = useSelector((state) => state.messageSlice.senderId);
     const reciver_id = useSelector((state) => state.messageSlice.receiverId);
     const reciver_photo = useSelector((state) => state.messageSlice.reciverPhoto);
-    const [Messages, setMessages] = useState([]);
-    const [error, setError] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [consversation, setConsversation] = useState();
-    const [delteMessage, setDelteMessage] = useState(null);
-    const [deleteStatus, setDeleteStatus] = useState(false);
-    const navigate = useNavigate();
 
-    console.log(userPhoto)
-
-    // function to get message at front end
     useEffect(() => {
-        if (sender_id === "null" || reciver_id === "null") {
+        if (!sender_id || !reciver_id || sender_id === "null" || reciver_id === "null") {
             navigate("/message");
         }
     }, [sender_id, reciver_id, navigate]);
 
-    const getMessages = async () => {
-        setIsLoading(true);
-        try {
-            const res = await API.post("/getMessage", { sender_id, reciver_id });
-            if (res.status === 200) {
-                setMessages(res.data.conversationHistory);
-                setIsLoading(false);
-            } else {
-                setError(true);
-                setIsLoading(false);
-            }
-        } catch (error) {
-            setError(true);
-            setIsLoading(false);
-        }
-    };
+    const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+        queryKey: (['getMessage', sender_id, reciver_id]),
+        queryFn: ({ pageParam = 1 }) => getMessage({ sender_id, reciver_id, page: pageParam }),
+        enabled: !!sender_id && !!reciver_id,
+        getNextPageParam: (lastPage, allPages) => {
+            const totalFetched = allPages.flatMap(page => page.conversationHistory).length;
+            return totalFetched < lastPage.totalMessage ? allPages.length + 1 : undefined;
+        },
+        staleTime: Infinity,
+        gcTime: Infinity,
+    });
 
     useEffect(() => {
-        getMessages();
-        // eslint-disable-next-line
-    }, [reciver_id, sender_id]);
+        if (conversation?.result?.createdMessage) {
+            const newMessage = conversation.result.createdMessage;
+            const newMessageId = newMessage?._id;
 
-    const handleDownloadImage = (url, id) => {
-        const anchor = document.createElement('a');
-        anchor.href = url;
-        anchor.download = `Photo-${id}`;
-        anchor.addEventListener('click', () => {
-            toast.success("Photo is Downloaded Successfully");
-        });
-        anchor.click();
+            // Check if the new message already exists in the conversation history
+            queryClient.setQueryData(['getMessage', sender_id, reciver_id], (oldData) => {
+                if (!oldData) return oldData;
+
+                const existingMessages = oldData.pages[0]?.conversationHistory || [];
+
+                if (existingMessages.some(msg => msg._id === newMessageId)) {
+                    return oldData;
+                }
+
+                return {
+                    ...oldData,
+                    pages: [
+                        {
+                            ...oldData.pages[0],
+                            conversationHistory: [newMessage, ...existingMessages]
+                        },
+                        ...oldData.pages.slice(1)
+                    ]
+                };
+            });
+
+            scrollToBottom();
+        }
+    }, [conversation, queryClient, sender_id, reciver_id]);
+
+    const scrollToBottom = (forceScroll = false) => {
+        if (!boxRef.current) return;
+
+        const isUserNearBottom =
+            boxRef.current.scrollHeight - boxRef.current.scrollTop <= boxRef.current.clientHeight + 100;
+
+        if (forceScroll || isUserNearBottom || data?.pages?.length === 1) {
+            boxRef.current.scrollTo({
+                top: boxRef.current.scrollHeight,
+                behavior: "smooth"
+            });
+        }
     };
+
+    // Scroll on initial load & new message
+    useEffect(() => {
+        scrollToBottom();
+    }, [data, conversation]);
 
     useEffect(() => {
-        if (consversation?.result.success) {
-            setMessages(prevMessages => [...prevMessages, consversation.result.createdMessage]);
-        }
-    }, [consversation]);
+        const contactListCache = queryClient.getQueryData(['contactList', sender_id]);
 
-    const handleDelteMessage = async (messageID, index) => {
-        setDeleteStatus(true);
-        const res = await API.post("/deleteMessage", { messageID });
-        try {
-            if (res.status === 200 && res.data.deleteCount === 1) {
-
-                setDelteMessage(null);
-                setMessages(Messages.filter((_, i) => i !== index));
-            } else if (res.status === 200 && res.data.deleteCount === 0) {
-                toast.error("Something went wrong")
-            }
-        } catch (error) {
-            toast.error("Something went wrong")
-        } finally {
-            setDeleteStatus(false);
+        if (contactListCache) {
+            queryClient.setQueryData(['contactList', sender_id], (oldData) => {
+                return {
+                    ...oldData,
+                    chatList: oldData.chatList.map((item) => {
+                        if (item?._id === reciver_id && item.unreadCount > 0) {
+                            return { ...item, unreadCount: 0 };
+                        }
+                        return item;
+                    }),
+                };
+            });
         }
-    };
+    })
 
     return (
-        <div className="lg:w-[80%] right-0 absolute mt-[10px] pb-36 lg:pb-36 lg:mt-10 pt-14 space-y-5 example w-full overflow-hidden">
-            {isLoading && (<div className='text-3xl text-gray-500 font-thin pt-40 text-center'>Loading Older Chats</div>)}
-            <ToastContainer />
-            {error ? (
-                <div className='text-lg text-gray-400 font-semibold w-full text-center'>Network Error</div>
+        <div className="lg:w-[80%] h-[calc(100%-160px)] md:h-[calc(100%-170px)] right-0 absolute mt-14 lg:mt-[104px] space-y-5 example w-full overflow-y-scroll">
+            {isLoading && <LoadChat />}
+
+            {isError ? (
+                <div className='text-lg text-gray-400 font-semibold w-full text-center'>
+                    Network Error
+                </div>
             ) : (
-                <div className="shadow- rounded-3xl text-sm font-medium space-y-6 p-3 h-4/5 overflow-y-scroll example">
-                    {!isLoading && (!Messages || Messages.length === 0) ? (
-                        <div className="text-center text-gray-500 mt-4">No Conversation Exists</div>
+                <div ref={boxRef} className="h-full rounded-3xl text-sm font-medium space-y-3 p-3 overflow-y-scroll example">
+                    {hasNextPage && (
+                        <div className="flex justify-center">
+                            <button className="px-4 py-2 rounded-lg cursor-pointer active:opacity-50 hover:opacity-75 shadow-[2px_2px_2px_gray] font-semibold" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+                                {isFetchingNextPage ? "Loading..." : "Load Older Messages"}
+                            </button>
+                        </div>
+                    )}
+
+                    {(!data?.pages?.flatMap(page => page.conversationHistory)?.length) ? (
+                        <div className="text-center text-gray-500 mt-4">
+                            No Conversation Exists
+                        </div>
                     ) : (
                         <>
-                            {Messages?.map((msg, index) => (
-                                <div id={index} key={index} className={`flex gap-3 ${msg.sourceId === sender_id ? 'flex-row-reverse items-end' : ''}`}>
-                                    <img src={(msg.sourceId === sender_id ? userPhoto : reciver_photo) || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="user" className={`${msg.sourceId === sender_id ? 'select-none w-9 h-9 rounded-full shadow object-contain -translate-y-4' : 'select-none w-9 h-9 rounded-full shadow object-contain'}`}/>
+                            {[...data?.pages?.flatMap(page => page.conversationHistory)].reverse().map((msg, index) => (
+                                <div id={msg._id} key={msg._id} className={`flex gap-3 ${msg.sourceId === sender_id ? 'flex-row-reverse items-end' : ''}`}>
+                                    <img src={(msg.sourceId === sender_id ? userPhoto : reciver_photo) || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="user" className={`${msg.sourceId === sender_id ? 'select-none w-9 h-9 rounded-full shadow object-contain -translate-y-4' : 'select-none w-9 h-9 rounded-full shadow object-contain'}`} />
                                     <div className="flex flex-col space-y-2">
-                                        {msg.messagePhoto.length > 0 && (
-                                            <div className='flex-col relative items-start w-fit h-full mx-auto space-y-3'>
-                                                {msg.messagePhoto.map((_, photoIndex) => (
-                                                    <div key={photoIndex} className="relative overflow-hidden max-w-lg border rounded-xl border-gray-200">
-                                                        {msg.sourceId === sender_id && (
-                                                            <svg onClick={() => handleDelteMessage(msg?._id, index)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="size-6 absolute rounded-md opacity-90 right-12 top-2 bg-[#6e8ee1] p-1 cursor-pointer">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                            </svg>
-                                                        )}
-                                                        <svg onClick={() => handleDownloadImage(msg.messagePhoto[photoIndex]?.base64, msg.messagePhoto[photoIndex]?.name)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" className="size-6 absolute rounded-md opacity-90 right-2 top-2 bg-[#6e8ee1] p-1 cursor-pointer">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                                        </svg>
-                                                        <img className="h-auto w-80 sm:max-w-96 max-h-40 object-cover" src={msg.messagePhoto[photoIndex]?.base64 || postImagErr} onError={(e) => e.target.src = postImagErr} alt={`imgErr-${photoIndex}`} />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                        {delteMessage === index && (
-                                            <div onClick={() => handleDelteMessage(msg?._id, index)} className='w-full flex flex-row-reverse'>
-                                                <div className={`flex text-center bg-gray-200 cursor-pointer select-none border-[0.1px] border-gray-900 text-gray-800 px-2 py-1 rounded-lg`}>{deleteStatus ? 'Deleting' : 'Delete'}</div>
-                                            </div>
-                                        )}
-                                        {msg.message && (
-                                            <div className={`relative px-4 py-2 rounded-[15px] max-w-2xl ${msg.sourceId === sender_id ? 'bg-[#708fe3] text-white shadow-[1px_2px_1px_gray]' : 'bg-gray-200'}`}>
-                                                <div className='font-sans pr-3'>{msg.message}</div>
-                                                {msg.sourceId === sender_id && (
-                                                    <>
-                                                        <svg onClick={() => delteMessage === null ? setDelteMessage(index) : delteMessage === index ? setDelteMessage(null) : setDelteMessage(index)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-5 w-5 absolute right-2 top-2 cursor-pointer active:opacity-50">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                                        </svg>
-                                                    </>
-                                                )}
-                                            </div>
-                                        )}
-
-                                        <div className='text-right font-extralight font-italic font-mono text-[10px] md:text-[12px] select-none'>
-                                            {moment(msg?.createdAt).format('h:mm A, DD/MMM/YYYY')}
-                                        </div>
+                                        <MessageContent setSeenMessage={setSeenMessage} seenMessage={seenMessage} msg={msg} index={index} />
                                     </div>
                                 </div>
                             ))}
-
                         </>
                     )}
                 </div>
             )}
-            <SendMessage userPhoto={userPhoto} newConsversation={setConsversation} />
+
+            <SendMessage userPhoto={userPhoto} setConversation={setConversation} />
         </div>
     );
 };
 
-export default MessgaeSection;
+export default MessageSection;

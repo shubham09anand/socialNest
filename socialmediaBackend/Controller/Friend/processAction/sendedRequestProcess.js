@@ -9,12 +9,12 @@ const deleteSendedRequest = async (req, res) => {
           const removeRequest = await FriendRequest.findOneAndDelete({ senderId: senderId, reciverId: reciverId });
 
           if (removeRequest) {
-               res.status(200).json({
+               return res.status(200).json({
                     message: 'Request removed',
                     status: 1,
                });
           } else {
-               res.status(400).json({
+               return res.status(400).json({
                     message: 'Error',
                     status: 0,
                });
@@ -22,7 +22,7 @@ const deleteSendedRequest = async (req, res) => {
 
      } catch (error) {
           console.error('Error:', error);
-          res.status(500).json({
+          return res.status(500).json({
                message: 'Action Failed',
                error: error.message,
           });

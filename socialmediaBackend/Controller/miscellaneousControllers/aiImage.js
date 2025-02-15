@@ -49,7 +49,7 @@ const textToImageController = async (req, res) => {
     });
 
     // Sending the image URLs as a response
-    res.status(200).json({
+    return res.status(200).json({
       message: 'Image URLs generated successfully',
       imageUrls: imageUrls,
     });
@@ -57,7 +57,7 @@ const textToImageController = async (req, res) => {
     console.error("Error:", error);
 
     // Sending an error response
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Internal Server Error',
       error: error.message,
     });

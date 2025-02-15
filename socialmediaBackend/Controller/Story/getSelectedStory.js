@@ -4,7 +4,6 @@ const { ObjectId } = require("mongodb");
 const getSelectedStory = async (req, res) => {
     try {
         const storyId = new ObjectId(req.query.storyId);
-     //    console.log("Story ID:", storyId);
 
         const Story = await storySchema.aggregate([
             {
@@ -67,20 +66,20 @@ const getSelectedStory = async (req, res) => {
 
         if (Story.length === 0) {
             // console.log("No Story Exists");
-            res.status(400).json({
+            return res.status(400).json({
                 message: "No Story Exists",
                 storyDetails: Story,
             });
         } else {
             // console.log("Story Exists");
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Story Exists",
                 storyDetails: Story,
             });
         }
     } catch (error) {
         console.error("Procedure failed:", error);
-        res.status(500).json({
+        return res.status(500).json({
             message: "Internal Server Error",
             error: error.message,
         });

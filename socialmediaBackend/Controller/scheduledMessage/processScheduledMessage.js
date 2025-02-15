@@ -25,31 +25,30 @@ const processScheduledMessage = async (_, res) => {
                     }
                 } catch (createError) {
                     console.error("Error creating message:", createError);
-                    res.status(500).json({
+                    return res.status(500).json({
                         success: false,
                         message: "Internal Server Error",
                     });
-                    return; // Exit the function in case of an error
                 }
             }
         }
 
         if (numberOfMessagesCreated > 0) {
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
                 numberOfMessagesCreated,
                 numberOfMessagesDeleted,
                 message: "Messages Updated",
             });
         } else {
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
                 message: "No changes",
             });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: "Internal Server Error",
         });

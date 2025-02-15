@@ -75,13 +75,13 @@ const getRequestedArticle = async (req, res) => {
                },
           ]);
 
-          res.status(201).json({
+          return res.status(201).json({
                success: true,
                articleData: articlesData,
           });
      } catch (error) {
           console.error("Error getting articles:", error);
-          res.status(500).json({
+          return res.status(500).json({
                success: false,
                error: "Internal Server Error",
           });

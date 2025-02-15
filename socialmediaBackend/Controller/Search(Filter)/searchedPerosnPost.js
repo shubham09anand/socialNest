@@ -7,8 +7,6 @@ const searchedPerosnPost = async (req, res) => {
           const page = parseInt(req.body.page) || 1;
           const skip = (page - 1) * limit;
 
-          console.log(page)
-
           const userID = (req.body.userId);
 
           const Post = await PostSchema.aggregate([
@@ -170,14 +168,14 @@ const searchedPerosnPost = async (req, res) => {
 
           const totalPosts = await PostSchema.find({ userId: userID }).countDocuments();
 
-          res.status(200).json({
+          return res.status(200).json({
                message: "Post Exists",
                Post: Post || [],
                totalPosts: totalPosts
           });
      } catch (error) {
           console.error("Procedure failed:", error);
-          res.status(500).json({
+          return res.status(500).json({
                message: "Internal Server Error",
                error: error.message,
           });

@@ -72,12 +72,12 @@ const friendList = async (req, res) => {
     ]);
 
     if (friendList) {
-      res.status(200).json({
+      return res.status(200).json({
         message: 'Success',
         friendList: friendList,
       });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'Error',
         friendList: friendList,
       });
@@ -85,7 +85,7 @@ const friendList = async (req, res) => {
 
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Network Error',
       error: error.message,
     });

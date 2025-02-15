@@ -36,13 +36,13 @@ const sendedRequest = async (req, res) => {
           ]);
 
           if (FriendRequestList) {
-               res.status(200).json({
+               return res.status(200).json({
                     message: 'List of Recived Friedn Request',
                     FriendRequestList: FriendRequestList,
                });
           }
           else {
-               res.status(400).json({
+               return res.status(400).json({
                     message: 'No Friend Sent',
                     FriendRequestList: FriendRequestList,
                });
@@ -50,7 +50,7 @@ const sendedRequest = async (req, res) => {
 
      } catch (error) {
           console.error('Error:', error);
-          res.status(500).json({
+          return res.status(500).json({
                message: 'Retrevation Failed',
                error: error.message,
           });

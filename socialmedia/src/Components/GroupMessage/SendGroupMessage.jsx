@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import AIchat from '../Messages/AIchat';
 import GroupScheduledMessage from './GroupScheduledMessage';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
@@ -47,7 +47,7 @@ const SendGroupMessage = ({ userDetails, expand, setTotalMessage }) => {
 
      useEffect(() => {
           // const s = io('http://192.168.1.6:8080');
-          const s = io('http://192.168.1.6:8080');
+          const s = io('http://127.0.0.1:8080/socket_2');
           setSocket(s);
 
           if (groupId && s) {
