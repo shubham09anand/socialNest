@@ -47,6 +47,6 @@
   }
 }
 
-.animate-spin {
+.spin_Setting_Logo {
 	animation: spinSettingLogo 3s linear infinite;
 }
