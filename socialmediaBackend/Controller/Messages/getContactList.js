@@ -48,8 +48,7 @@ const contactList = async (req, res) => {
                          "firstName": 1,
                          "lastName": 1,
                          "userName": 1,
-                         "secondPerson.profilePhoto": 1,
-                         "unreadCount": 1  // Ensure it's included in the output
+                         "unreadCount": 1
                     }
                }
           ]);

@@ -80,7 +80,7 @@ const MakeComment = ({ index, commentSection, setCommentSection, postId }) => {
                                    <div className='mb-2 mx-auto w-full border-b-[1px] border-gray-600'>
                                         <div className='w-fit mx-auto flex place-content-center items-center space-x-5 '>
                                              <div className='mt-2 font-semibold mb-2 text-center text-lg mx-auto pb-1 flex place-content-center items-center w-full'>Comments <span className='font-medium ml-2'>{'(' + postComment?.comments?.length + ')'}</span></div>
-                                             <svg onClick={()=> setCommentSection(null)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 animate-bounce mt-2 cursor-pointer">
+                                             <svg onClick={() => setCommentSection(null)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 animate-bounce mt-2 cursor-pointer">
                                                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25 12 21m0 0-3.75-3.75M12 21V3" />
                                              </svg>
                                         </div>
@@ -88,26 +88,28 @@ const MakeComment = ({ index, commentSection, setCommentSection, postId }) => {
 
                                    <div className="w-full example border-gray-200 font-normal space-y-3 relative h-60  pb-20 overflow-y-scroll">
                                         {postComment?.comments?.map((comment, index) => (
-                                             <div key={index} className="pl-2 gap-3 relative">
-                                                  <div className="flex w-full space-x-2">
+                                             <div key={index} className="flex pl-2 gap-3 border-b pb-2">
+                                                  <div className="flex flex-shrink-0 w-fit space-x-2">
                                                        {!commeterProfilePhoto && (
-                                                            <Link to={`/searched-person/${comment?.commenterId}`} className="border-[1px] text-white border-gray-600 text-center pt-[1.5px] h-8 w-8 rounded-full font-semibold text-lg" style={{textDecoration: 'none', backgroundColor: colorArray[Math.floor(Math.random() * colorArray.length)] }}>{comment?.commenterProfile?.firstName?.[0] || "U"}</Link>
+                                                            <Link to={`/searched-person/${comment?.commenterId}`} className="border-[1px] text-white border-gray-600 text-center pt-[1.5px] h-8 w-8 rounded-full font-semibold text-lg" style={{ textDecoration: 'none', backgroundColor: colorArray[Math.floor(Math.random() * colorArray.length)] }}>{comment?.commenterProfile?.firstName?.[0] || "U"}</Link>
                                                        )}
                                                        {commeterProfilePhoto?.map((photo, _) => (
                                                             <>
                                                                  {photo?.userId === comment?.commenterId &&
-                                                                      <Link style={{ textDecoration: 'none' }} to={`/searched-person/${comment?.commenterId}`}>
-                                                                           <img key={index} src={photo?.profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="Profile" style={{ border: '2px solid black' }} className="h-8 w-8 rounded-full object-cover" />
+                                                                      <Link key={index} style={{ textDecoration: 'none' }} to={`/searched-person/${comment?.commenterId}`}>
+                                                                           <img src={photo?.profilePhoto || noProfilePicture} onError={(e) => e.target.src = noProfilePicture} alt="Profile" style={{ border: '1px solid black' }} className="h-10 w-10 rounded-full object-cover" />
                                                                       </Link>
                                                                  }
                                                             </>
                                                        ))}
-                                                       <div className="text-black flex place-content-center items-center text-sm -mt-1 font-semibold">
-                                                            {comment?.commenterProfile?.firstName} {comment?.commenterProfile?.lastName}
-                                                            <span className='ml-4'>{(comment?.commenterProfile?.userName === '@shubham' || comment?.commenterProfile?.userName === 'shubham09anand') && (<Deveplores size={3} />)}</span>
-                                                       </div>
                                                   </div>
-                                                  <p className="pl-10 -mt-1.5 text-sm sm:text-base max-h-20 overflow-y-scroll">{comment?.commentBody}</p>
+                                                  <div>
+                                                       <div className="text-gray-800 place-content-center items-center text-sm font-semibold">
+                                                            {comment?.commenterProfile?.firstName} {comment?.commenterProfile?.lastName}
+                                                            <span className='ml-4 text-black'>{(comment?.commenterProfile?.userName === '@shubham' || comment?.commenterProfile?.userName === 'shubham09anand') && (<Deveplores size={3} />)}</span>
+                                                       </div>
+                                                       <p className="mt-1.5 text-sm sm:text-base max-h-20 overflow-y-scroll">{comment?.commentBody}</p>
+                                                  </div>
                                              </div>
                                         ))}
                                         {postComment?.comments?.length === 0 && (<div className='w-full py-10 text-center text-gray-600 text-sm'>No Comments Yet...</div>)}
@@ -127,7 +129,15 @@ const MakeComment = ({ index, commentSection, setCommentSection, postId }) => {
                          )}
 
                          {isLoading &&
-                              <div className='absolute pt-3 space-y-6 bg-white w-full h-80 overflow-y-scroll example -bottom-1 z-20 border-[1px] border-b-0 rounded-t-3xl shadow-[.5px_.5px_.5px_gray] left-0'>
+                              <div className='absolute pt-3 space-y-3 bg-white w-full h-80 overflow-y-scroll example -bottom-1 z-20 border-[1px] border-b-0 rounded-t-3xl shadow-[.5px_.5px_.5px_gray] left-0'>
+                                   <div className='mb-2 mx-auto w-full border-b-[1px] border-gray-600'>
+                                        <div className='w-fit mx-auto flex place-content-center items-center space-x-5 '>
+                                             <div className='mt-2 font-semibold mb-2 text-center text-lg mx-auto pb-1 flex place-content-center items-center w-full'>Comments</div>
+                                             <svg onClick={() => setCommentSection(null)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 animate-bounce mt-2 cursor-pointer">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25 12 21m0 0-3.75-3.75M12 21V3" />
+                                             </svg>
+                                        </div>
+                                   </div>
                                    {[...Array(5)].map((_, index) => (
                                         <LoadComment key={index} />
                                    ))}
