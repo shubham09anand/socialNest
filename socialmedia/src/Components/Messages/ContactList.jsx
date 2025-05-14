@@ -98,11 +98,11 @@ const ContactList = ({ toggleDisplay }) => {
                                                        <div className='flex items-center place-content-center w-[98%] gap-x-4'>
                                                             <div className='relative w-14 h-14 shrink-0'>
                                                                  {commeterProfilePhoto === undefined ? (
-                                                                      <div className='capitalize text-white text-center flex place-content-center items-center w-14 h-14 shadow-[1px_1px_1px_1px_#f2f2f2] rounded-full text-xl md:text-3xl' style={{ backgroundColor: colorArray[Math.floor(Math.random() * colorArray.length)] }}>{person?.firstName?.[0] || 'U'}</div>
+                                                                      <div className='capitalize text-white text-center flex place-content-center items-center w-14 h-14 shadow-[.5px_.5px_.5px_gray] rounded-full text-xl md:text-3xl' style={{ backgroundColor: colorArray[Math.floor(Math.random() * colorArray.length)] }}>{person?.firstName?.[0] || 'U'}</div>
                                                                  ) : userPhoto ? (
-                                                                      <img src={userPhoto} onError={(e) => (e.target.src = noProfilePicture)} alt='Profile' className='text-white w-14 h-14 shadow-[1px_1px_1px_1px_#f2f2f2] border rounded-full object-cover'/>
+                                                                      <img src={userPhoto} onError={(e) => (e.target.src = noProfilePicture)} alt='Profile' className='text-white w-14 h-14 shadow-[.5px_.5px_.5px_gray] border rounded-full object-cover'/>
                                                                  ) : (
-                                                                      <img src={noProfilePicture} alt='Profile' className='w-14 h-14 shadow-[1px_1px_1px_1px_#f2f2f2] border rounded-full object-cover'/>
+                                                                      <img src={noProfilePicture} alt='Profile' className='w-14 h-14 shadow-[.5px_.5px_.5px_gray] border rounded-full object-cover'/>
                                                                  )}
                                                             </div>
                                                             <div className='flex-1'>
