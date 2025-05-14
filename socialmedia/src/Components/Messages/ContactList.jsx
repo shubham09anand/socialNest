@@ -15,11 +15,11 @@ const ContactList = ({ toggleDisplay }) => {
      const [display, setDisplay] = useState(false);
      const colorArray = ['#dc2d28', '#5069aa', '#f06937', '#eb6946', '#6eb4f5', '#197378', '#64508c'];
 
-     function getChatLink(loggedUser, personId, profilePhoto) {
+     function getChatLink(loggedUser, personId) {
           const user1IdString = loggedUser.toString();
           const user2IdString = personId.toString();
           const sortedUserIds = [user1IdString, user2IdString].sort().join('');
-          return `/message/${sortedUserIds}?photo=${encodeURIComponent(profilePhoto || noProfilePicture)}`;
+          return `/message/${sortedUserIds}`;
      }
 
      const getChatLists = async (loggedUser) => {
@@ -89,7 +89,7 @@ const ContactList = ({ toggleDisplay }) => {
 
                                              return (
                                                   <Link
-                                                       to={getChatLink(loggedUser, person?._id, userPhoto)}
+                                                       to={getChatLink(loggedUser, person?._id)}
                                                        style={{ textDecoration: 'none' }}
                                                        key={index}
                                                        onClick={() => handleItemClick(loggedUser, person._id, userPhoto)}
