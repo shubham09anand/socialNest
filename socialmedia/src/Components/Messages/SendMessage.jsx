@@ -27,7 +27,7 @@ const SendMessage = ({ setConversation }) => {
           // const s = io('https://apisocialnest.shubham09anand.in');
           // const s = io('http://127.0.0.1:8080');
 
-          const s = io(`${socketUrl}/socket_1`);
+          const s = io(`${socketUrl}/socket_1`,{transports: ['websocket'],});
 
           setSocket(s);
 
