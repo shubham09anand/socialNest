@@ -29,12 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 sendMessageSocket(server);
 // groupSocket(server)
 
-app.get('/', (req, res) => {
-    const userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    console.log(userIP)
-    res.json({ ip: userIP });
-});
-
 // Include existing routes
 app.use("/auth", require('./authRoutes.js'));
 app.use("/auth", require('./Routes/postRoutes'));

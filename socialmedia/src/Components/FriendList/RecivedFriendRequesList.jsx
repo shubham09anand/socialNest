@@ -62,7 +62,7 @@ const RecivedFriendRequesList = () => {
           <FriendProfileLoadingAnimation />
           <FriendProfileLoadingAnimation />
         </>
-      ) : RecivedRequest?.FriendRequestList.length !== 0 ? (
+      ) : Array.isArray(RecivedRequest?.FriendRequestList) && RecivedRequest.FriendRequestList.length > 0 ? (
         <div className="w-full">
           <ul className="w-full divide-y divide-gray-200">
             {RecivedRequest?.FriendRequestList.map((friend, index) => (
